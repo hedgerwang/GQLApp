@@ -1,1 +1,3 @@
-@import url('/app/ui/chrome/chrome.css');
+body {
+  border: solid 10px blue;
+}
