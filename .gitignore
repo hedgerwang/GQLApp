@@ -1,0 +1,7 @@
+.idea
+jog
+pylib
+google_app_engine_host/build/app.yaml
+google_app_engine_host/deploy.sh
+google_app_engine_host/run_app.sh
+google_app_engine_host/GoogleAppEngineLauncher.app

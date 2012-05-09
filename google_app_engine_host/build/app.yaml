@@ -1,0 +1,13 @@
+application: gqlapp
+version: 1
+runtime: python
+api_version: 1
+
+handlers:  
+- url: /(.*\.(gif|png|jpg|js|css|html))
+  static_files: \1
+  upload: (.*\.(gif|png|jpg|js|css|html))
+  
+- url: /
+  static_files: index.html
+  upload: index.html
