@@ -11,17 +11,19 @@ var dom = require('jog/dom').dom;
  * @constructor
  * @extends {BaseUI}
  */
-function Chrome() {
-  this.superClass.apply(this, arguments);
-}
-Class.extend(Chrome, BaseUI);
+var Chrome = Class.create({
+  extend: BaseUI,
 
-/**
- * @override
- */
-Chrome.prototype.createNode = function() {
-  return dom.createElement('div', 'app-ui-Chrome', 'hello');
-};
-
+  construct: function() {
+    this.superClass.apply(this, arguments);
+  },
+  
+  members: {
+    /** @override */
+    createNode : function() {
+      return dom.createElement('div', 'app-ui-Chrome', 'hello');
+    }
+  }
+});
 
 exports.Chrome = Chrome;
