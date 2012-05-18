@@ -5,15 +5,20 @@
 
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
-var Login = require('app/ui/scene/login').Login;
+var EventType = require('app/eventtype').EventType;
+var Cover = require('app/ui/scene/cover').Cover;
 var dom = require('jog/dom').dom;
 
 var App = Class.create({
   main: function() {
     var chrome = new Chrome();
 
-    var loginScene = new Login();
-    loginScene.render(chrome.getNode());
+    var coverScene = new Cover();
+    coverScene.render(chrome.getNode());
+
+    coverScene.addEventListener(EventType.EVT_FB_SESSION_READY, function() {
+      alert(3);
+    });
 
     chrome.render(dom.getDocument().body);
   }
