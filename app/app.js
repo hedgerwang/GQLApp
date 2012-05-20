@@ -32,5 +32,6 @@ var App = Class.create(null, {
 
 
 window.addEventListener('load', function() {
-  new App();
+  var app = new App();
+  // app.xmain();
 });

@@ -23,7 +23,7 @@ var Cover = Class.create(Scene, {
   /** @override} */
   onDocumentReady:function() {
     FBAPI.isLoggedIn().addCallback(lang.bind(this, function(result) {
-      if (!this.isDisposed()) {
+      if (!this.disposed) {
         this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
 //          dom.addClassName(this.getNode(), cssx('app-ui-scene-cover_ready'));
 //          FBAPI.query('me()').addCallback(lang.bind(this, function(response) {
