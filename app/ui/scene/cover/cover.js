@@ -25,10 +25,6 @@ var Cover = Class.create(Scene, {
     FBAPI.isLoggedIn().addCallback(lang.bind(this, function(result) {
       if (!this.disposed) {
         this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
-//          dom.addClassName(this.getNode(), cssx('app-ui-scene-cover_ready'));
-//          FBAPI.query('me()').addCallback(lang.bind(this, function(response) {
-//            this.getNode().textContent = JSON.stringify(response);
-//          }));
       }
     }));
   }
