@@ -22,6 +22,7 @@
 
 .app-ui-jewel_icon {
   background: url(/images/sprites1.png) 0 0 no-repeat;
+  background-size: 401px 216px;
   display: inline-block;
   height: 26px;
   margin: 0 10px;

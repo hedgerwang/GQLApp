@@ -1,3 +1,7 @@
 .app-ui-scene-newsfeed {
   background: green;
 }
+
+.app-ui-scene-newsfeed > .jog-ui-scrolllist {
+  top: 44px;
+}

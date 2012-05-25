@@ -14,36 +14,41 @@ var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
 
 var NewsFeed = Class.create(Scene, {
+  /** @override} */
+  main: function() {
+    this._jewel = new Jewel();
+    this._scrollList = new ScrollList();
+  },
 
   /** @override} */
   createNode: function() {
     var node = Scene.prototype.createNode.call(this);
     dom.addClassName(node, cssx('app-ui-scene-newsfeed'));
-
-    var jewel = new Jewel();
-    jewel.render(node);
-
-    this.appendChild(jewel);
     return node;
   },
 
   /** @override} */
   onDocumentReady:function() {
+    this.appendChild(this._jewel, true);
+
     FBAPI.isLoggedIn().
       addCallback(this.bind(function(result) {
       FBAPI.query('me()').addCallback(this.bind(function(response) {
-        var scrollList = new ScrollList();
-        scrollList.render(this.getNode());
-        this.appendChild(scrollList);
-
-        this.getNode().appendChild(
-          dom.createElement('div', {
-            style: 'padding-top:100px;'
-          }, JSON.stringify(response))
-        );
+        this.appendChild(this._scrollList, true);
+        this._scrollList.addContent(JSON.stringify(response));
       }));
     }));
-  }
+  },
+
+  /**
+   * @type {ScrollList}
+   */
+  _scrollList: null,
+
+  /**
+   * @type {Jewel}
+   */
+  _jewel: null
 });
 
 exports.NewsFeed = NewsFeed;
