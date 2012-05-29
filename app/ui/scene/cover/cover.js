@@ -22,7 +22,8 @@ var Cover = Class.create(Scene, {
 
   /** @override} */
   onDocumentReady:function() {
-    FBAPI.isLoggedIn().addCallback(lang.bind(this, function(result) {
+
+    FBAPI.isLoggedIn().addCallback(this.bind(function(result) {
       if (!this.disposed) {
         this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
       }
