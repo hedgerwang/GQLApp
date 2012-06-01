@@ -5,8 +5,9 @@
 
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
-var FBAPI = require('jog/fbapi').FBAPI;
+var FBData = require('jog/fbdata').FBData;
 var Jewel = require('app/ui/jewel').Jewel;
+var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var Story = require('app/ui/story').Story;
@@ -15,16 +16,20 @@ var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
 var objects = require('jog/objects').objects;
 
-var HOME_STORIES = 'me(){home_stories.first(50){' +
-  'nodes{message,title,id,url,creation_time,actors,attachments{' +
-  'media{src,url,id,message},source,description}}}}';
-
-
 var NewsFeed = Class.create(Scene, {
   /** @override} */
   main: function() {
     this._jewel = new Jewel();
     this._scrollList = new ScrollList();
+    this._loading = new LoadingIndicator();
+    this.appendChild(this._jewel);
+    this.appendChild(this._scrollList);
+    this.appendChild(this._loading);
+  },
+
+  /** @override} */
+  dispose: function() {
+
   },
 
   /** @override} */
@@ -36,12 +41,15 @@ var NewsFeed = Class.create(Scene, {
 
   /** @override} */
   onDocumentReady:function() {
-    this.appendChild(this._jewel, true);
+    this._jewel.render(this.getNode());
+    this._loading.render(this.getNode());
     this._query();
   },
 
   _query: function() {
-    FBAPI.queryGraph(HOME_STORIES).addCallback(this.bind(function(response) {
+    FBData.getHomeStories().addCallback(this.bind(function(response) {
+      this._loading.dispose();
+
       var stories = objects.getValueByName(
         response.userid + '.' + 'home_stories.nodes',
         response);
@@ -49,11 +57,10 @@ var NewsFeed = Class.create(Scene, {
       var scrollList = this._scrollList;
 
       if (lang.isArray(stories) && stories.length) {
-        this.appendChild(scrollList, true);
-
         for (var i = 0, j = stories.length; i < j; i++) {
           scrollList.addContent(new Story(stories[i]));
         }
+        scrollList.render(this.getNode());
       } else {
         this.getNode().appendChild(dom.createElement('div', null, 'no stories'))
       }

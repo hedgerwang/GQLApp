@@ -12,22 +12,37 @@ var dom = require('jog/dom').dom;
 
 var App = Class.create(null, {
   main: function() {
-    var chrome = new Chrome();
-    var coverScene = new Cover();
-    var newsFeed = new NewsFeed();
+    this._chrome = new Chrome();
+    this._coverScene = new Cover();
+    this._newsFeed = new NewsFeed();
 
     // Show the initial blue screen.
-    coverScene.render(chrome.getNode());
+    this._coverScene.render(this._chrome.getNode());
 
-    coverScene.addEventListener(EventType.EVT_FB_SESSION_READY, function() {
-      newsFeed.render(chrome.getNode());
-      coverScene.dispose();
-      coverScene = null;
-    });
+
+    this._coverScene.addEventListener(
+      EventType.EVT_FB_SESSION_READY,
+      this.bind(this._start)
+    );
 
     // show the whole chrome.
-    chrome.render(dom.getDocument().body);
-  }
+    this._chrome.render(dom.getDocument().body);
+  },
+
+  dispose: function() {
+    this._chrome.dispose();
+    this._coverScene.dispose();
+    this._newsFeed.dispose();
+  },
+
+  _start: function() {
+    this._newsFeed.render(this._chrome.getNode());
+    this._coverScene.dispose();
+  },
+
+  _chrome: null,
+  _coverScene: null,
+  _newsFeed: null
 });
 
 

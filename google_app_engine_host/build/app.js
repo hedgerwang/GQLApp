@@ -1,1 +1,1 @@
-document.write('yes');
+document.write('yes...');

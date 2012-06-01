@@ -1,7 +1,16 @@
 .app-ui-scene-newsfeed {
-  background: green;
+  background: #fff;
+}
+
+.app-ui-scene-newsfeed > .jog-ui-loading-indicator {
+  display: block;
+  position: absolute;
+  margin: 0 0 0 -2em;
+  left: 50%;
+  top: 50%;
 }
 
 .app-ui-scene-newsfeed > .jog-ui-scrolllist {
   top: 44px;
+  z-index: 1;
 }
