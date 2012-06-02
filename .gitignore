@@ -2,6 +2,7 @@
 images/test
 jog
 pylib
+google_app_engine_host/build/images/
 google_app_engine_host/build/app.yaml
 google_app_engine_host/deploy.sh
 google_app_engine_host/run_app.sh

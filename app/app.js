@@ -19,7 +19,6 @@ var App = Class.create(null, {
     // Show the initial blue screen.
     this._coverScene.render(this._chrome.getNode());
 
-
     this._coverScene.addEventListener(
       EventType.EVT_FB_SESSION_READY,
       this.bind(this._start)

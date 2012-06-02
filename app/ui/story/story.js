@@ -30,10 +30,13 @@ var Story = Class.create(BaseUI, {
     var message = objects.getValueByName('message.text', data) ||
       objects.getValueByName('title.text', data);
 
+    if (image) {
+      console.log(data);
+    }
 
     var header = dom.createElement('div', cssx('app-ui-story-header'),
       ['div', {
-        class: cssx('app-ui-story-profile-pix'),
+        className: cssx('app-ui-story-profile-pix'),
         style: 'background-image:url(' + actorPix + ')'
       }],
       ['div', cssx('app-ui-story-title'),
@@ -90,13 +93,15 @@ var Story = Class.create(BaseUI, {
     if (image && image.width && image.uri && /\.jpg$/.test(image.uri)) {
       var style = 'background-image:url(' + image.uri + ');';
       if (image.width > image.height) {
-        style += 'background-size: auto, 100%;'
+        style += 'background-size: auto 100%'
+      } else if (image.width === image.height) {
+        style += 'background-size: 100% 100%'
       } else {
-        style += 'background-size: 100% auto;'
+        style += 'background-size: 100% auto'
       }
 
       return dom.createElement('div', {
-        class: cssx('app-ui-story-img'),
+        className: cssx('app-ui-story-img'),
         style: style
       });
     }

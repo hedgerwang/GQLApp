@@ -1,16 +1,16 @@
-.app-ui-scene-newsfeed {
+.app-ui-scene-newsfeed {  
   background: #fff;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-loading-indicator {
+.app-ui-scene-newsfeed > .jog-ui-loading-indicator {  
   display: block;
-  position: absolute;
-  margin: 0 0 0 -2em;
   left: 50%;
+  margin: 0 0 0 -2em;
+  position: absolute;
   top: 50%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-scrolllist {
+.app-ui-scene-newsfeed > .jog-ui-scrolllist {  
   top: 44px;
   z-index: 1;
 }

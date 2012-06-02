@@ -32,7 +32,12 @@ var Jewel = Class.create(BaseUI, {
 
   /** @override */
   onDocumentReady:function() {
-   
+    this.getEvents().listen(
+      this.getNode(),
+      'touchend',
+      function() {
+        window.location.reload();
+      });
   }
 });
 
