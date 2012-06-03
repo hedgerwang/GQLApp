@@ -47,23 +47,30 @@ var NewsFeed = Class.create(Scene, {
   },
 
   _query: function() {
+    var start = Date.now();
     FBData.getHomeStories().addCallback(this.bind(function(response) {
-      this._loading.dispose();
+      this.callLater(function() {
+        this._loading.dispose();
+        delete this._loading;
 
-      var stories = objects.getValueByName(
-        response.userid + '.' + 'home_stories.nodes',
-        response);
+        this.callLater(function() {
+          var stories = objects.getValueByName(
+            response.userid + '.' + 'home_stories.nodes',
+            response);
 
-      var scrollList = this._scrollList;
-
-      if (lang.isArray(stories) && stories.length) {
-        for (var i = 0, j = stories.length; i < j; i++) {
-          scrollList.addContent(new Story(stories[i]));
-        }
-        scrollList.render(this.getNode());
-      } else {
-        this.getNode().appendChild(dom.createElement('div', null, 'no stories'))
-      }
+          var scrollList = this._scrollList;
+          if (lang.isArray(stories) && stories.length) {
+            for (var i = 0, j = stories.length; i < j; i++) {
+              scrollList.addContent(new Story(stories[i]));
+            }
+            scrollList.render(this.getNode());
+          } else {
+            this.getNode().appendChild(
+              dom.createElement('div', null, 'no stories')
+            );
+          }
+        }, 16);
+      }, Math.max(1000, Date.now() - start));
     }));
   },
 

@@ -36,7 +36,7 @@ var App = Class.create(null, {
 
   _start: function() {
     this._newsFeed.render(this._chrome.getNode());
-    this._coverScene.dispose();
+    this._coverScene.faceOut(450, true)
   },
 
   _chrome: null,
