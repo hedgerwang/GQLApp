@@ -5,8 +5,7 @@
 
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
-var EventType = require('app/eventtype').EventType;
-var FBAPI = require('jog/fbapi').FBAPI;
+var Imageable = require('jog/behavior/imageable').Imageable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -20,6 +19,10 @@ var Story = Class.create(BaseUI, {
     this._data = data;
   },
 
+  dispose: function() {
+    Class.dispose(this._imageable);
+  },
+
   /** @override */
   createNode: function() {
     var data = this._data;
@@ -29,10 +32,6 @@ var Story = Class.create(BaseUI, {
     var image = objects.getValueByName('attachments.0.media.image', data);
     var message = objects.getValueByName('message.text', data) ||
       objects.getValueByName('title.text', data);
-
-    if (image) {
-      console.log(data);
-    }
 
     var header = dom.createElement('div', cssx('app-ui-story-header'),
       ['div', {
@@ -52,8 +51,10 @@ var Story = Class.create(BaseUI, {
       'Like - Comment'
     );
 
-    return dom.createElement('div', cssx('app-ui-story'),
+    var node = dom.createElement('div', cssx('app-ui-story'),
       header, body, footer);
+
+    return node;
   },
 
   /**
@@ -91,23 +92,21 @@ var Story = Class.create(BaseUI, {
    */
   _createImage: function(image) {
     if (image && image.width && image.uri && /\.jpg$/.test(image.uri)) {
-      var style = 'background-image:url(' + image.uri + ');';
-      if (image.width > image.height) {
-        style += 'background-size: auto 100%'
-      } else if (image.width === image.height) {
-        style += 'background-size: 100% 100%'
-      } else {
-        style += 'background-size: 100% auto'
-      }
 
-      return dom.createElement('div', {
-        className: cssx('app-ui-story-img'),
-        style: style
+      var node = dom.createElement('div', {
+        className: cssx('app-ui-story-img')
       });
+
+      this._imageable = new Imageable(node, image.uri);
+      return node;
     }
     return null;
   },
 
+  /**
+   * @type {Imageable}
+   */
+  _imageable: null,
   _data: null
 });
 
