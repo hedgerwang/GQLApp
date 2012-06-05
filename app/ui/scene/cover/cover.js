@@ -28,10 +28,7 @@ var Cover = Class.create(Scene, {
   onDocumentReady:function() {
     FBAPI.isLoggedIn().addCallback(this.bind(function(result) {
       if (result) {
-        // Pre-fetch Home Stories.
-        FBData.getHomeStories().addCallback(this.bind(function() {
-          this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
-        }));
+        this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
       } else {
         // Should've been redirected to login.
       }

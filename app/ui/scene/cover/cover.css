@@ -1,4 +1,4 @@
-.app-ui-scene-cover {
+.app-ui-scene-cover {  
   background: -webkit-radial-gradient(center, ellipse cover, rgba(108, 159, 201, 1) 0%, rgba(30, 87, 153, 1) 100%);
   box-align: center;
   box-orient: vertical;
@@ -8,9 +8,9 @@
   font-size: 36px;
   font-weight: bold;
   text-shadow: #222 0 0 3px;
-  z-index: 1000;
+  z-index: 1001; /* Must be greater than jewel. */
 }
 
-.app-ui-scene-cover_ready {
+.app-ui-scene-cover_ready {  
   background: #fff;
 }

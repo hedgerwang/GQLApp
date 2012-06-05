@@ -21,7 +21,7 @@ var App = Class.create(null, {
 
     this._coverScene.addEventListener(
       EventType.EVT_FB_SESSION_READY,
-      this.bind(this._start)
+      this.callAfter(this._start, 600)
     );
 
     // show the whole chrome.
@@ -44,6 +44,7 @@ var App = Class.create(null, {
   _newsFeed: null
 });
 
+exports.App = App;
 
 window.addEventListener('load', function() {
   var app = new App();

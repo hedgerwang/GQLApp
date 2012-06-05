@@ -43,36 +43,61 @@ var NewsFeed = Class.create(Scene, {
   onDocumentReady:function() {
     this._jewel.render(this.getNode());
     this._loading.render(this.getNode());
-    this._query();
+    this._query(14, null);
   },
 
-  _query: function() {
-    var start = Date.now();
-    FBData.getHomeStories().addCallback(this.bind(function(response) {
-      this.callLater(function() {
-        this._loading.dispose();
-        delete this._loading;
-
-        this.callLater(function() {
-          var stories = objects.getValueByName(
-            response.userid + '.' + 'home_stories.nodes',
-            response);
-
-          var scrollList = this._scrollList;
-          if (lang.isArray(stories) && stories.length) {
-            for (var i = 0, j = stories.length; i < j; i++) {
-              scrollList.addContent(new Story(stories[i]));
-            }
-            scrollList.render(this.getNode());
-          } else {
-            this.getNode().appendChild(
-              dom.createElement('div', null, 'no stories')
-            );
-          }
-        }, 16);
-      }, Math.max(1000, Date.now() - start));
-    }));
+  /**
+   * @param {number} count
+   * @param {string?} startCursor
+   */
+  _query: function(count, startCursor) {
+    var callback = this._loading ?
+      this.callAfter(this._onQueryResult, 1200) :
+      this.bind(this._onQueryResult);
+    FBData.getHomeStories(count, startCursor, true).addCallback(callback);
   },
+
+  /**
+   * @param {Object} response
+   */
+  _onQueryResult: function(response) {
+    if (this._loading) {
+      this._loading.dispose();
+      delete this._loading;
+    }
+
+    this.callLater(function() {
+      var stories = objects.getValueByName(
+        response.userid + '.' + 'home_stories.nodes',
+        response);
+
+      var scrollList = this._scrollList;
+      if (lang.isArray(stories) && stories.length) {
+        for (var i = 0, j = stories.length; i < j; i++) {
+          scrollList.addContent(new Story(stories[i]));
+        }
+
+        if (!scrollList.isInDocument()) {
+          scrollList.render(this.getNode());
+        }
+      }
+
+      this._storiesLength += stories.length;
+
+      if (this._storiesLength < 70) {
+        var startCursor = objects.getValueByName(
+          response.userid + '.home_stories.page_info.end_cursor',
+          response);
+
+        if (startCursor) {
+          this._query(40, startCursor);
+        }
+      }
+      response = null;
+    }, 16);
+  },
+
+  _storiesLength: 0,
 
   /**
    * @type {ScrollList}
