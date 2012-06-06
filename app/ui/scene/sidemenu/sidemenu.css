@@ -1,0 +1,55 @@
+.app-ui-scene-sidemenu {
+  background: #31394a;
+  width: 260px;
+  z-index: 1;
+}
+
+.app-ui-scene-sidemenu .jog-ui-scrolllist {
+  background: transparent;
+}
+
+.app-ui-scene-sidemenu_heading {
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#434B5C), to(#394152));
+  border-bottom-color: #242A37;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-shadow: rgba(255, 255, 255, 0.078125) 0px 1px 0px 0px inset;
+  color: #7A8292;
+  font-family: Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  font-weight: bold;
+  height: 12px;
+  line-height: 12px;
+  padding: 4px 10px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+}
+
+.app-ui-scene-sidemenu_item {
+  border-bottom-color: #242A37;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-align: center;
+  box-orient: horizontal;
+  box-pack: left;
+  box-shadow: rgba(255, 255, 255, 0.078125) 0px 1px 0px 0px inset;
+  display: -webkit-box;
+}
+
+.app-ui-scene-sidemenu_item-icon {
+  height: 34px;
+  margin: 6px 8px;
+  width: 34px;
+}
+
+.app-ui-scene-sidemenu_item-text {
+  color: #C4CCDA;
+  font-size: 14px;
+  font-weight: bold;
+  overflow: hidden;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 200px;
+}

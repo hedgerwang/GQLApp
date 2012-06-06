@@ -4,7 +4,6 @@
  */
 
 var Class = require('jog/class').Class;
-var EventType = require('app/eventtype').EventType;
 var FBData = require('jog/fbdata').FBData;
 var Jewel = require('app/ui/jewel').Jewel;
 var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
@@ -84,7 +83,7 @@ var NewsFeed = Class.create(Scene, {
 
       this._storiesLength += stories.length;
 
-      if (this._storiesLength < 70) {
+      if (this._storiesLength < 200) {
         var startCursor = objects.getValueByName(
           response.userid + '.home_stories.page_info.end_cursor',
           response);

@@ -10,7 +10,3 @@
   text-shadow: #222 0 0 3px;
   z-index: 1001; /* Must be greater than jewel. */
 }
-
-.app-ui-scene-cover_ready {  
-  background: #fff;
-}

@@ -13,7 +13,7 @@
 
 .app-ui-story-profile-pix {
   background-size: 100% 100%;
-  background: #D8DCE6 url(http://placekitten.com/g/30/30);
+  background: #D8DCE6;
   display: inline-block;
   height: 34px;
   margin: 0 8px 0 0;
@@ -44,6 +44,7 @@
 }
 
 .app-ui-story-img {
+  background-color: #fff;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .4);
   height: 312px;
   margin: 8px 0 3px -16px;

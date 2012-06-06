@@ -28,7 +28,7 @@ var Cover = Class.create(Scene, {
   onDocumentReady:function() {
     FBAPI.isLoggedIn().addCallback(this.bind(function(result) {
       if (result) {
-        this.dispatchEvent(EventType.EVT_FB_SESSION_READY);
+        this.dispatchEvent(EventType.FB_SESSION_READY);
       } else {
         // Should've been redirected to login.
       }
