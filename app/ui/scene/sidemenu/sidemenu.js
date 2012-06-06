@@ -9,6 +9,7 @@ var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
+var SearchBar = require('app/ui/searchbar').SearchBar;
 var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
@@ -36,14 +37,15 @@ var SideMenu = Class.create(Scene, {
   /** @override} */
   onDocumentReady: function() {
     this._scrollList.render(this.getNode());
-    this._renderProfile().
+
+    this._renderSearch().
+      then(this.bind(this._renderProfile)).
       then(this.bind(this._renderFavorites)).
       then(this.bind(this._renderGroups)).
       then(this.bind(this._renderFriendLists)).
       then(this.bind(this._renderOther));
 
     this._tappable = new Tappable(this.getNode());
-
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
   },
 
@@ -58,6 +60,14 @@ var SideMenu = Class.create(Scene, {
         window.location.reload();
         break;
     }
+  },
+
+  _renderSearch: function() {
+    return (new Deferred()).addCallback(this.bind(
+      function() {
+        this._searchBar = new SearchBar();
+        this._scrollList.addContent(this._searchBar);
+      })).succeed(true);
   },
 
   /**
@@ -169,7 +179,8 @@ var SideMenu = Class.create(Scene, {
         this._createHeading('Other')
       );
 
-      body.appendChild(this._createMenuItem('Reload', null, null, 'reload'));
+      body.appendChild(this._createMenuItem('Reload APP', null, null, 'reload'));
+      body.appendChild(this._createMenuItem('Logout', null, null, 'logout'));
       this._scrollList.addContent(body);
     })).succeed(true);
   },

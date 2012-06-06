@@ -1,5 +1,5 @@
 /**
- * @fileOverview Scene
+ * @fileOverview
  * @author Hedger Wang
  */
 

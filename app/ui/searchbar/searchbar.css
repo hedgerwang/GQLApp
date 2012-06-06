@@ -1,0 +1,42 @@
+.app-ui-searchbar {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#434B5B), to(#242B39));
+  border-bottom: 1px solid #161B25;
+  border-top: 1px solid #5F6673;
+  height: 28px;
+  padding: 6px 10px 8px 10px;
+  position: relative;
+}
+
+.app-ui-searchbar_background {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#414A5A), to(#4C5464));
+  border-radius: 15px;
+  border: 1px solid #222936;
+  box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(255, 255, 255, 0.4);
+  height: 100%;
+}
+
+.app-ui-searchbar_input {
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  color: #AAB2C0;
+  font-size: 13px;
+  left: 37px;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  top: 13px;
+}
+
+.app-ui-searchbar_input:focus {
+  color: #fff;
+}
+
+.app-ui-searchbar_icon {
+  height: 19px;
+  left: 17px;
+  position: absolute;
+  top: 15px;
+  width: 18px;
+}
