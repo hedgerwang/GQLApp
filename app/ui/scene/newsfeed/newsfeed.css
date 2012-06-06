@@ -1,8 +1,9 @@
-.app-ui-scene-newsfeed {  
+.app-ui-scene-newsfeed {
   background: #fff;
+  width: 100%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-loading-indicator {  
+.app-ui-scene-newsfeed > .jog-ui-loading-indicator {
   display: block;
   left: 50%;
   margin: 0 0 0 -2em;
@@ -10,17 +11,15 @@
   top: 50%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-scrolllist {  
+.app-ui-scene-newsfeed > .jog-ui-scrolllist {
   top: 44px;
   z-index: 1;
 }
 
-.app-ui-scene-newsfeed_opened {  
+.app-ui-scene-newsfeed_opened {
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.8);
-  left: 262px;
-  width: 100%;
 }
 
-.app-ui-scene-newsfeed_opened > .jog-ui-scrolllist {  
+.app-ui-scene-newsfeed_opened > .jog-ui-scrolllist {
   pointer-events: none;
 }

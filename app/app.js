@@ -46,28 +46,30 @@ var App = Class.create(null, {
       this._newsFeed, EventType.JEWEL_SIDE_MENU_TOGGLE, this._toggleSideMenu);
   },
 
-  _reload: function() {
-    window.location.reload();
-  },
-
   _toggleSideMenu: function() {
     switch (this._sideMenuMode) {
       case 0:
         this._sideMenuMode = 1;
-        dom.addClassName(
-          this._newsFeed.getNode(),
-          cssx('app-ui-scene-newsfeed_opened'));
+
+        this._newsFeed.translateXTo(260).addCallback(
+          this.bind(function() {
+            dom.addClassName(
+              this._newsFeed.getNode(),
+              cssx('app-ui-scene-newsfeed_opened'));
+          }));
+
         break;
 
       case 1:
         this._sideMenuMode = 0;
+        this._newsFeed.translateXTo(0);
         dom.removeClassName(
           this._newsFeed.getNode(),
           cssx('app-ui-scene-newsfeed_opened'));
         break;
     }
 
-    console.log(this._newsFeed.getNode().className)
+    console.log(this._newsFeed.getNode().className);
   },
 
   _chrome: null,
