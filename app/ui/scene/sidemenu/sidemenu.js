@@ -77,27 +77,27 @@ var SideMenu = Class.create(Scene, {
    * @retrun {Deferred}
    */
   _renderFavorites: function() {
-    var df = new Deferred();
-    var body = dom.createElement('ul', cssx('app-ui-scene-sidemenu_body'),
-      this._createHeading('Favorites'),
+    return (new Deferred()).addCallback(this.bind(function() {
+      var body = dom.createElement('ul', cssx('app-ui-scene-sidemenu_body'),
+        this._createHeading('Favorites'),
 
-      this._createMenuItem('News Feed',
-        '//s-static.ak.facebook.com/rsrc.php/v2/y8/r/R2NjP5a0R3f.png'),
+        this._createMenuItem('News Feed',
+          '//s-static.ak.facebook.com/rsrc.php/v2/y8/r/R2NjP5a0R3f.png'),
 
-      this._createMenuItem('Messages',
-        '//s-static.ak.facebook.com/rsrc.php/v2/yS/r/Ts7l0QBNRnV.png'),
+        this._createMenuItem('Messages',
+          '//s-static.ak.facebook.com/rsrc.php/v2/yS/r/Ts7l0QBNRnV.png'),
 
-      this._createMenuItem('Near By',
-        '//s-static.ak.facebook.com/rsrc.php/v2/yk/r/BhCnfPi-P2i.png'),
+        this._createMenuItem('Near By',
+          '//s-static.ak.facebook.com/rsrc.php/v2/yk/r/BhCnfPi-P2i.png'),
 
-      this._createMenuItem('Events',
-        '//s-static.ak.facebook.com/rsrc.php/v2/yL/r/34CgvWdkzyW.png'),
+        this._createMenuItem('Events',
+          '//s-static.ak.facebook.com/rsrc.php/v2/yL/r/34CgvWdkzyW.png'),
 
-      this._createMenuItem('Find Friends',
-        '//s-static.ak.facebook.com/rsrc.php/v2/y4/r/E6jmLaCoCUD.png')
-    );
-    this._scrollList.addContent(body);
-    return df.succeed(true);
+        this._createMenuItem('Find Friends',
+          '//s-static.ak.facebook.com/rsrc.php/v2/y4/r/E6jmLaCoCUD.png')
+      );
+      this._scrollList.addContent(body);
+    })).succeed(true);
   },
 
   /**
@@ -162,14 +162,16 @@ var SideMenu = Class.create(Scene, {
    * @retrun {Deferred}
    */
   _renderOther: function() {
-    var df = new Deferred();
-    var body = dom.createElement('ul', cssx('app-ui-scene-sidemenu_body'),
-      this._createHeading('Other'));
+    return (new Deferred()).addCallback(this.bind(function() {
+      var body = dom.createElement(
+        'ul',
+        cssx('app-ui-scene-sidemenu_body'),
+        this._createHeading('Other')
+      );
 
-    body.appendChild(this._createMenuItem('Reload', null, null, 'reload'));
-    this._scrollList.addContent(body);
-
-    return df.succeed(true);
+      body.appendChild(this._createMenuItem('Reload', null, null, 'reload'));
+      this._scrollList.addContent(body);
+    })).succeed(true);
   },
 
   /**
@@ -184,7 +186,7 @@ var SideMenu = Class.create(Scene, {
       cssx('app-ui-scene-sidemenu_item-icon'));
 
     if (iconSrc) {
-      var imageable = new Imageable(icon, iconSrc);
+      new Imageable(icon, iconSrc);
     }
 
     var node = dom.createElement('li', cssx('app-ui-scene-sidemenu_item'),

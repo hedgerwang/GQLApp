@@ -5,7 +5,7 @@
 
 var Class = require('jog/class').Class;
 var FBData = require('jog/fbdata').FBData;
-var Jewel = require('app/ui/jewel').Jewel;
+var Jewel = require('app/ui/jewelbar').JewelBar;
 var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
@@ -104,7 +104,7 @@ var NewsFeed = Class.create(Scene, {
   _scrollList: null,
 
   /**
-   * @type {Jewel}
+   * @type {JewelBar}
    */
   _jewel: null
 });

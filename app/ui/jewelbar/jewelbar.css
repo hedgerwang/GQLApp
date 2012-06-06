@@ -1,4 +1,4 @@
-.app-ui-jewel {
+.app-ui-jewelbar {
   background: -webkit-gradient(linear, left top, left bottom, from(#738ABA), to(#2C4987));
   border-bottom: solid 1px #666;
   border-color: #111A33;
@@ -13,7 +13,7 @@
   white-space: nowrap;
 }
 
-.app-ui-jewel_center {
+.app-ui-jewelbar_center {
   display: inline-block;
   height: 100%;
   margin: auto;
@@ -21,9 +21,8 @@
   width: 160px;
 }
 
-.app-ui-jewel_icon {
+.app-ui-jewelbar_icon {
   background-size: 401px 216px;
-  background: url(/images/sprites1.png) 0 0 no-repeat;
   display: inline-block;
   height: 26px;
   margin: 10px;
@@ -31,26 +30,7 @@
   width: 30px;
 }
 
-.app-ui-jewel_freind-requests {
-  background-position: -279px -159px;
-  height: 26px;
-  width: 30px;
-}
-
-.app-ui-jewel_inbox {
-  background-position: -31px -159px;
-  height: 26px;
-  width: 30px;
-}
-
-.app-ui-jewel_notification {
-  background-position: -155px -159px;
-  height: 26px;
-  width: 30px;
-}
-
-.app-ui-jewel_sidemenu {
-  background-position: -31px -159px;
+.app-ui-jewelbar_sidemenu {
   left: 0;
   position: absolute;
   top: 0;

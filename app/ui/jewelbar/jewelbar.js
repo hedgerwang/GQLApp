@@ -6,36 +6,38 @@
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
+var Imageable = require('jog/behavior/imageable').Imageable;
 var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
-var Jewel = Class.create(BaseUI, {
+
+var JewelBar = Class.create(BaseUI, {
   dispose: function() {
     Class.dispose(this._tappable);
   },
 
   /** @override */
   createNode: function() {
-    var iconClassName = ' ' + cssx('app-ui-jewel_icon');
+    var iconClassName = ' ' + cssx('app-ui-jewelbar_icon');
     this._sideMenuIcon = dom.createElement(
-      'div', cssx('app-ui-jewel_sidemenu') + iconClassName);
+      'div', cssx('app-ui-jewelbar_sidemenu') + iconClassName);
 
     this._friendRequestsIcon = dom.createElement(
-      'div', cssx('app-ui-jewel_freind-requests') + iconClassName);
+      'div', cssx('app-ui-jewelbar_freind-requests') + iconClassName);
 
-    this._inboxIcon = dom.createElement(
-      'div', cssx('app-ui-jewel_inbox') + iconClassName);
+    this._messagesIcon = dom.createElement(
+      'div', cssx('app-ui-jewelbar_messages') + iconClassName);
 
     this._notificationIcon = dom.createElement(
-      'div', cssx('app-ui-jewel_notification') + iconClassName);
+      'div', cssx('app-ui-jewelbar_notification') + iconClassName);
 
     var node = dom.createElement(
-      'div', cssx('app-ui-jewel'),
+      'div', cssx('app-ui-jewelbar'),
       this._sideMenuIcon,
-      ['div', cssx('app-ui-jewel_center'),
+      ['div', cssx('app-ui-jewelbar_center'),
         this._friendRequestsIcon,
-        this._inboxIcon,
+        this._messagesIcon,
         this._notificationIcon
       ]
     );
@@ -45,13 +47,20 @@ var Jewel = Class.create(BaseUI, {
   /** @override */
   onDocumentReady:function() {
     this._tappable = new Tappable(this.getNode());
-    this._tappable.addTarget(this._sideMenuIcon);
-    this._tappable.addTarget(this._friendRequestsIcon);
-    this._tappable.addTarget(this._notificationIcon);
-    this._tappable.addTarget(this._inboxIcon);
-    this._tappable.addTarget(this.getNode());
+
+    this._tappable.addTarget(this._sideMenuIcon).
+      addTarget(this._friendRequestsIcon).
+      addTarget(this._notificationIcon).
+      addTarget(this._messagesIcon).
+      addTarget(this.getNode());
+
     var events = this.getEvents();
     events.listen(this._tappable, 'tap', this._onTap);
+
+    new Imageable(this._sideMenuIcon, '/images/menu-2x.png');
+    new Imageable(this._friendRequestsIcon, '/images/requests-2x.png');
+    new Imageable(this._messagesIcon, '/images/messages-2x.png');
+    new Imageable(this._notificationIcon, '/images/notifications-2x.png');
   },
 
   /**
@@ -68,9 +77,9 @@ var Jewel = Class.create(BaseUI, {
   _tappable: null,
   _sideMenuIcon: null,
   _friendRequestsIcon:null,
-  _inboxIcon: null,
+  _messagesIcon: null,
   _notificationIcon: null
 });
 
 
-exports.Jewel = Jewel;
+exports.JewelBar = JewelBar;
