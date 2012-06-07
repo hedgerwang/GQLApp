@@ -16,3 +16,9 @@
   top: 44px;
   z-index: 1;
 }
+
+.app-ui-scene-newsfeed-denug-no-stories {  
+  color: #444;
+  padding: 60px 16px;
+  word-wrap: break-word;
+}

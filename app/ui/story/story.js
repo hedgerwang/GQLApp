@@ -39,7 +39,7 @@ var Story = Class.create(BaseUI, {
         style: 'background-image:url(' + actorPix + ')'
       }],
       ['div', cssx('app-ui-story-title'),
-        actor && actor.name,
+        ['span', {profile_id: actor.id}, actor.name],
         this._createTime(data.creation_time)
       ]
     );

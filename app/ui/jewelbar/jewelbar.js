@@ -12,6 +12,14 @@ var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
 var JewelBar = Class.create(BaseUI, {
+  /**
+   * @param {boolean=} opt_showBackButton
+   * @override
+   */
+  main: function(opt_showBackButton) {
+    this._showBackButton = opt_showBackButton;
+  },
+
   dispose: function() {
     Class.dispose(this._tappable);
   },
@@ -74,6 +82,7 @@ var JewelBar = Class.create(BaseUI, {
   },
 
   _tappable: null,
+  _showBackButton: false,
   _sideMenuIcon: null,
   _friendRequestsIcon:null,
   _messagesIcon: null,
