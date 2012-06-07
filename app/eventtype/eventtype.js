@@ -1,6 +1,8 @@
 var EventType = {
   FB_SESSION_READY: 1,
-  JEWEL_SIDE_MENU_TOGGLE: 2
+  JEWEL_SIDE_MENU_TOGGLE: 2,
+  SEARCH_BAR_ON_SEARCH_START: 3,
+  SEARCH_BAR_ON_SEARCH_END: 4
 };
 
 exports.EventType = EventType;

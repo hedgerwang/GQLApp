@@ -4,8 +4,17 @@
   z-index: 1;
 }
 
-.app-ui-scene-sidemenu .jog-ui-scrolllist {  
+.app-ui-scene-sidemenu_onsearch {  
+  width: 100%;
+}
+
+.app-ui-scene-sidemenu > .jog-ui-scrolllist {  
   background: transparent;
+  top: 44px;
+}
+
+.app-ui-scene-sidemenu_onsearch > .jog-ui-scrolllist {  
+  pointer-events: none;
 }
 
 .app-ui-scene-sidemenu_heading {  

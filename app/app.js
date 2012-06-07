@@ -6,14 +6,13 @@
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
 var Cover = require('app/ui/scene/cover').Cover;
-var Events = require('jog/events').Events;
 var EventType = require('app/eventtype').EventType;
+var Events = require('jog/events').Events;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
+var TouchHelper = require('jog/touchhelper').TouchHelper;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
-var TouchHelper = require('jog/touchhelper').TouchHelper;
-
 
 var App = Class.create(null, {
   main: function() {
@@ -53,35 +52,77 @@ var App = Class.create(null, {
   _bindEvents: function() {
     this._events.listen(
       this._mainScene, EventType.JEWEL_SIDE_MENU_TOGGLE, this._toggleSideMenu);
+
+    this._events.listen(
+      this._sideMenu,
+      EventType.SEARCH_BAR_ON_SEARCH_START,
+      this._onSearchStart);
+
+    this._events.listen(
+      this._sideMenu,
+      EventType.SEARCH_BAR_ON_SEARCH_END,
+      this._onSearchEnd);
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onSearchStart: function(event) {
+    dom.addClassName(this._sideMenu.getNode(),
+      cssx('app-ui-scene-sidemenu_onsearch'));
+
+    this._sideMenuMode = 2;
+    this._hideMainScene();
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onSearchEnd: function(event) {
+    dom.removeClassName(this._sideMenu.getNode(),
+      cssx('app-ui-scene-sidemenu_onsearch'));
+
+    this._sideMenuMode = 1;
+    this._hideMainScene();
   },
 
   _toggleSideMenu: function() {
     switch (this._sideMenuMode) {
-      case 0:
-        this._hideMainScene();
+      case 1:
+        this._sideMenuMode = 0;
+        this._showMainScene();
         break;
 
-      case 1:
-        this._showMainScene();
+      case 0:
+        this._sideMenuMode = 1;
+        this._hideMainScene();
         break;
     }
   },
 
   _hideMainScene: function() {
-    this._sideMenuMode = 1;
+    var df = this._mainScene.translateXTo(this._sideMenu.getNode().offsetWidth);
 
-    this._mainScene.translateXTo(this._sideMenu.getNode().offsetWidth).
-      addCallback(this.bind(
-      function() {
-        dom.addClassName(
-          this._mainScene.getNode(),
-          cssx('app-main_scene_opened'));
-      }));
+    if (this._sideMenuMode == 1) {
+      df.addCallback(this.bind(
+        function() {
+          if (this._sideMenuMode == 1) {
+            dom.addClassName(
+              this._mainScene.getNode(),
+              cssx('app-main_scene_shadowed'));
+          }
+        }));
+    } else {
+      dom.removeClassName(
+        this._mainScene.getNode(),
+        cssx('app-main_scene_shadowed'));
+    }
 
     this._events.listen(
       this._mainScene.getNode(),
       TouchHelper.EVT_TOUCHSTART,
       this._showMainScene,
+      null,
       true);
   },
 
@@ -94,17 +135,17 @@ var App = Class.create(null, {
       opt_event.preventDefault();
     }
 
-    this._sideMenuMode = 0;
     this._mainScene.translateXTo(0);
 
     dom.removeClassName(
       this._mainScene.getNode(),
-      cssx('app-main_scene_opened'));
+      cssx('app-main_scene_shadowedd'));
 
     this._events.unlisten(
       this._mainScene.getNode(),
       TouchHelper.EVT_TOUCHSTART,
       this._showMainScene,
+      null,
       true);
   },
 

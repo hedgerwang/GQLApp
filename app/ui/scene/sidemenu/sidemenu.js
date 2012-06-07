@@ -20,6 +20,7 @@ var SideMenu = Class.create(Scene, {
   /** @override} */
   main: function() {
     this._scrollList = this.appendChild(new ScrollList());
+    this._searchBar = this.appendChild(new SearchBar());
   },
 
   /** @override} */
@@ -36,16 +37,17 @@ var SideMenu = Class.create(Scene, {
 
   /** @override} */
   onDocumentReady: function() {
+    this._searchBar.render(this.getNode());
     this._scrollList.render(this.getNode());
 
-    this._renderSearch().
-      then(this.bind(this._renderProfile)).
+    this._renderProfile().
       then(this.bind(this._renderFavorites)).
       then(this.bind(this._renderGroups)).
       then(this.bind(this._renderFriendLists)).
       then(this.bind(this._renderOther));
 
     this._tappable = new Tappable(this.getNode());
+
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
   },
 
@@ -60,14 +62,6 @@ var SideMenu = Class.create(Scene, {
         window.location.reload();
         break;
     }
-  },
-
-  _renderSearch: function() {
-    return (new Deferred()).addCallback(this.bind(
-      function() {
-        this._searchBar = new SearchBar();
-        this._scrollList.addContent(this._searchBar);
-      })).succeed(true);
   },
 
   /**

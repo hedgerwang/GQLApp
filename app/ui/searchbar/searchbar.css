@@ -1,42 +1,118 @@
-.app-ui-searchbar {
+.app-ui-searchbar_head {  
   background-image: -webkit-gradient(linear, left top, left bottom, from(#434B5B), to(#242B39));
   border-bottom: 1px solid #161B25;
   border-top: 1px solid #5F6673;
   height: 28px;
+  overflow: hidden;
   padding: 6px 10px 8px 10px;
   position: relative;
+  z-index: 10;
 }
 
-.app-ui-searchbar_background {
+.app-ui-searchbar_head-background {  
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#414A5A), to(#4C5464));
   border-radius: 15px;
   border: 1px solid #222936;
   box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(255, 255, 255, 0.4);
   height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-.app-ui-searchbar_input {
+.app-ui-searchbar_input {  
   -webkit-appearance: none;
+  background: red;
   background: transparent;
   border: none;
   color: #AAB2C0;
   font-size: 13px;
-  left: 37px;
+  left: 25px;
   margin: 0;
   outline: none;
   padding: 0;
   position: absolute;
-  top: 13px;
+  right: 8px;
+  top: 6px;
 }
 
-.app-ui-searchbar_input:focus {
+.app-ui-searchbar_input:focus {  
   color: #fff;
 }
 
-.app-ui-searchbar_icon {
+.app-ui-searchbar_icon {  
   height: 19px;
   left: 17px;
   position: absolute;
   top: 15px;
   width: 18px;
+}
+
+.app-ui-searchbar_onsearch .app-ui-searchbar_mask {  
+  background: rgba(0, 0, 0, 0.6);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 43px;
+  z-index: 10;
+}
+
+.app-ui-searchbar_cancel {  
+  display: none;
+}
+
+.app-ui-searchbar_onsearch .app-ui-searchbar_cancel {  
+  background: -webkit-gradient(linear, left top, left bottom, from(#3B4456), to(#242A3A));
+  border-color: #1B202A #1F2531 #1A1F2D;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .17);
+  color: #BDC4D3;
+  display: block;
+  float: right;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  padding: 6px 8px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .35);
+  white-space: nowrap;
+}
+
+.app-ui-searchbar  > .jog-ui-scrolllist {  
+  background: #31394A;
+  top: 43px;
+  z-index: 11;
+}
+
+.app-ui-searchbar_item {  
+  border-bottom-color: #242A37;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-align: center;
+  box-orient: horizontal;
+  box-pack: left;
+  box-shadow: rgba(255, 255, 255, 0.078125) 0px 1px 0px 0px inset;
+  display: -webkit-box;
+  overflow: hidden;
+  width: 100%;
+}
+
+.app-ui-searchbar_item-icon {  
+  height: 43px;
+  margin-right: 4px;
+  width: 43px;
+}
+
+.app-ui-searchbar_item-text {  
+  color: #A9B1C0;
+  font-weight: bold;
+  text-shadow: rgba(0, 0, 0, .35) 0 1px;
+  white-space: nowrap;
+}
+
+.app-ui-searchbar .jog-ui-loading-indicator {  
+  left: 50%;
+  margin: -2em 0 0 -2em;
+  position: absolute;
+  top: 50%;
+  z-index: 13;
 }

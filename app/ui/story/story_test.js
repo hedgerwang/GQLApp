@@ -5,10 +5,9 @@
  * @url http://localhost:8888/app/ui/story/story_test.html
  */
 
+var Story = require('app/ui/story').Story;
 var TestCase = require('jog/testing').TestCase;
 var asserts = require('jog/asserts').asserts;
-
-var Story = require('app/ui/story').Story;
 
 (new TestCase('Story Test'))
   .test('test 1',

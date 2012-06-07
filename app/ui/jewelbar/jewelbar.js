@@ -11,7 +11,6 @@ var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
-
 var JewelBar = Class.create(BaseUI, {
   dispose: function() {
     Class.dispose(this._tappable);
