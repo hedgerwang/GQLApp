@@ -84,6 +84,11 @@ var App = Class.create(null, {
       this._onViewProfile);
 
     events.listen(
+      this._chrome,
+      EventType.SEARCH_BAR_ON_SEARCH_SELECT,
+      this._onViewProfile);
+
+    events.listen(
       this._sideMenu,
       EventType.SIDE_MENU_HOME,
       this._onViewHome);
@@ -122,14 +127,20 @@ var App = Class.create(null, {
   _onViewProfile: function(event) {
     var uid = event.data;
 
-    if (event.type === EventType.SIDE_MENU_PROFILE) {
-      this._hideSideMenu().addCallback(this.bind(function() {
-        this._clearScenes();
-        this._addScene(new Profile(uid));
-        uid = null;
-      }));
-    } else {
-      this._addScene(new Profile(uid, true));
+    switch (event.type) {
+      case  EventType.SIDE_MENU_PROFILE:
+      case  EventType.SEARCH_BAR_ON_SEARCH_SELECT:
+        this._hideSideMenu().addCallback(this.bind(function() {
+          this._clearScenes();
+          this._addScene(new Profile(uid));
+          uid = null;
+        }));
+        return;
+
+      default:
+        this._addScene(new Profile(uid, true));
+        break;
+
     }
   },
 

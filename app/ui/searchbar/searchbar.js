@@ -39,6 +39,8 @@ var SearchBar = Class.create(BaseUI, {
         placeholder: 'Search'
       });
 
+    this._searchPopup = dom.createElement('div');
+
     var node = dom.createElement(
       'div', cssx('app-ui-searchbar'),
       ['div', cssx('app-ui-searchbar_head'),
@@ -46,7 +48,8 @@ var SearchBar = Class.create(BaseUI, {
         ['div', cssx('app-ui-searchbar_head-background'), this._input],
         this._icon
       ],
-      this._mask
+      this._mask,
+      this._searchPopup
     );
 
     new Imageable(this._icon, '/images/spyglass-2x.png');
@@ -61,6 +64,7 @@ var SearchBar = Class.create(BaseUI, {
     this._tappable = new Tappable(this.getNode());
     this._tappable.addTarget(this.getNode());
     this._tappable.addTarget(this._cancel);
+    this._tappable.addTarget(this._searchPopup);
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
     this.getEvents().listen(this._input, 'focus', this._onFocus);
   },
@@ -73,13 +77,35 @@ var SearchBar = Class.create(BaseUI, {
    * @param {Event} event
    */
   _onTap: function(event) {
+    var profileID;
+
     switch (event.data) {
       case this._cancel:
         this._close();
-        break;
+        return;
+
+      case this._searchPopup :
+        var node = event.target;
+        while (node) {
+          profileID = node._profileID;
+
+          if (profileID) {
+            this._close();
+
+            this.dispatchEvent(
+              EventType.SEARCH_BAR_ON_SEARCH_SELECT,
+              profileID,
+              true);
+
+            break;
+          }
+          node = node.parentNode;
+        }
+        return;
 
       default:
         this._start();
+        return;
     }
   },
 
@@ -135,7 +161,7 @@ var SearchBar = Class.create(BaseUI, {
       this._scrollList.clearContent();
     } else {
       this._scrollList = new ScrollList();
-      this._scrollList.render(this.getNode());
+      this._scrollList.render(this._searchPopup);
     }
 
     if (value.length > 2) {
@@ -156,6 +182,8 @@ var SearchBar = Class.create(BaseUI, {
 
     var node = dom.createElement(
       'div', cssx('app-ui-searchbar_item'), icon, text);
+
+    node._profileID = data.id;
 
     new Imageable(icon, objects.getValueByName('profile_picture.uri', data));
     return node;
@@ -196,6 +224,7 @@ var SearchBar = Class.create(BaseUI, {
   _icon : null,
   _input : null,
   _mask: null,
+  _searchPopup:null,
   _cancel: null,
   _on: false,
   _queryValue: ''
