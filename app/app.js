@@ -8,18 +8,17 @@ var Class = require('jog/class').Class;
 var Cover = require('app/ui/scene/cover').Cover;
 var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
-var HashCode = require('jog/hashcode').HashCode;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
+var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
+var lang = require('jog/lang').lang;
 
 var App = Class.create(null, {
 
   main: function() {
-    this._updateURLHash();
-
     this._chrome = new Chrome();
     this._coverScene = new Cover();
     this._sideMenu = new SideMenu();
@@ -41,28 +40,35 @@ var App = Class.create(null, {
     var currScene = this._activeScene;
 
     while (currScene) {
-      var prevScene = currScene._appScenePrev;
+      var prevScene = currScene._prevScene;
       Class.dispose(currScene);
       currScene = prevScene;
     }
 
+    this._disableSceneScroller();
     Class.dispose(this._events);
     Class.dispose(this._sideMenu);
     Class.dispose(this._chrome);
   },
 
   _start: function() {
-    this._appendScene(0);
+    this._addScene(0);
     this._chrome.appendChild(this._sideMenu, true);
-    this._coverScene.faceOut(450, true);
+    this._coverScene.fadeOut(450, true);
+    this._enableSceneScroller();
     this._bindEvents();
   },
 
   _bindEvents: function() {
     this._events.listen(
       this._chrome,
-      EventType.JEWEL_SIDE_MENU_TOGGLE,
+      EventType.JEWELBAR_SIDE_MENU_TOGGLE,
       this._toggleSideMenu);
+
+    this._events.listen(
+      this._chrome,
+      EventType.JEWELBAR_BACK,
+      this._onBackScene);
 
     this._events.listen(
       this._chrome,
@@ -78,11 +84,13 @@ var App = Class.create(null, {
       this._sideMenu,
       EventType.SEARCH_BAR_ON_SEARCH_END,
       this._onSearchEnd);
+  },
 
-    this._events.listen(
-      window,
-      'hashchange',
-      this._onHashChange);
+  /**
+   * @param {Event} event
+   */
+  _onBackScene: function(event) {
+    this._removeScene(this._activeScene);
   },
 
   /**
@@ -100,40 +108,41 @@ var App = Class.create(null, {
    */
   _onViewProfile: function(event) {
     var uid = event.data;
-    this._appendScene(uid);
+    this._addScene(uid);
   },
 
   /**
    * @param {number} uid
    */
-  _appendScene: function(uid) {
+  _addScene: function(uid) {
     if (!this._activeScene) {
-      this._activeScene = new NewsFeed(uid, true);
-      window.location.hash = '#scene=' + HashCode.getHashCode(this._activeScene);
+      this._activeScene = new NewsFeed(uid, false);
       this._chrome.appendChild(this._activeScene, true);
       return;
     }
 
+    this._disableSceneScroller();
+    this._activeScene.setDisabled(true);
+
     this._hideSideMenu().then(this.bind(function() {
       var currScene = this._activeScene;
-      currScene.setDisabled(true);
 
       var newScene = new NewsFeed(uid, true);
       uid = null;
 
       // TODO(hedger): Use LinkedList?
       // HACK. Expando.
-      currScene._appSceneNext = newScene;
-      newScene._appScenePrev = currScene;
+      currScene._nextScene = newScene;
+      newScene._prevScene = currScene;
       this._chrome.appendChild(newScene);
       this._activeScene = newScene;
-      this._updateURLHash();
-      return newScene.translateXTo(this._chrome.getWidth());
+      return newScene.translateXTo(this._chrome.getWidth(), 350);
     })).then(this.bind(function(nextScene) {
       nextScene.render(this._chrome.getNode());
-      return nextScene.translateXTo(0);
+      return nextScene.translateXTo(0, 350);
     })).addCallback(this.bind(function(nextScene) {
-      nextScene._appScenePrev.setHidden(true);
+      nextScene._prevScene.setHidden(true);
+      this._enableSceneScroller();
     }));
   },
 
@@ -143,59 +152,33 @@ var App = Class.create(null, {
    */
   _removeScene: function(targetScene) {
     // CLear all scenes after targetScene.
-    var scene = targetScene._appSceneNext;
+    var scene = targetScene._nextScene;
 
     if (scene) {
       while (scene) {
-        var nextScene = scene._appSceneNext;
+        var nextScene = scene._nextScene;
         scene.dispose();
         scene = nextScene;
       }
     }
 
-    var prevScene = targetScene._appScenePrev;
+    var prevScene = targetScene._prevScene;
     if (__DEV__) {
       if (!prevScene) {
         throw new Error('The first scene should not be removed');
       }
     }
 
-    prevScene.setHidden(false).setDisabled(false);
+    prevScene.setHidden(false).setDisabled(true);
     this._activeScene = prevScene;
-    delete this._activeScene._appSceneNext;
-    this._updateURLHash();
+    delete this._activeScene._nextScene;
+
     targetScene.setDisabled(true).
-      translateXTo(this._chrome.getWidth()).
-      addCallback(function(scene) {
-        scene.dispose();
-      });
-  },
-
-  _updateURLHash: function() {
-    if (window.history.replaceState) {
-      var url = window.location.href.split('#')[0];
-      var hashPrefix = '#scene=';
-      if (this._activeScene) {
-        if (this._activeScene._appSceneNext) {
-          window.history.replaceState(
-            null,
-            'prevscene',
-            url + hashPrefix + HashCode.getHashCode(this._activeScene));
-        } else {
-          window.history.pushState(
-            null,
-            'currscene',
-            url + hashPrefix + HashCode.getHashCode(this._activeScene));
-        }
-      } else {
-        window.history.replaceState(null, 'scene', url);
-      }
-
-    } else {
-      if (__DEV__) {
-        throw new Error('Client does not support History API');
-      }
-    }
+      translateXTo(this._chrome.getWidth() - 50, 800).
+      addCallback(this.bind(function(scene) {
+      scene.dispose();
+      this._activeScene.setDisabled(false);
+    }));
   },
 
   /**
@@ -206,35 +189,6 @@ var App = Class.create(null, {
       cssx('app-ui-scene-sidemenu_onsearch'));
 
     this._showSideMenu();
-  },
-
-  /**
-   * @param {Event} event
-   */
-  _onHashChange: function(event) {
-    var re = /#*(scene=)([a-zA-Z0-9_-]+)/;
-    var matches = window.location.hash.match(re);
-    if (matches && matches[2]) {
-      var hashCode = matches[2];
-      var scene = this._activeScene;
-      var targetScene;
-
-      while (scene) {
-        if (HashCode.getHashCode(scene) === hashCode) {
-          if (scene === this._activeScene) {
-            return;
-          } else {
-            targetScene = scene;
-            break;
-          }
-        }
-        scene = scene._appScenePrev;
-      }
-
-      if (targetScene && targetScene._appSceneNext) {
-        this._removeScene(targetScene._appSceneNext);
-      }
-    }
   },
 
   _toggleSideMenu: function() {
@@ -254,9 +208,11 @@ var App = Class.create(null, {
    * @return {Deferred}
    */
   _showSideMenu: function() {
+    this._disableSceneScroller();
+
     this._sideMenuMode++;
 
-    var df = this._activeScene.translateXTo(this._sideMenu.getWidth());
+    var df = this._activeScene.translateXTo(this._sideMenu.getWidth(), 350);
 
     switch (this._sideMenuMode) {
       case 1:
@@ -299,6 +255,8 @@ var App = Class.create(null, {
    * @return {Deferred}
    */
   _hideSideMenu: function(opt_event) {
+    this._disableSceneScroller();
+
     this._sideMenuMode = 0;
 
     if (opt_event) {
@@ -316,13 +274,108 @@ var App = Class.create(null, {
       null,
       true);
 
-    return this._activeScene.translateXTo(0);
+    return this._activeScene.translateXTo(0, 350).addCallback(
+      this.bind(this._enableSceneScroller));
+  },
+
+  _enableSceneScroller: function() {
+    this._disableSceneScroller();
+
+    var scroller = new Scroller(this, {
+      paging: true,
+      direction: 'horizontal'
+    });
+
+    this._sceneScroller = scroller;
+    this._sceneScrollerEvents = new Events(this);
+
+    var node = this._activeScene.getNode();
+    var events = this._sceneScrollerEvents;
+    events.listen(node, TouchHelper.EVT_TOUCHSTART, this._onSceneTouchStart);
+  },
+
+  _disableSceneScroller: function() {
+    if (this._sceneScroller) {
+      Class.dispose(this._sceneScroller);
+      Class.dispose(this._sceneScrollerEvents);
+      delete this._sceneScrollerEvents;
+      delete this._sceneScroller;
+    }
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onSceneTouchStart: function(event) {
+    this._sceneScroller.doTouchStart(event);
+    var events = this._sceneScrollerEvents;
+    events.unlistenAll();
+    events.listen(document, TouchHelper.EVT_TOUCHMOVE, this._onSceneTouchMove);
+    events.listen(document, TouchHelper.EVT_TOUCHEND, this._onSceneTouchEnd);
+    events.listen(document, TouchHelper.EVT_TOUCHCANCEL, this._onSceneTouchEnd);
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onSceneTouchMove: function(event) {
+    this._sceneScroller.doTouchMove(event);
+  },
+
+  _onSceneTouchEnd: function(event) {
+    this._sceneScroller.doTouchEnd(event);
+    var node = this._activeScene.getNode();
+    var events = this._sceneScrollerEvents;
+    events.unlistenAll();
+    events.listen(node, TouchHelper.EVT_TOUCHSTART, this._onSceneTouchStart);
+    if (this._activeScene.getTranslateX() > this._sceneScrollerWidth / 3) {
+      this._disableSceneScroller();
+      this._showSideMenu();
+    }
+  },
+
+
+  onScrollStart: function(left) {
+    if (this._sideMenuMode !== 0) {
+      this._disableSceneScroller();
+    } else {
+      this._activeScene.setDisabled(true);
+      var width = this._sideMenu.getWidth();
+      this._sceneScrollerWidth = width;
+      this._sceneScroller.setDimensions(width, 1, width);
+    }
+  },
+
+  onScroll: function(left) {
+    this._activeScene.translateXTo(
+      Math.min(-left * this._chrome.getScale(), this._sceneScrollerWidth));
+  },
+
+  onScrollEnd: function() {
+    // Do nothing.
+    this._activeScene.setDisabled(false);
   },
 
   /**
    * @type {BaseUI}
    */
   _chrome: null,
+
+  /**
+   * @type {Scroller}
+   */
+  _sceneScroller: null,
+
+  /**
+   * @type {number}
+   */
+  _sceneScrollerWidth: 0,
+
+
+  /**
+   * @type {Events}
+   */
+  _sceneScrollerEvents: null,
 
   /**
    * @type {Scene}
@@ -333,7 +386,6 @@ var App = Class.create(null, {
    * @type {Scene}
    */
   _activeScene: null,
-
 
   /**
    * 0 - close

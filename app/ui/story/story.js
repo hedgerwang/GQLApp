@@ -48,7 +48,7 @@ var Story = Class.create(BaseUI, {
     dom.append(body, this._createImage(image));
 
     var footer = dom.createElement('div', cssx('app-ui-story-footer'),
-      'Like - Comment'
+      'Like . Comment'
     );
 
     var node = dom.createElement('div', cssx('app-ui-story'),

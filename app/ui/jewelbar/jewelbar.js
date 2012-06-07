@@ -11,6 +11,9 @@ var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
+// Images:
+// phabricator.fb.com/diffusion/E/browse/tfb/trunk/www/html/images/jewel/
+
 var JewelBar = Class.create(BaseUI, {
   /**
    * @param {boolean=} opt_showBackButton
@@ -27,9 +30,14 @@ var JewelBar = Class.create(BaseUI, {
   /** @override */
   createNode: function() {
     var iconClassName = ' ' + cssx('app-ui-jewelbar_icon');
-    this._sideMenuIcon = dom.createElement(
-      'div', cssx('app-ui-jewelbar_sidemenu') + iconClassName);
 
+    if (this._showBackButton) {
+      this._backIcon = dom.createElement(
+        'div', cssx('app-ui-jewelbar_back'), '\u00AB');
+    } else {
+      this._sideMenuIcon = dom.createElement(
+        'div', cssx('app-ui-jewelbar_sidemenu') + iconClassName);
+    }
     this._friendRequestsIcon = dom.createElement(
       'div', cssx('app-ui-jewelbar_freind-requests') + iconClassName);
 
@@ -41,7 +49,7 @@ var JewelBar = Class.create(BaseUI, {
 
     var node = dom.createElement(
       'div', cssx('app-ui-jewelbar'),
-      this._sideMenuIcon,
+      this._backIcon || this._sideMenuIcon,
       ['div', cssx('app-ui-jewelbar_center'),
         this._friendRequestsIcon,
         this._messagesIcon,
@@ -55,7 +63,7 @@ var JewelBar = Class.create(BaseUI, {
   onDocumentReady:function() {
     this._tappable = new Tappable(this.getNode());
 
-    this._tappable.addTarget(this._sideMenuIcon).
+    this._tappable.addTarget(this._backIcon || this._sideMenuIcon).
       addTarget(this._friendRequestsIcon).
       addTarget(this._notificationIcon).
       addTarget(this._messagesIcon).
@@ -64,7 +72,10 @@ var JewelBar = Class.create(BaseUI, {
     var events = this.getEvents();
     events.listen(this._tappable, 'tap', this._onTap);
 
-    new Imageable(this._sideMenuIcon, '/images/menu-2x.png');
+    if (this._sideMenuIcon) {
+      new Imageable(this._sideMenuIcon, '/images/menu-2x.png');
+    }
+
     new Imageable(this._friendRequestsIcon, '/images/requests-2x.png');
     new Imageable(this._messagesIcon, '/images/messages-2x.png');
     new Imageable(this._notificationIcon, '/images/notifications-2x.png');
@@ -74,10 +85,16 @@ var JewelBar = Class.create(BaseUI, {
    * @param {Event} event
    */
   _onTap: function(event) {
-    switch (event.data) {
-      case this._sideMenuIcon:
-        this.dispatchEvent(EventType.JEWEL_SIDE_MENU_TOGGLE, null, true);
-        break;
+    if (event.data) {
+      switch (event.data) {
+        case this._sideMenuIcon:
+          this.dispatchEvent(EventType.JEWELBAR_SIDE_MENU_TOGGLE, null, true);
+          break;
+
+        case this._backIcon:
+          this.dispatchEvent(EventType.JEWELBAR_BACK, null, true);
+          break;
+      }
     }
   },
 

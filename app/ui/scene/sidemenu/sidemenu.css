@@ -42,7 +42,7 @@
   box-align: center;
   box-orient: horizontal;
   box-pack: left;
-  box-shadow: rgba(255, 255, 255, 0.078125) 0px 1px 0px 0px inset;
+  box-shadow: rgba(255, 255, 255, 0.078125) 1px 1px 0px 0px inset;
   display: -webkit-box;
 }
 
