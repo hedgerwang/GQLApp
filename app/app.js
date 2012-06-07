@@ -53,7 +53,7 @@ var App = Class.create(null, {
   },
 
   _start: function() {
-    this._addScene(0);
+    this._addScene(new NewsFeed(0, false));
     this._chrome.appendChild(this._sideMenu, true);
     this._coverScene.fadeOut(450, true);
     this._enableSceneScroller();
@@ -61,27 +61,39 @@ var App = Class.create(null, {
   },
 
   _bindEvents: function() {
-    this._events.listen(
+    var events = this._events;
+
+    events.listen(
       this._chrome,
       EventType.JEWELBAR_SIDE_MENU_TOGGLE,
       this._toggleSideMenu);
 
-    this._events.listen(
+    events.listen(
       this._chrome,
       EventType.JEWELBAR_BACK,
       this._onBackScene);
 
-    this._events.listen(
+    events.listen(
       this._chrome,
       EventType.VIEW_PROFILE,
       this._onViewProfile);
 
-    this._events.listen(
+    events.listen(
+      this._sideMenu,
+      EventType.SIDE_MENU_PROFILE,
+      this._onViewProfile);
+
+    events.listen(
+      this._sideMenu,
+      EventType.SIDE_MENU_HOME,
+      this._onViewHome);
+
+    events.listen(
       this._sideMenu,
       EventType.SEARCH_BAR_ON_SEARCH_START,
       this._onSearchStart);
 
-    this._events.listen(
+    events.listen(
       this._sideMenu,
       EventType.SEARCH_BAR_ON_SEARCH_END,
       this._onSearchEnd);
@@ -109,15 +121,41 @@ var App = Class.create(null, {
    */
   _onViewProfile: function(event) {
     var uid = event.data;
-    this._addScene(uid);
+
+    if (event.type === EventType.SIDE_MENU_PROFILE) {
+      this._hideSideMenu().addCallback(this.bind(function() {
+        this._clearScenes();
+        this._addScene(new Profile(uid));
+        uid = null;
+      }));
+    } else {
+      this._addScene(new Profile(uid, true));
+    }
+  },
+
+  _onViewHome: function() {
+    this._hideSideMenu().addCallback(this.bind(function() {
+      this._clearScenes();
+      this._addScene(new NewsFeed(0));
+    }));
+  },
+
+  _clearScenes: function() {
+    var scene = this._activeScene;
+    while (scene) {
+      var nextScene = scene._nextScene;
+      scene.dispose();
+      scene = nextScene;
+    }
+    delete this._activeScene;
   },
 
   /**
-   * @param {number} uid
+   * @param {Scene} scene
    */
-  _addScene: function(uid) {
+  _addScene: function(scene) {
     if (!this._activeScene) {
-      this._activeScene = new NewsFeed(uid, false);
+      this._activeScene = scene;
       this._chrome.appendChild(this._activeScene, true);
       return;
     }
@@ -128,15 +166,17 @@ var App = Class.create(null, {
     this._hideSideMenu().then(this.bind(function() {
       var currScene = this._activeScene;
 
-      var newScene = new Profile(uid, true);
-      uid = null;
+      var newScene = scene;
+      scene = null;
 
       // TODO(hedger): Use LinkedList?
       // HACK. Expando.
       currScene._nextScene = newScene;
       newScene._prevScene = currScene;
+
       this._chrome.appendChild(newScene);
       this._activeScene = newScene;
+
       return newScene.translateXTo(this._chrome.getWidth(), 350);
     })).then(this.bind(function(nextScene) {
       nextScene.render(this._chrome.getNode());
@@ -170,16 +210,18 @@ var App = Class.create(null, {
       }
     }
 
+    this._disableSceneScroller();
     prevScene.setHidden(false).setDisabled(true);
     this._activeScene = prevScene;
     delete this._activeScene._nextScene;
 
     targetScene.setDisabled(true).
-      translateXTo(this._chrome.getWidth() - 50, 800).
-      addCallback(this.bind(function(scene) {
-      scene.dispose();
-      this._activeScene.setDisabled(false);
-    }));
+      translateXTo(this._chrome.getWidth() - 50, 600).addCallback(
+      this.bind(function(scene) {
+        scene.dispose();
+        this._activeScene.setDisabled(false);
+        this._enableSceneScroller();
+      }));
   },
 
   /**

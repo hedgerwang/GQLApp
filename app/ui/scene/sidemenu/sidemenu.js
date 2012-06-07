@@ -5,6 +5,7 @@
 
 var Class = require('jog/class').Class;
 var Deferred = require('jog/deferred').Deferred;
+var EventType = require('app/eventtype').EventType;
 var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Scene = require('jog/ui/scene').Scene;
@@ -40,28 +41,57 @@ var SideMenu = Class.create(Scene, {
     this._searchBar.render(this.getNode());
     this._scrollList.render(this.getNode());
 
+    this._tappable = new Tappable(this.getNode());
+    this.getEvents().listen(this._tappable, 'tap', this._onTap);
+
     this._renderProfile().
       then(this.bind(this._renderFavorites)).
       then(this.bind(this._renderGroups)).
       then(this.bind(this._renderFriendLists)).
       then(this.bind(this._renderOther));
-
-    this._tappable = new Tappable(this.getNode());
-
-    this.getEvents().listen(this._tappable, 'tap', this._onTap);
   },
 
   /**
    * @param {Event} event
    */
   _onTap: function(event) {
+    if (this._selectedItemNode === event.data || !event.data) {
+      return;
+    }
+
     var name = event.data ? event.data._name : null;
+    var eventType;
+    var data;
 
     switch (name) {
       case 'reload':
         window.location.reload();
         break;
+
+      case 'home':
+        eventType = EventType.SIDE_MENU_HOME;
+        break;
+
+      case 'profile':
+        eventType = EventType.SIDE_MENU_PROFILE;
+        data = 0;
+        break;
+
+      default:
+        return;
     }
+
+    if (this._selectedItemNode) {
+      dom.removeClassName(
+        this._selectedItemNode, cssx('app-ui-scene-sidemenu_item-selected'));
+    }
+
+    this._selectedItemNode = event.data;
+
+    dom.addClassName(
+      event.data, cssx('app-ui-scene-sidemenu_item-selected'));
+
+    this.dispatchEvent(eventType, data);
   },
 
   /**
@@ -72,7 +102,7 @@ var SideMenu = Class.create(Scene, {
       var uid = response.userid;
       var name = objects.getValueByName(uid + '.name', response);
       var src = objects.getValueByName(uid + '.profile_picture.uri', response);
-      var item = this._createMenuItem(name, src);
+      var item = this._createMenuItem(name, src, null, 'profile');
       this._scrollList.addContent(item);
     }))
   },
@@ -86,7 +116,10 @@ var SideMenu = Class.create(Scene, {
         this._createHeading('Favorites'),
 
         this._createMenuItem('News Feed',
-          '//s-static.ak.facebook.com/rsrc.php/v2/y8/r/R2NjP5a0R3f.png'),
+          '//s-static.ak.facebook.com/rsrc.php/v2/y8/r/R2NjP5a0R3f.png',
+          null,
+          'home',
+          true),
 
         this._createMenuItem('Messages',
           '//s-static.ak.facebook.com/rsrc.php/v2/yS/r/Ts7l0QBNRnV.png'),
@@ -184,9 +217,10 @@ var SideMenu = Class.create(Scene, {
    * @param {string} iconSrc
    * @param {Object=} opt_data
    * @param {string=} opt_name
+   * @param {boolean} opt_selected
    * @return {Node}
    */
-  _createMenuItem: function(text, iconSrc, opt_data, opt_name) {
+  _createMenuItem: function(text, iconSrc, opt_data, opt_name, opt_selected) {
     var icon = dom.createElement('div',
       cssx('app-ui-scene-sidemenu_item-icon'));
 
@@ -200,9 +234,14 @@ var SideMenu = Class.create(Scene, {
 
     if (opt_name) {
       node._name = opt_name;
+      this._tappable.addTarget(node);
     }
 
-    this._tappable.addTarget(node);
+    if (opt_selected) {
+      this._selectedItemNode = node;
+      dom.addClassName(node, cssx('app-ui-scene-sidemenu_item-selected'));
+    }
+
     return node;
   },
 
@@ -219,6 +258,11 @@ var SideMenu = Class.create(Scene, {
    * @type {SimpleScrollList}
    */
   _scrollList: null,
+
+  /**
+   * @type {Element}
+   */
+  _selectedItemNode: null,
 
   /**
    * @type {Imageable}
