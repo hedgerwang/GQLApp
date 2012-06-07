@@ -30,7 +30,7 @@ var SearchBar = Class.create(BaseUI, {
     this._icon = dom.createElement('i', cssx('app-ui-searchbar_icon'));
 
     this._cancel = dom.createElement(
-      'i', cssx('app-ui-searchbar_cancel'), 'Cancel');
+      'div', cssx('app-ui-searchbar_cancel'), 'Cancel');
 
     this._input = dom.createElement(
       'input',
@@ -62,6 +62,11 @@ var SearchBar = Class.create(BaseUI, {
     this._tappable.addTarget(this.getNode());
     this._tappable.addTarget(this._cancel);
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
+    this.getEvents().listen(this._input, 'focus', this._onFocus);
+  },
+
+  _onFocus: function(event) {
+    // event.preventDefault();
   },
 
   /**
@@ -82,21 +87,21 @@ var SearchBar = Class.create(BaseUI, {
    * @param {Event} event
    */
   _onInput: function(event) {
-    if (this._loading || !this._on) {
+    if (this._loadingIcon || !this._on) {
       return;
     }
 
     if (!this._friendsData) {
-      this._loading = new LoadingIndicator();
-      this.appendChild(this._loading, true);
+      this._loadingIcon = new LoadingIndicator();
+      this.appendChild(this._loadingIcon, true);
 
       FBData.getFriends(100, null, true).addCallback(
         this.callAfter(function(data) {
           this._friendsData = objects.getValueByName(
             data.userid + '.friends.nodes', data) || [];
 
-          Class.dispose(this._loading);
-          delete this._loading;
+          Class.dispose(this._loadingIcon);
+          delete this._loadingIcon;
 
           this._onInput(null);
         }, 1200));
@@ -165,6 +170,7 @@ var SearchBar = Class.create(BaseUI, {
       this.dispatchEvent(EventType.SEARCH_BAR_ON_SEARCH_START, null, true);
     }
     this._input.focus();
+    window.scrollTo(0, 1);
   },
 
   _close: function() {
@@ -172,8 +178,8 @@ var SearchBar = Class.create(BaseUI, {
       Class.dispose(this._scrollList);
       delete this._scrollList;
 
-      Class.dispose(this._loading);
-      delete this._loading;
+      Class.dispose(this._loadingIcon);
+      delete this._loadingIcon;
 
       delete this._on;
       this._input.value = '';
@@ -185,7 +191,7 @@ var SearchBar = Class.create(BaseUI, {
   },
 
   _scrollList: null,
-  _loading: null,
+  _loadingIcon: null,
   _friendsData: null,
   _icon : null,
   _input : null,

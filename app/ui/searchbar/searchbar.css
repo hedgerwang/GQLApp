@@ -21,7 +21,6 @@
 
 .app-ui-searchbar_input {  
   -webkit-appearance: none;
-  background: red;
   background: transparent;
   border: none;
   color: #AAB2C0;
@@ -48,17 +47,28 @@
 }
 
 .app-ui-searchbar_onsearch .app-ui-searchbar_mask {  
+  position: absolute;
+}
+
+.app-ui-searchbar_onsearch .app-ui-searchbar_mask {  
   background: rgba(0, 0, 0, 0.6);
   bottom: 0;
   left: 0;
-  position: absolute;
   right: 0;
   top: 43px;
   z-index: 10;
 }
 
 .app-ui-searchbar_cancel {  
-  display: none;
+  display: block;
+  float: right;
+  font-size: 12px;
+  font-weight: bold;
+  overflow: hidden;
+  padding: 6px 0;
+  visibility: hidden;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .app-ui-searchbar_onsearch .app-ui-searchbar_cancel {  
@@ -67,14 +77,12 @@
   border-radius: 4px;
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .17);
   color: #BDC4D3;
-  display: block;
-  float: right;
-  font-size: 12px;
-  font-weight: bold;
   margin-left: 8px;
+  overflow: hidden;
   padding: 6px 8px;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, .35);
-  white-space: nowrap;
+  visibility: visible;
+  width: auto;
 }
 
 .app-ui-searchbar  > .jog-ui-scrolllist {  

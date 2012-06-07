@@ -89,6 +89,7 @@ var App = Class.create(null, {
   _toggleSideMenu: function() {
     switch (this._sideMenuMode) {
       case 1:
+      case 2:
         this._sideMenuMode = 0;
         this._showMainScene();
         break;
@@ -131,6 +132,8 @@ var App = Class.create(null, {
    * @param {Event} opt_event
    */
   _showMainScene: function(opt_event) {
+    this._sideMenuMode = 0;
+
     if (opt_event) {
       opt_event.preventDefault();
     }
