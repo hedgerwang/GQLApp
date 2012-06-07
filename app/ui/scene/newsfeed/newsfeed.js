@@ -50,6 +50,7 @@ var NewsFeed = Class.create(Scene, {
   onDocumentReady:function() {
     this._jewel.render(this.getNode());
     this._loading.render(this.getNode());
+    this._loading.center();
     this._tappable = new Tappable(this.getNode());
     this._query(14, null);
     this.getEvents().listen(this._tappable, 'tap', this._onTap);

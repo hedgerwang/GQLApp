@@ -1,0 +1,31 @@
+.app-ui-scene-profile_content {
+  padding: 56px 10px;
+  position: relative;
+}
+
+.app-ui-scene-profile_content-img {
+  background: #000;
+  border-radius: 3px;
+  display: block;
+  height: 320px;
+  margin: 0 auto 10px auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+
+.app-ui-scene-profile_content-name {
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 0;
+  color: #fff;
+  font-size: 2em;
+  font-weight: bold;
+  left: 0;
+  line-height: 140%;
+  padding: 10px 10px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 0 0 2px #000;
+  width: 100%;
+}

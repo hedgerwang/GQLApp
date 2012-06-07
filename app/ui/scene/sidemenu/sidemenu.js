@@ -68,7 +68,7 @@ var SideMenu = Class.create(Scene, {
    * @retrun {Deferred}
    */
   _renderProfile: function() {
-    return FBData.getProfile(true).addCallback(this.bind(function(response) {
+    return FBData.getProfile(0, true).addCallback(this.bind(function(response) {
       var uid = response.userid;
       var name = objects.getValueByName(uid + '.name', response);
       var src = objects.getValueByName(uid + '.profile_picture.uri', response);

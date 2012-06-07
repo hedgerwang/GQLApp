@@ -3,14 +3,6 @@
   width: 100%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-loading-indicator {  
-  display: block;
-  left: 50%;
-  margin: 0 0 0 -2em;
-  position: absolute;
-  top: 50%;
-}
-
 .app-ui-scene-newsfeed > .jog-ui-scrolllist {  
   background: #d8dce6;
   top: 44px;

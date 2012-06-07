@@ -9,6 +9,7 @@ var Cover = require('app/ui/scene/cover').Cover;
 var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
+var Profile = require('app/ui/scene/profile').Profile;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
@@ -127,7 +128,7 @@ var App = Class.create(null, {
     this._hideSideMenu().then(this.bind(function() {
       var currScene = this._activeScene;
 
-      var newScene = new NewsFeed(uid, true);
+      var newScene = new Profile(uid, true);
       uid = null;
 
       // TODO(hedger): Use LinkedList?
@@ -347,8 +348,8 @@ var App = Class.create(null, {
   },
 
   onScroll: function(left) {
-    this._activeScene.translateXTo(
-      Math.min(-left * this._chrome.getScale(), this._sceneScrollerWidth));
+    var x = Math.min(-left * this._chrome.getScale(), this._sceneScrollerWidth);
+    this._activeScene.translateXTo(Math.max(x, 0));
   },
 
   onScrollEnd: function() {
