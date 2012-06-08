@@ -56,7 +56,6 @@ var App = Class.create(null, {
     this._addScene(new NewsFeed(0, false));
     this._chrome.appendChild(this._sideMenu, true);
     this._coverScene.fadeOut(450, true);
-    this._enableSceneScroller();
     this._bindEvents();
   },
 

@@ -10,6 +10,10 @@ handlers:
 # - url: /(.*\.(gif|png|jpg|js|css|html))
 #   static_files: \1
 #   upload: (.*\.(gif|png|jpg|js|css|html))
+
+- url: /1x.html
+  static_files: 1x.html
+  upload: 1x.html
   
 - url: /
   static_files: index.html

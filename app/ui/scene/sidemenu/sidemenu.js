@@ -44,12 +44,27 @@ var SideMenu = Class.create(Scene, {
     this._tappable = new Tappable(this.getNode());
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
     this.getEvents().listen(this._tappable, 'tapstart', this._onTapStart);
+    this.getEvents().listen(this._searchBar,
+      EventType.SEARCH_BAR_ON_SEARCH_SELECT,
+      this._onSearchSelect);
 
     this._renderProfile().
       then(this.bind(this._renderFavorites)).
       then(this.bind(this._renderGroups)).
       then(this.bind(this._renderFriendLists)).
       then(this.bind(this._renderOther));
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onSearchSelect: function(event) {
+    if (this._selectedItemNode) {
+      dom.removeClassName(
+        this._selectedItemNode,
+        cssx('app-ui-scene-sidemenu_item-selected'));
+      delete this._selectedItemNode;
+    }
   },
 
   /**
