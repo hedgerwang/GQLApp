@@ -6,6 +6,7 @@
 var Class = require('jog/class').Class;
 var Deferred = require('jog/deferred').Deferred;
 var EventType = require('app/eventtype').EventType;
+var FBAPI = require('jog/fbapi').FBAPI;
 var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Scene = require('jog/ui/scene').Scene;
@@ -84,6 +85,14 @@ var SideMenu = Class.create(Scene, {
         window.location.reload();
         break;
 
+      case 'logout':
+        FBAPI.logout().addCallback(function() {
+          window.location.reload();
+          this.dispose();
+        });
+        break;
+
+
       case 'home':
         eventType = EventType.SIDE_MENU_HOME;
         break;
@@ -92,6 +101,7 @@ var SideMenu = Class.create(Scene, {
         eventType = EventType.SIDE_MENU_PROFILE;
         data = 0;
         break;
+
 
       default:
         return;

@@ -456,5 +456,10 @@ var App = Class.create(null, {
 exports.App = App;
 
 window.addEventListener('DOMContentLoaded', function() {
+  if (window.history.replaceState) {
+    // Clear the hash.
+    window.history.replaceState(
+      null, 'home', window.location.href.split('#')[0]);
+  }
   var app = new App();
 });

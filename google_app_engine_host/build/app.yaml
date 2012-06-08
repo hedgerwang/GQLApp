@@ -11,14 +11,25 @@ handlers:
 #   static_files: \1
 #   upload: (.*\.(gif|png|jpg|js|css|html))
 
-- url: /1x
-  static_files: 1x.html
-  upload: 1x.html
+#- url: /1x
+#  static_files: 1x.html
+#  upload: 1x.html
 
 - url: /1x.html
   static_files: 1x.html
   upload: 1x.html
-  
-- url: /
+
+- url: /1x
+  static_files: 1x.html
+  upload: 1x.html
+
+- url: /index.html
   static_files: index.html
   upload: index.html
+
+- url: /.*
+  script: main.py
+
+#- url: /.*
+#  secure: always
+#  script: main.py
