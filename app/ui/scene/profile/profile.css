@@ -1,16 +1,16 @@
-.app-ui-scene-profile_content {
+.app-ui-scene-profile_content {  
   padding: 56px 10px;
   position: relative;
 }
 
-.app-ui-scene-profile_cover {
+.app-ui-scene-profile_cover {  
   background: #000;
   height: 250px;
   margin-bottom: -120px;
   width: 100%;
 }
 
-.app-ui-scene-profile_content-img {
+.app-ui-scene-profile_content-img {  
   background: #000;
   border: solid 10px #aaa;
   display: block;
@@ -19,7 +19,7 @@
   width: 110px;
 }
 
-.app-ui-scene-profile_content-name {
+.app-ui-scene-profile_content-name {  
   background: rgba(0, 0, 0, 0.5);
   bottom: 0;
   color: #fff;

@@ -6,6 +6,7 @@
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var Imageable = require('jog/behavior/imageable').Imageable;
+var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -21,19 +22,48 @@ var Story = Class.create(BaseUI, {
 
   dispose: function() {
     Class.dispose(this._imageable);
+    Class.dispose(this._scrollableAlbum);
   },
 
   /** @override */
   createNode: function() {
     var data = this._data;
     var actor = objects.getValueByName('actors.0', data);
-    var actorPix = objects.getValueByName('profile_picture.uri', actor);
     var title = objects.getValueByName('title.text', data);
-    var image = objects.getValueByName('attachments.0.media.image', data);
     var message = objects.getValueByName('message.text', data) ||
       objects.getValueByName('title.text', data);
 
-    var header = dom.createElement('div', cssx('app-ui-story-header'),
+    var subattachments =
+      objects.getValueByName('attachments.0.subattachments', data);
+
+    if (__DEV__ && !lang.isArray(subattachments) || subattachments.length < 2) {
+      // Do not show stories that has no attachments.
+      // return dom.createElement('div', null, '');
+    }
+
+    var header = this._createHeader(actor, data);
+    var body = this._createBody(message);
+    var images = this._createImages(subattachments, data);
+
+    if (images) {
+      body.appendChild(images);
+    }
+
+    var footer = this._createFooter();
+
+    return dom.createElement('div', cssx('app-ui-story'),
+      header, body, footer);
+  },
+
+  /**
+   * @param {Object} actor
+   * @param {Object} data
+   * @reutrn {Element}
+   */
+  _createHeader: function(actor, data) {
+    var actorPix = objects.getValueByName('profile_picture.uri', actor);
+
+    return dom.createElement('div', cssx('app-ui-story-header'),
       ['div', {
         className: cssx('app-ui-story-profile-pix'),
         style: 'background-image:url(' + actorPix + ')'
@@ -43,18 +73,68 @@ var Story = Class.create(BaseUI, {
         this._createTime(data.creation_time)
       ]
     );
+  },
 
-    var body = dom.createElement('div', cssx('app-ui-story-body'), message);
-    dom.append(body, this._createImage(image));
+  /**
+   * @param {string} message
+   * @return {Node}
+   */
+  _createBody: function(message, data) {
+    return dom.createElement('div', cssx('app-ui-story-body'), message);
+  },
 
-    var footer = dom.createElement('div', cssx('app-ui-story-footer'),
+  /**
+   * @return {Node}
+   */
+  _createFooter: function() {
+    return dom.createElement('div', cssx('app-ui-story-footer'),
       'Like . Comment'
     );
+  },
 
-    var node = dom.createElement('div', cssx('app-ui-story'),
-      header, body, footer);
 
-    return node;
+  /**
+   * @param {Array} subattachments
+   * @param {Object} data
+   * @return {Node}
+   */
+  _createImages: function(subattachments, data) {
+    var imagesAlbum;
+    var imagesAlbumBody;
+    var imagesCount = 0;
+
+    if (lang.isArray(subattachments) && subattachments.length > 1) {
+      for (var i = 0, j = subattachments.length; i < j; i++) {
+        var subImage = objects.getValueByName('media.image', subattachments[i]);
+        if (!subImage || !subImage.uri || !subImage.width) {
+          continue;
+        }
+        if (imagesCount === 0) {
+          imagesAlbumBody = dom.createElement(
+            'div', cssx('app-ui-story-album-body'));
+
+          imagesAlbum = dom.createElement(
+            'div', cssx('app-ui-story-album'), imagesAlbumBody);
+        }
+        imagesAlbumBody.appendChild(this._createImage(subImage));
+        imagesCount++;
+        if (imagesCount > 4) {
+          // Too many photos.
+          break;
+        }
+      }
+    }
+
+    if (imagesAlbum) {
+      this._scrollableAlbum = new Scrollable(
+        imagesAlbum,
+        {direction:'horizontal', paging: true}
+      );
+      return imagesAlbum;
+    } else {
+      var image = objects.getValueByName('attachments.0.media.image', data);
+      return this._createImage(image);
+    }
   },
 
   /**
@@ -92,7 +172,6 @@ var Story = Class.create(BaseUI, {
    */
   _createImage: function(image) {
     if (image && image.width && image.uri && /\.jpg$/.test(image.uri)) {
-
       var node = dom.createElement('div', {
         className: cssx('app-ui-story-img')
       });
@@ -107,6 +186,12 @@ var Story = Class.create(BaseUI, {
    * @type {Imageable}
    */
   _imageable: null,
+
+  /**
+   * @type {Scrollable}
+   */
+  _scrollableAlbum: null,
+
   _data: null
 });
 

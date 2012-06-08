@@ -346,6 +346,8 @@ var App = Class.create(null, {
     this._sceneScrollerEvents = new Events(this);
 
     var node = this._activeScene.getNode();
+    this._sceneScroller.registerElement(node);
+
     var events = this._sceneScrollerEvents;
     events.listen(node, TouchHelper.EVT_TOUCHSTART, this._onSceneTouchStart);
   },
