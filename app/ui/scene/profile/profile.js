@@ -62,7 +62,7 @@ var Profile = Class.create(Scene, {
           this._uid = data.userid;
         }
         this.getNode().appendChild(this._createProfileNode(data[this._uid]));
-      }), 800);
+      }), 1200);
   },
 
   /**
@@ -73,19 +73,29 @@ var Profile = Class.create(Scene, {
     var node = dom.createElement(
       'div', cssx('app-ui-scene-profile_content'));
 
-    var name = dom.createElement(
-      'div', cssx('app-ui-scene-profile_content-name'), data.name);
 
-    var uri = objects.getValueByName('profile_picture.uri', data);
+    var coverUri = objects.getValueByName(
+      'albums.nodes.0.cover_photo.image.uri', data);
 
-    if (uri) {
+    if (coverUri) {
+      var cover = dom.createElement(
+        'div', cssx('app-ui-scene-profile_cover'));
+      new Imageable(cover, coverUri);
+      node.appendChild(cover);
+    }
+
+    var profileUri = objects.getValueByName('profile_picture.uri', data);
+
+    if (profileUri) {
       var img = dom.createElement(
         'div', cssx('app-ui-scene-profile_content-img'), name);
-      new Imageable(img, uri);
+      new Imageable(img, profileUri);
+
       node.appendChild(img);
-    } else {
-      node.appendChild(name);
     }
+
+    node.appendChild(dom.createElement(
+      'div', cssx('app-ui-scene-profile_content-name'), data.name));
 
     if (data.birthday) {
       node.appendChild(dom.createElement(

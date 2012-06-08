@@ -43,6 +43,7 @@ var SideMenu = Class.create(Scene, {
 
     this._tappable = new Tappable(this.getNode());
     this.getEvents().listen(this._tappable, 'tap', this._onTap);
+    this.getEvents().listen(this._tappable, 'tapstart', this._onTapStart);
 
     this._renderProfile().
       then(this.bind(this._renderFavorites)).
@@ -81,17 +82,25 @@ var SideMenu = Class.create(Scene, {
         return;
     }
 
+    this._selectedItemNode = event.data;
+    this.dispatchEvent(eventType, data);
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onTapStart: function(event) {
+    if (this._selectedItemNode === event.data || !event.data) {
+      return;
+    }
+
     if (this._selectedItemNode) {
       dom.removeClassName(
         this._selectedItemNode, cssx('app-ui-scene-sidemenu_item-selected'));
     }
 
-    this._selectedItemNode = event.data;
-
     dom.addClassName(
       event.data, cssx('app-ui-scene-sidemenu_item-selected'));
-
-    this.dispatchEvent(eventType, data);
   },
 
   /**

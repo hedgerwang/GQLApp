@@ -1,4 +1,4 @@
-.app-ui-searchbar_head {
+.app-ui-searchbar_head {  
   background-image: -webkit-gradient(linear, left top, left bottom, from(#434B5B), to(#242B39));
   border-bottom: 1px solid #161B25;
   border-top: 1px solid #5F6673;
@@ -9,7 +9,7 @@
   z-index: 10;
 }
 
-.app-ui-searchbar_head-background {
+.app-ui-searchbar_head-background {  
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#414A5A), to(#4C5464));
   border-radius: 15px;
   border: 1px solid #222936;
@@ -19,7 +19,7 @@
   position: relative;
 }
 
-.app-ui-searchbar_input {
+.app-ui-searchbar_input {  
   -webkit-appearance: none;
   background: transparent;
   border: none;
@@ -34,11 +34,11 @@
   top: 6px;
 }
 
-.app-ui-searchbar_input:focus {
+.app-ui-searchbar_input:focus {  
   color: #fff;
 }
 
-.app-ui-searchbar_icon {
+.app-ui-searchbar_icon {  
   height: 19px;
   left: 17px;
   position: absolute;
@@ -46,11 +46,11 @@
   width: 18px;
 }
 
-.app-ui-searchbar_onsearch .app-ui-searchbar_mask {
+.app-ui-searchbar_onsearch .app-ui-searchbar_mask {  
   position: absolute;
 }
 
-.app-ui-searchbar_onsearch .app-ui-searchbar_mask {
+.app-ui-searchbar_onsearch .app-ui-searchbar_mask {  
   background: rgba(0, 0, 0, 0.6);
   bottom: 0;
   left: 0;
@@ -59,7 +59,7 @@
   z-index: 10;
 }
 
-.app-ui-searchbar_cancel {
+.app-ui-searchbar_cancel {  
   display: block;
   float: right;
   font-size: 12px;
@@ -71,7 +71,7 @@
   width: 1px;
 }
 
-.app-ui-searchbar_onsearch .app-ui-searchbar_cancel {
+.app-ui-searchbar_onsearch .app-ui-searchbar_cancel {  
   background: -webkit-gradient(linear, left top, left bottom, from(#3B4456), to(#242A3A));
   border-color: #1B202A #1F2531 #1A1F2D;
   border-radius: 4px;
@@ -85,13 +85,13 @@
   width: auto;
 }
 
-.app-ui-searchbar   .jog-ui-scrolllist {
+.app-ui-searchbar   .jog-ui-scrolllist {  
   background: #31394A;
   top: 43px;
   z-index: 11;
 }
 
-.app-ui-searchbar_item {
+.app-ui-searchbar_item {  
   border-bottom-color: #242A37;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -104,20 +104,20 @@
   width: 100%;
 }
 
-.app-ui-searchbar_item-icon {
+.app-ui-searchbar_item-icon {  
   height: 43px;
   margin-right: 4px;
   width: 43px;
 }
 
-.app-ui-searchbar_item-text {
+.app-ui-searchbar_item-text {  
   color: #A9B1C0;
   font-weight: bold;
   text-shadow: rgba(0, 0, 0, .35) 0 1px;
   white-space: nowrap;
 }
 
-.app-ui-searchbar .jog-ui-loading-indicator {
+.app-ui-searchbar .jog-ui-loading-indicator {  
   left: 50%;
   margin: -2em 0 0 -2em;
   position: absolute;

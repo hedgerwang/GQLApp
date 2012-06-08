@@ -3,29 +3,33 @@
   position: relative;
 }
 
-.app-ui-scene-profile_content-img {
+.app-ui-scene-profile_cover {
   background: #000;
-  border-radius: 3px;
-  display: block;
-  height: 320px;
-  margin: 0 auto 10px auto;
-  overflow: hidden;
-  position: relative;
+  height: 250px;
+  margin-bottom: -120px;
   width: 100%;
 }
 
+.app-ui-scene-profile_content-img {
+  background: #000;
+  border: solid 10px #aaa;
+  display: block;
+  height: 110px;
+  position: relative;
+  width: 110px;
+}
 
 .app-ui-scene-profile_content-name {
   background: rgba(0, 0, 0, 0.5);
   bottom: 0;
   color: #fff;
-  font-size: 2em;
   font-weight: bold;
   left: 0;
   line-height: 140%;
+  margin-bottom: -30px;
   padding: 10px 10px;
-  position: absolute;
+  position: relative;
   text-align: left;
   text-shadow: 0 0 2px #000;
-  width: 100%;
+  top: -38px;
 }

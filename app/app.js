@@ -33,7 +33,7 @@ var App = Class.create(null, {
       this.callAfter(this._start, 600)
     );
 
-    // show the whole chrome.
+    // show the whole chro me.
     this._chrome.render(dom.getDocument().body);
   },
 
@@ -168,6 +168,8 @@ var App = Class.create(null, {
     if (!this._activeScene) {
       this._activeScene = scene;
       this._chrome.appendChild(this._activeScene, true);
+      this._disableSceneScroller();
+      this._enableSceneScroller();
       return;
     }
 
@@ -454,5 +456,4 @@ exports.App = App;
 
 window.addEventListener('DOMContentLoaded', function() {
   var app = new App();
-  // app.xmain();
 });
