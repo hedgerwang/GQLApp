@@ -35,6 +35,9 @@ var SearchBar = Class.create(BaseUI, {
     this._input = dom.createElement(
       'input',
       {
+        spellcheck :'off' ,
+        autocapitalize: 'off',
+        autocorrect: 'off',
         className: cssx('app-ui-searchbar_input'),
         placeholder: 'Search'
       });
