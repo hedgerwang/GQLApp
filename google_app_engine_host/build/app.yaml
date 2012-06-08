@@ -15,17 +15,22 @@ handlers:
 #  static_files: 1x.html
 #  upload: 1x.html
 
-- url: /1x.html
-  static_files: 1x.html
-  upload: 1x.html
-
 - url: /1x
   static_files: 1x.html
   upload: 1x.html
 
-- url: /index.html
-  static_files: index.html
-  upload: index.html
+
+- url: /android
+  static_files: android.html
+  upload: android.html
+  
+- url: /15x
+  static_files: 15x.html
+  upload: 15x.html  
+
+- url: /2x
+  static_files: 2x.html
+  upload: 2x.html
 
 - url: /.*
   script: main.py

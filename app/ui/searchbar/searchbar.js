@@ -153,23 +153,21 @@ var SearchBar = Class.create(BaseUI, {
     }
 
     this._queryValue = value;
+    Class.dispose(this._scrollList);
+    delete this._scrollList;
 
     if (!value) {
-      Class.dispose(this._scrollList);
-      delete this._scrollList;
       return;
     }
 
-    if (this._scrollList) {
-      this._scrollList.clearContent();
-    } else {
-      this._scrollList = new ScrollList();
-      this._scrollList.render(this._searchPopup);
-    }
+    this._scrollList = new ScrollList();
+    this._scrollList.render(this._searchPopup);
 
-    if (value.length > 2) {
+    if (value) {
+      var valueLength = value.length;
       for (var i = 0, data; data = this._friendsData[i]; i++) {
-        if (data.name.toLowerCase().indexOf(value) > -1) {
+        var idx = data.name.toLowerCase().indexOf(value);
+        if (valueLength === 1 && idx === 0 || valueLength > 1 && idx > -1) {
           this._scrollList.addContent(this._createSearchItem(data));
         }
       }

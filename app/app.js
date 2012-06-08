@@ -13,6 +13,7 @@ var Profile = require('app/ui/scene/profile').Profile;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
+var UserAgent = require('jog/useragent').UserAgent;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -461,5 +462,16 @@ window.addEventListener('DOMContentLoaded', function() {
     window.history.replaceState(
       null, 'home', window.location.href.split('#')[0]);
   }
+
+  if (UserAgent.IS_ANDROID) {
+    // Disable pinch-zoom for Android since we're targeting fixed
+    // "target-densitydpi"
+    document.addEventListener('touchstart', function(evt) {
+      if (evt.touches && evt.touches.length > 1) {
+        evt.preventDefault();
+      }
+    }, true);
+  }
+
   var app = new App();
 });
