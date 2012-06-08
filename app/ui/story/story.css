@@ -1,4 +1,4 @@
-.app-ui-story {
+.app-ui-story {  
   background: #fff;
   border-radius: 4px;
   border: solid 1px #eee;
@@ -6,12 +6,12 @@
   transform: translate3d(0, 0, 0);
 }
 
-.app-ui-story-header {
+.app-ui-story-header {  
   display: -webkit-box;
   margin: 8px;
 }
 
-.app-ui-story-profile-pix {
+.app-ui-story-profile-pix {  
   background-size: 100% 100%;
   background: #D8DCE6;
   display: inline-block;
@@ -21,7 +21,7 @@
   width: 34px;
 }
 
-.app-ui-story-title {
+.app-ui-story-title {  
   box-flex: 1;
   box-flex: 1;
   color: #576B95;
@@ -31,19 +31,19 @@
   word-wrap: break-word;
 }
 
-.app-ui-story-time {
+.app-ui-story-time {  
   color: #bbb;
   font-size: 12px;
   font-weight: normal;
 }
 
-.app-ui-story-body {
+.app-ui-story-body {  
   hyphens: auto;
   margin: 8px;
   word-wrap: break-word;
 }
 
-.app-ui-story-img {
+.app-ui-story-img {  
   background-color: #fff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .4);
   height: 312px;
@@ -51,15 +51,15 @@
   width: 312px;
 }
 
-.app-ui-story-album {
+.app-ui-story-album {  
   height: 288px;
   margin: 8px 0 3px 0;
-  white-space: nowrap;
   overflow: visible;
+  white-space: nowrap;
   width: 288px;
 }
 
-.app-ui-story-album .app-ui-story-img {
+.app-ui-story-album .app-ui-story-img {  
   background: #000;
   display: inline-block;
   height: 280px;
@@ -67,7 +67,7 @@
   width: 280px;
 }
 
-.app-ui-story-footer {
+.app-ui-story-footer {  
   background: #e2e9f1;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
