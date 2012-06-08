@@ -4,6 +4,7 @@
  */
 
 var Class = require('jog/class').Class;
+var ComposerBar = require('app/ui/composerbar').ComposerBar;
 var EventType = require('app/eventtype').EventType;
 var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
@@ -25,13 +26,11 @@ var NewsFeed = Class.create(Scene, {
    * @override
    */
   main: function(opt_uid, opt_showBackButton) {
-    this._jewel = new JewelBar(opt_showBackButton);
-    this._scrollList = new ScrollList();
-    this._loading = new LoadingIndicator();
     this._uid = opt_uid;
-    this.appendChild(this._jewel);
-    this.appendChild(this._scrollList);
-    this.appendChild(this._loading);
+    this._jewel = this.appendChild(new JewelBar(opt_showBackButton));
+    this._scrollList = this.appendChild(new ScrollList());
+    this._loading = this.appendChild(new LoadingIndicator());
+    this._composerBar = this.appendChild(new ComposerBar());
   },
 
   /** @override */
@@ -48,12 +47,32 @@ var NewsFeed = Class.create(Scene, {
 
   /** @override} */
   onDocumentReady:function() {
-    this._jewel.render(this.getNode());
-    this._loading.render(this.getNode());
+    var node = this.getNode();
+    this._jewel.render(node);
+    this._loading.render(node);
+    this._composerBar.render(node);
     this._loading.center();
     this._tappable = new Tappable(this.getNode());
     this._query(14, null);
-    this.getEvents().listen(this._tappable, 'tap', this._onTap);
+
+    var events = this.getEvents();
+    events.listen(this._tappable, 'tap', this._onTap);
+    events.listen(this._scrollList, 'scroll', this._onFeedScroll);
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onFeedScroll: function(event) {
+    var newTop = event.data.scrollTop;
+    newTop = newTop < 0 ? 0 : newTop;
+
+    if (this._feedSrollTop > newTop) {
+      this._composerBar.setVisible(true);
+    } else if (this._feedSrollTop < newTop) {
+      this._composerBar.setVisible(false);
+    }
+    this._feedSrollTop = newTop;
   },
 
   /**
@@ -133,6 +152,8 @@ var NewsFeed = Class.create(Scene, {
   },
 
   _storiesLength: 0,
+
+  _feedSrollTop: 0,
 
   _uid: 0,
 

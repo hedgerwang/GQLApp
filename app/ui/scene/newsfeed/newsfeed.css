@@ -1,15 +1,20 @@
-.app-ui-scene-newsfeed {  
+.app-ui-scene-newsfeed {
   background: #fff;
   width: 100%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-scrolllist {  
+.app-ui-scene-newsfeed > .jog-ui-scrolllist {
   background: #d8dce6;
   top: 44px;
   z-index: 1;
 }
 
-.app-ui-scene-newsfeed-denug-no-stories {  
+.app-ui-scene-newsfeed .app-ui-composerbar {
+  top: 44px;
+  z-index: 2;
+}
+
+.app-ui-scene-newsfeed-denug-no-stories {
   color: #444;
   padding: 60px 16px;
   word-wrap: break-word;

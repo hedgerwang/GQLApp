@@ -11,10 +11,13 @@ var asserts = require('jog/asserts').asserts;
 
 (new TestCase('ComposerBar Test'))
   .demo('demo',
-  function(body){
-    // var obj = new ComposerBar();
-  })
-  .test('test 1',
-  function() {
-    asserts.equal(1, 1);
+  function(body) {
+    var bar = new ComposerBar();
+    bar.render(body);
+    setTimeout(function() {
+      bar.setVisible(false);
+    }, 0);
+    setTimeout(function() {
+      bar.setVisible(true);
+    }, 500);
   });
