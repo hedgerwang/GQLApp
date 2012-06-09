@@ -60,11 +60,8 @@ var NewsFeed = Class.create(Scene, {
     events.listen(this._scrollList, 'scroll', this._onFeedScroll);
   },
 
-  /**
-   * @param {Event} event
-   */
-  _onFeedScroll: function(event) {
-    var newTop = event.data.scrollTop;
+  _onFeedScroll: function() {
+    var newTop = this._scrollList.scrollTop;
     newTop = newTop < 0 ? 0 : newTop;
 
     if (this._feedSrollTop > newTop) {
@@ -104,24 +101,22 @@ var NewsFeed = Class.create(Scene, {
 
       var scrollList = this._scrollList;
 
+      if (!scrollList.isInDocument()) {
+        scrollList.render(this.getNode());
+        this._tappable.addTarget(scrollList.getNode());
+      }
+
       if (lang.isArray(stories) && stories.length) {
         for (var i = 0, j = stories.length; i < j; i++) {
           scrollList.addContent(new Story(stories[i]));
         }
-
-        if (!scrollList.isInDocument()) {
-          scrollList.render(this.getNode());
-          this._tappable.addTarget(scrollList.getNode());
-        }
-
         this._storiesLength += stories.length;
-      } else {
-        dom.append(
-          this.getNode(),
+      } else if (this._storiesLength === 0) {
+        this._scrollList.addContent(
           dom.createElement(
-            'div',
+            'textarea',
             cssx('app-ui-scene-newsfeed-denug-no-stories'),
-            JSON.stringify(response)
+            'No Stories Found\n\r.' + JSON.stringify(response)
           )
         );
       }

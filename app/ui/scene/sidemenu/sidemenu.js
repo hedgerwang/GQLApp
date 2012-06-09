@@ -47,7 +47,7 @@ var SideMenu = Class.create(Scene, {
     this.getEvents().listen(this._tappable, 'tapstart', this._onTapStart);
     this.getEvents().listen(this._searchBar,
       EventType.SEARCH_BAR_ON_SEARCH_SELECT,
-      this._onSearchSelect);
+      this.dismissSelectedItem);
 
     this._renderProfile().
       then(this.bind(this._renderFavorites)).
@@ -56,10 +56,7 @@ var SideMenu = Class.create(Scene, {
       then(this.bind(this._renderOther));
   },
 
-  /**
-   * @param {Event} event
-   */
-  _onSearchSelect: function(event) {
+  dismissSelectedItem: function() {
     if (this._selectedItemNode) {
       dom.removeClassName(
         this._selectedItemNode,
@@ -92,6 +89,9 @@ var SideMenu = Class.create(Scene, {
         });
         break;
 
+      case 'dev':
+        eventType = EventType.SIDE_MENU_DEVELOPER;
+        break;
 
       case 'home':
         eventType = EventType.SIDE_MENU_HOME;
@@ -240,6 +240,7 @@ var SideMenu = Class.create(Scene, {
         this._createHeading('Other')
       );
 
+      body.appendChild(this._createMenuItem('Developer', null, null, 'dev'));
       body.appendChild(this._createMenuItem('Reload APP', null, null, 'reload'));
       body.appendChild(this._createMenuItem('Logout', null, null, 'logout'));
       this._scrollList.addContent(body);

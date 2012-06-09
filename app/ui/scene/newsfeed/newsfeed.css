@@ -1,21 +1,24 @@
-.app-ui-scene-newsfeed {
+.app-ui-scene-newsfeed {  
   background: #fff;
   width: 100%;
 }
 
-.app-ui-scene-newsfeed > .jog-ui-scrolllist {
+.app-ui-scene-newsfeed > .jog-ui-scrolllist {  
   background: #d8dce6;
   top: 44px;
   z-index: 1;
 }
 
-.app-ui-scene-newsfeed .app-ui-composerbar {
+.app-ui-scene-newsfeed .app-ui-composerbar {  
   top: 44px;
   z-index: 2;
 }
 
-.app-ui-scene-newsfeed-denug-no-stories {
-  color: #444;
-  padding: 60px 16px;
+.app-ui-scene-newsfeed-denug-no-stories {  
+  display: block;
+  font-size: 1em;
+  height: 300px;
+  margin: 100px auto;
+  width: 90%;
   word-wrap: break-word;
 }

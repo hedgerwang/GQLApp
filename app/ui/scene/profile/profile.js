@@ -11,7 +11,6 @@ var JewelBar = require('app/ui/jewelbar').JewelBar;
 var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
-var Story = require('app/ui/story').Story;
 var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
@@ -25,13 +24,10 @@ var Profile = Class.create(Scene, {
    * @override
    */
   main: function(opt_uid, opt_showBackButton) {
-    this._jewel = new JewelBar(opt_showBackButton);
-    this._scrollList = new ScrollList();
-    this._loading = new LoadingIndicator();
+    this._jewel = this.appendChild(new JewelBar(opt_showBackButton));
+    this._scrollList = this.appendChild(new ScrollList());
+    this._loading = this.appendChild(new LoadingIndicator());
     this._uid = opt_uid;
-    this.appendChild(this._jewel);
-    this.appendChild(this._scrollList);
-    this.appendChild(this._loading);
   },
   /** @override */
   dispose: function() {
@@ -61,7 +57,8 @@ var Profile = Class.create(Scene, {
         if (!this._uid) {
           this._uid = data.userid;
         }
-        this.getNode().appendChild(this._createProfileNode(data[this._uid]));
+        this._scrollList.render(this.getNode());
+        this._scrollList.addContent(this._createProfileNode(data[this._uid]));
       }), 1200);
   },
 
@@ -88,7 +85,7 @@ var Profile = Class.create(Scene, {
 
     if (profileUri) {
       var img = dom.createElement(
-        'div', cssx('app-ui-scene-profile_content-img'), name);
+        'div', cssx('app-ui-scene-profile_content-img'));
       new Imageable(img, profileUri);
 
       node.appendChild(img);
@@ -97,12 +94,52 @@ var Profile = Class.create(Scene, {
     node.appendChild(dom.createElement(
       'div', cssx('app-ui-scene-profile_content-name'), data.name));
 
-    if (data.birthday) {
-      node.appendChild(dom.createElement(
-        'div', null, 'Born at ' + data.birthday));
+
+    var friends = objects.getValueByName('mutual_friends.nodes', data);
+
+    if (lang.isArray(friends) && friends.length) {
+      var friendsTab = dom.createElement(
+        'div', cssx('app-ui-scene-profile_friends-tab'));
+
+      this._tappable = new Tappable(friendsTab);
+      this.getEvents().listen(this._tappable, 'tap', this._onFacePileTap);
+
+      for (var i = 0, friend; friend = friends[i]; i++) {
+        var facePile = dom.createElement(
+          'div',
+          cssx('app-ui-scene-profile_friend-pile'));
+
+        this._tappable.addTarget(facePile);
+        facePile._profileID = friend.id;
+
+        new Imageable(
+          facePile,
+          objects.getValueByName('profile_picture.uri', friend));
+
+        friendsTab.appendChild(facePile);
+      }
+
+      node.appendChild(friendsTab);
     }
+
     return node;
-  }
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onFacePileTap: function(event) {
+    var id = event.target._profileID;
+    if (id) {
+      this.dispatchEvent(EventType.VIEW_PROFILE, id, true);
+    }
+  },
+
+  _tappable: null,
+  _scrollList:null,
+  _jewel:null,
+  _loading:null,
+  _tabs: null
 });
 
 exports.Profile = Profile;

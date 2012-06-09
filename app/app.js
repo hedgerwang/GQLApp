@@ -6,6 +6,7 @@
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
 var Cover = require('app/ui/scene/cover').Cover;
+var Developer = require('app/ui/scene/developer').Developer;
 var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
@@ -95,6 +96,11 @@ var App = Class.create(null, {
 
     events.listen(
       this._sideMenu,
+      EventType.SIDE_MENU_DEVELOPER,
+      this._onDeveloper);
+
+    events.listen(
+      this._sideMenu,
       EventType.SEARCH_BAR_ON_SEARCH_START,
       this._onSearchStart);
 
@@ -138,9 +144,9 @@ var App = Class.create(null, {
         return;
 
       default:
+        this._sideMenu.dismissSelectedItem();
         this._addScene(new Profile(uid, true));
         break;
-
     }
   },
 
@@ -148,6 +154,13 @@ var App = Class.create(null, {
     this._hideSideMenu().addCallback(this.bind(function() {
       this._clearScenes();
       this._addScene(new NewsFeed(0));
+    }));
+  },
+
+  _onDeveloper: function() {
+    this._hideSideMenu().addCallback(this.bind(function() {
+      this._clearScenes();
+      this._addScene(new Developer());
     }));
   },
 
@@ -457,6 +470,7 @@ var App = Class.create(null, {
 exports.App = App;
 
 window.addEventListener('DOMContentLoaded', function() {
+
   if (window.history.replaceState) {
     // Clear the hash.
     window.history.replaceState(
