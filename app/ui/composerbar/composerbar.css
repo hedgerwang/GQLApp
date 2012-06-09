@@ -1,0 +1,43 @@
+.app-ui-composerbar {  
+  background-color: rgba(229, 229, 229, 1);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(229, 229, 229, 1) 100%); /* Chrome10+,Safari5.1+ */
+  border-bottom: solid 1px #efefef;
+  box-shadow: 0 0 3px #444;
+  display: -webkit-box;
+  font-size: 90%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.app-ui-composerbar_tab {  
+  border-left: solid 1px #fff;
+  border-right: solid 1px #dfdfdf;
+  box-sizing: border-box;
+  color: #666;
+  padding: 10px 0;
+  text-align: center;
+  white-space: nowrap;
+  width: 33.33%;
+}
+
+.app-ui-composerbar_tab:first-child {  
+  border-left: none;
+}
+
+.app-ui-composerbar_tab:last-child {  
+  border-right: none;
+}
+
+.app-ui-composerbar_tab-icon {  
+  display: inline-block;
+  height: 1.1em;
+  margin: -2px 4px 0 0;
+  vertical-align: middle;
+  width: 1.1em;
+}
+

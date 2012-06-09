@@ -1,0 +1,36 @@
+.app-ui-scene-developer {
+  background: #31394a;
+}
+
+.app-ui-scene-developer_item {
+  border-bottom-color: #242A37;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-align: center;
+  box-orient: horizontal;
+  box-pack: left;
+  box-shadow: rgba(255, 255, 255, 0.078125) 1px 1px 0px 0px inset;
+  color: #fff;
+  padding: 8px;
+}
+
+.app-ui-scene-developer_item-label {
+  font-weight: bold;
+  margin: 0 0 3px 0;
+}
+
+.app-ui-scene-developer_item-input {
+  box-sizing: border-box;
+  display: block;
+  font-size: 1.5em;
+  margin: 6px 0;
+  padding: 3px;
+  width: 5em;
+}
+
+.app-ui-scene-developer_item-submit {
+  display: block;
+  float: right;
+  font-size: 1.5em;
+  margin: 10px;
+}

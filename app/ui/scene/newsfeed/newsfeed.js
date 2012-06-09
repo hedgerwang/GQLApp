@@ -103,6 +103,9 @@ var NewsFeed = Class.create(Scene, {
 
       if (!scrollList.isInDocument()) {
         scrollList.render(this.getNode());
+        scrollList.addContent(
+          dom.createElement('div',
+            cssx('app-ui-scene-newsfeed-top-spacer')));
         this._tappable.addTarget(scrollList.getNode());
       }
 
