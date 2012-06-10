@@ -1,8 +1,8 @@
-.app-ui-scene-developer {
+.app-ui-scene-developer {  
   background: #31394a;
 }
 
-.app-ui-scene-developer_item {
+.app-ui-scene-developer_item {  
   border-bottom-color: #242A37;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -14,12 +14,12 @@
   padding: 8px;
 }
 
-.app-ui-scene-developer_item-label {
+.app-ui-scene-developer_item-label {  
   font-weight: bold;
   margin: 0 0 3px 0;
 }
 
-.app-ui-scene-developer_item-input {
+.app-ui-scene-developer_item-input {  
   box-sizing: border-box;
   display: block;
   font-size: 1.5em;
@@ -28,7 +28,7 @@
   width: 5em;
 }
 
-.app-ui-scene-developer_item-submit {
+.app-ui-scene-developer_item-submit {  
   display: block;
   float: right;
   font-size: 1.5em;

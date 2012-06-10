@@ -1,16 +1,16 @@
-.app-ui-scene-profile_content {
+.app-ui-scene-profile_content {  
   padding: 44px 0;
   position: relative;
 }
 
-.app-ui-scene-profile_cover {
+.app-ui-scene-profile_cover {  
   background: #000;
   height: 250px;
   margin-bottom: -60px;
   width: 100%;
 }
 
-.app-ui-scene-profile_content-img {
+.app-ui-scene-profile_content-img {  
   background: #000;
   border: solid 10px #fff;
   box-shadow: 0 0 5px #aaa;
@@ -21,7 +21,7 @@
   width: 110px;
 }
 
-.app-ui-scene-profile_content-name {
+.app-ui-scene-profile_content-name {  
   bottom: 0;
   font-size: 1.2em;
   font-weight: bold;
@@ -33,15 +33,15 @@
   text-align: left;
   top: -70px;
   white-space: normal;
-  word-wrap: break-word;
   width: 155px;
+  word-wrap: break-word;
 }
 
-.app-ui-scene-profile_friends-tab {
+.app-ui-scene-profile_friends-tab {  
   margin: 8px;
 }
 
-.app-ui-scene-profile_friend-pile {
+.app-ui-scene-profile_friend-pile {  
   display: inline-block;
   height: 48px;
   margin: 0 1px 1px 0;

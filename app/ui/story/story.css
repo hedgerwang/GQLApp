@@ -43,30 +43,6 @@
   word-wrap: break-word;
 }
 
-.app-ui-story-img {  
-  background-color: #fff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .4);
-  height: 312px;
-  margin: 8px 0 3px -14px;
-  width: 312px;
-}
-
-.app-ui-story-album {  
-  height: 288px;
-  margin: 8px 0 3px 0;
-  overflow: visible;
-  white-space: nowrap;
-  width: 288px;
-}
-
-.app-ui-story-album .app-ui-story-img {  
-  background: #000;
-  display: inline-block;
-  height: 280px;
-  margin: 0 8px 0 0;
-  width: 280px;
-}
-
 .app-ui-story-footer {  
   background: #e2e9f1;
   border-bottom-left-radius: 4px;

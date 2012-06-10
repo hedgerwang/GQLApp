@@ -3,9 +3,11 @@
  * @author Hedger Wang
  */
 
+var Album = require('app/ui/story/album').Album;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var Imageable = require('jog/behavior/imageable').Imageable;
+var Photo = require('app/ui/story/photo').Photo;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
@@ -22,7 +24,6 @@ var Story = Class.create(BaseUI, {
 
   dispose: function() {
     Class.dispose(this._imageable);
-    Class.dispose(this._scrollableAlbum);
   },
 
   /** @override */
@@ -46,7 +47,8 @@ var Story = Class.create(BaseUI, {
     var images = this._createImages(subattachments, data);
 
     if (images) {
-      body.appendChild(images);
+      this.appendChild(images);
+      images.render(body);
     }
 
     var footer = this._createFooter();
@@ -94,47 +96,29 @@ var Story = Class.create(BaseUI, {
 
 
   /**
-   * @param {Array} subattachments
+   * @param {Array} subAttachments
    * @param {Object} data
-   * @return {Node}
+   * @return {BaseUI}
    */
-  _createImages: function(subattachments, data) {
+  _createImages: function(subAttachments, data) {
     var imagesAlbum;
-    var imagesAlbumBody;
-    var imagesCount = 0;
 
-    if (lang.isArray(subattachments) && subattachments.length > 1) {
-      for (var i = 0, j = subattachments.length; i < j; i++) {
-        var subImage = objects.getValueByName('media.image', subattachments[i]);
-        if (!subImage || !subImage.uri || !subImage.width) {
-          continue;
-        }
-        if (imagesCount === 0) {
-          imagesAlbumBody = dom.createElement(
-            'div', cssx('app-ui-story-album-body'));
-
-          imagesAlbum = dom.createElement(
-            'div', cssx('app-ui-story-album'), imagesAlbumBody);
-        }
-        imagesAlbumBody.appendChild(this._createImage(subImage));
-        imagesCount++;
-        if (imagesCount > 4) {
-          // Too many photos.
-          break;
-        }
+    if (lang.isArray(subAttachments) && subAttachments.length > 1) {
+      var album = new Album();
+      for (var i = 0, j = subAttachments.length; i < j; i++) {
+        var subImage = objects.getValueByName('media.image', subAttachments[i]);
+        album.addPhoto(new Photo(subImage));
       }
+      return album;
     }
 
-    if (imagesAlbum) {
-      this._scrollableAlbum = new Scrollable(
-        imagesAlbum,
-        {direction:'horizontal', paging: true}
-      );
-      return imagesAlbum;
-    } else {
-      var image = objects.getValueByName('attachments.0.media.image', data);
-      return this._createImage(image);
+
+    var image = objects.getValueByName('attachments.0.media.image', data);
+    if (image) {
+      return new Photo(image);
     }
+
+    return null;
   },
 
   /**
@@ -165,32 +149,6 @@ var Story = Class.create(BaseUI, {
     }
     return null;
   },
-
-  /**
-   * @param {Image} image
-   * @return {Node}
-   */
-  _createImage: function(image) {
-    if (image && image.width && image.uri && /\.jpg$/.test(image.uri)) {
-      var node = dom.createElement('div', {
-        className: cssx('app-ui-story-img')
-      });
-
-      this._imageable = new Imageable(node, image.uri);
-      return node;
-    }
-    return null;
-  },
-
-  /**
-   * @type {Imageable}
-   */
-  _imageable: null,
-
-  /**
-   * @type {Scrollable}
-   */
-  _scrollableAlbum: null,
 
   _data: null
 });

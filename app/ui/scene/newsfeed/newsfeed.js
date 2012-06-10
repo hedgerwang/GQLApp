@@ -141,10 +141,12 @@ var NewsFeed = Class.create(Scene, {
    * @param {Event} event
    */
   _onTap: function(event) {
-    if (event.target.getAttribute) {
-      var id = event.target.getAttribute('profile_id');
-      if (id) {
-        this.dispatchEvent(EventType.VIEW_PROFILE, id, true);
+    var targetNode = event.target;
+    if (targetNode.getAttribute) {
+      var profile = targetNode.getAttribute('profile_id');
+      if (profile) {
+        this.dispatchEvent(EventType.VIEW_PROFILE, profile, true);
+        return;
       }
     }
   },
