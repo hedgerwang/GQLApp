@@ -13,7 +13,6 @@ var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var Story = require('app/ui/story').Story;
-var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -33,11 +32,6 @@ var NewsFeed = Class.create(Scene, {
     this._composerBar = this.appendChild(new ComposerBar());
   },
 
-  /** @override */
-  dispose: function() {
-    Class.dispose(this._tappable);
-  },
-
   /** @override} */
   createNode: function() {
     var node = Scene.prototype.createNode.call(this);
@@ -52,11 +46,10 @@ var NewsFeed = Class.create(Scene, {
     this._loading.render(node);
     this._composerBar.render(node);
     this._loading.center();
-    this._tappable = new Tappable(this.getNode());
     this._query(14, null);
 
     var events = this.getEvents();
-    events.listen(this._tappable, 'tap', this._onTap);
+    events.listen(this.getNodeTappable(), 'tap', this._onTap);
     events.listen(this._scrollList, 'scroll', this._onFeedScroll);
   },
 
@@ -100,13 +93,14 @@ var NewsFeed = Class.create(Scene, {
         response);
 
       var scrollList = this._scrollList;
+      var tappable = this.getNodeTappable();
 
       if (!scrollList.isInDocument()) {
         scrollList.render(this.getNode());
         scrollList.addContent(
           dom.createElement('div',
             cssx('app-ui-scene-newsfeed-top-spacer')));
-        this._tappable.addTarget(scrollList.getNode());
+        tappable.addTarget(scrollList.getNode());
       }
 
       if (lang.isArray(stories) && stories.length) {

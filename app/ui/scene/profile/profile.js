@@ -101,15 +101,15 @@ var Profile = Class.create(Scene, {
       var friendsTab = dom.createElement(
         'div', cssx('app-ui-scene-profile_friends-tab'));
 
-      this._tappable = new Tappable(friendsTab);
-      this.getEvents().listen(this._tappable, 'tap', this._onFacePileTap);
+      this._friendsTappable = new Tappable(friendsTab);
+      this.getEvents().listen(this._friendsTappable, 'tap', this._onFacePileTap);
 
       for (var i = 0, friend; friend = friends[i]; i++) {
         var facePile = dom.createElement(
           'div',
           cssx('app-ui-scene-profile_friend-pile'));
 
-        this._tappable.addTarget(facePile);
+        this._friendsTappable.addTarget(facePile);
         facePile._profileID = friend.id;
 
         new Imageable(
@@ -135,7 +135,7 @@ var Profile = Class.create(Scene, {
     }
   },
 
-  _tappable: null,
+  _friendsTappable: null,
   _scrollList:null,
   _jewel:null,
   _loading:null,

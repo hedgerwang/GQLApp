@@ -6,13 +6,10 @@
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
-var Imageable = require('jog/behavior/imageable').Imageable;
-var Photo = require('app/ui/story/photo').Photo;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
-var Tappable = require('jog/behavior/tappable').Tappable;
+var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
-var objects = require('jog/objects').objects;
 
 var Album = Class.create(BaseUI, {
   dispose: function() {
@@ -27,11 +24,10 @@ var Album = Class.create(BaseUI, {
     return dom.createElement('div', cssx('app-ui-story-album'), this._body);
   },
 
-  onDocumentReady: function() {
-    this._scrollable = new Scrollable(
-      this.getNode(),
-      {direction:'horizontal', paging: true}
-    );
+
+  onDocumentReady:function() {
+    this.getEvents().listen(
+      this, EventType.STORY_PHOTO_TAP, this._onStoryPhotoTap);
   },
 
   /**
@@ -41,13 +37,21 @@ var Album = Class.create(BaseUI, {
     if (!this._scrollable) {
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scrollable.OPTIONS_PAGING_HORIZONTAL
+        Scroller.OPTIONS_PAGING_HORIZONTAL
       );
     }
     this.appendChild(photo);
     photo.render(this._body);
   },
 
+  /**
+   * @param {Event} event
+   */
+  _onStoryPhotoTap: function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.dispatchEvent(EventType.STORY_ALBUM_TAP, null, true);
+  },
 
   /**
    * @type {Element}
@@ -57,12 +61,7 @@ var Album = Class.create(BaseUI, {
   /**
    * @type {Scrollable}
    */
-  _scrollable: null,
-
-  /**
-   * @type {Array}
-   */
-  _subAttachments: null
+  _scrollable: null
 });
 
 exports.Album = Album;
