@@ -171,7 +171,7 @@ var App = Class.create(null, {
    * @param {Event} event
    */
   _onViewPhoto: function(event) {
-    console.log(event.type, event.defaultPrevented, event.bubbles);
+    // console.log(event.type, event.defaultPrevented, event.bubbles);
   },
 
   _onDeveloper: function() {
