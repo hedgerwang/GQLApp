@@ -12,7 +12,6 @@ var Imageable = require('jog/behavior/imageable').Imageable;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var SearchBar = require('app/ui/searchbar').SearchBar;
-var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -25,10 +24,6 @@ var SideMenu = Class.create(Scene, {
     this._searchBar = this.appendChild(new SearchBar());
   },
 
-  /** @override} */
-  dispose: function() {
-    Class.dispose(this._tappable);
-  },
 
   /** @override} */
   createNode: function() {
@@ -42,9 +37,9 @@ var SideMenu = Class.create(Scene, {
     this._searchBar.render(this.getNode());
     this._scrollList.render(this.getNode());
 
-    this._tappable = new Tappable(this.getNode());
-    this.getEvents().listen(this._tappable, 'tap', this._onTap);
-    this.getEvents().listen(this._tappable, 'tapstart', this._onTapStart);
+    var tappable = this.getNodeTappable();
+    this.getEvents().listen(tappable, 'tap', this._onTap);
+    this.getEvents().listen(tappable, 'tapstart', this._onTapStart);
     this.getEvents().listen(this._searchBar,
       EventType.SEARCH_BAR_ON_SEARCH_SELECT,
       this.dismissSelectedItem);
@@ -269,7 +264,7 @@ var SideMenu = Class.create(Scene, {
 
     if (opt_name) {
       node._name = opt_name;
-      this._tappable.addTarget(node);
+      this.getNodeTappable().addTarget(node);
     }
 
     if (opt_selected) {

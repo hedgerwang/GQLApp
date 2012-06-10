@@ -3,6 +3,7 @@
  * @author Hedger Wang
  */
 
+var ActiveSceneScroller = require('app/behavior/activescenescroller').ActiveSceneScroller;
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
 var Cover = require('app/ui/scene/cover').Cover;
@@ -11,7 +12,6 @@ var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
 var Profile = require('app/ui/scene/profile').Profile;
-var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
 var UserAgent = require('jog/useragent').UserAgent;
@@ -55,9 +55,9 @@ var App = Class.create(null, {
   },
 
   _start: function() {
-    this._addScene(new NewsFeed(0, false));
     this._chrome.appendChild(this._sideMenu, true);
     this._coverScene.fadeOut(450, true);
+    this._addScene(new NewsFeed(0, false));
     this._bindEvents();
   },
 
@@ -349,82 +349,17 @@ var App = Class.create(null, {
 
   _enableSceneScroller: function() {
     this._disableSceneScroller();
-
-    var scroller = new Scroller(this, {
-      paging: true,
-      direction: 'horizontal'
-    });
-
-    this._sceneScroller = scroller;
-    this._sceneScrollerEvents = new Events(this);
-
-    var node = this._activeScene.getNode();
-    this._sceneScroller.registerElement(node);
-
-    var events = this._sceneScrollerEvents;
-    events.listen(node, TouchHelper.EVT_TOUCHSTART, this._onSceneTouchStart);
+    this._sceneScroller = new ActiveSceneScroller(this._activeScene);
+    this._sceneScroller.setWidth(this._sideMenu.getWidth());
+    this._sceneScroller.setScale(this._chrome.getScale());
+    this._sceneScroller.addEventListener(
+      EventType.ACTIVE_SCENE_SCROLLER_SCROLLOUT,
+      this.bind(this._hideSideMenu));
   },
 
   _disableSceneScroller: function() {
-    if (this._sceneScroller) {
-      Class.dispose(this._sceneScroller);
-      Class.dispose(this._sceneScrollerEvents);
-      delete this._sceneScrollerEvents;
-      delete this._sceneScroller;
-    }
-  },
-
-  /**
-   * @param {Event} event
-   */
-  _onSceneTouchStart: function(event) {
-    this._sceneScroller.doTouchStart(event);
-    var events = this._sceneScrollerEvents;
-    events.unlistenAll();
-    events.listen(document, TouchHelper.EVT_TOUCHMOVE, this._onSceneTouchMove);
-    events.listen(document, TouchHelper.EVT_TOUCHEND, this._onSceneTouchEnd);
-    events.listen(document, TouchHelper.EVT_TOUCHCANCEL, this._onSceneTouchEnd);
-  },
-
-  /**
-   * @param {Event} event
-   */
-  _onSceneTouchMove: function(event) {
-    this._sceneScroller.doTouchMove(event);
-  },
-
-  _onSceneTouchEnd: function(event) {
-    this._sceneScroller.doTouchEnd(event);
-    var node = this._activeScene.getNode();
-    var events = this._sceneScrollerEvents;
-    events.unlistenAll();
-    events.listen(node, TouchHelper.EVT_TOUCHSTART, this._onSceneTouchStart);
-    if (this._activeScene.getTranslateX() > this._sceneScrollerWidth / 3) {
-      this._disableSceneScroller();
-      this._showSideMenu();
-    }
-  },
-
-
-  onScrollStart: function(left) {
-    if (this._sideMenuMode !== 0) {
-      this._disableSceneScroller();
-    } else {
-      this._activeScene.setDisabled(true);
-      var width = this._sideMenu.getWidth();
-      this._sceneScrollerWidth = width;
-      this._sceneScroller.setDimensions(width, 1, width);
-    }
-  },
-
-  onScroll: function(left) {
-    var x = Math.min(-left * this._chrome.getScale(), this._sceneScrollerWidth);
-    this._activeScene.translateXTo(Math.max(x, 0));
-  },
-
-  onScrollEnd: function() {
-    // Do nothing.
-    this._activeScene.setDisabled(false);
+    Class.dispose(this._sceneScroller);
+    delete this._sceneScroller;
   },
 
   /**
@@ -433,20 +368,9 @@ var App = Class.create(null, {
   _chrome: null,
 
   /**
-   * @type {Scroller}
+   * @type {ActiveSceneScroller}
    */
   _sceneScroller: null,
-
-  /**
-   * @type {number}
-   */
-  _sceneScrollerWidth: 0,
-
-
-  /**
-   * @type {Events}
-   */
-  _sceneScrollerEvents: null,
 
   /**
    * @type {Scene}

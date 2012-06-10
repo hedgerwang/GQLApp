@@ -9,7 +9,7 @@ var EventType = require('app/eventtype').EventType;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Photo = require('app/ui/story/photo').Photo;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
-var Tappable = require('jog/behavior/tappable').Tappable;
+var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var objects = require('jog/objects').objects;
@@ -41,7 +41,7 @@ var Album = Class.create(BaseUI, {
     if (!this._scrollable) {
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scrollable.OPTIONS_PAGING_HORIZONTAL
+        Scroller.OPTIONS_PAGING_HORIZONTAL
       );
     }
     this.appendChild(photo);

@@ -59,16 +59,12 @@ var SearchBar = Class.create(BaseUI, {
     return node;
   },
 
-  dispose: function() {
-    Class.dispose(this._tappable);
-  },
-
   onDocumentReady: function() {
-    this._tappable = new Tappable(this.getNode());
-    this._tappable.addTarget(this.getNode());
-    this._tappable.addTarget(this._cancel);
-    this._tappable.addTarget(this._searchPopup);
-    this.getEvents().listen(this._tappable, 'tap', this._onTap);
+    var tappable = this.getNodeTappable();
+    tappable.addTarget(this.getNode());
+    tappable.addTarget(this._cancel);
+    tappable.addTarget(this._searchPopup);
+    this.getEvents().listen(tappable, 'tap', this._onTap);
     this.getEvents().listen(this._input, 'focus', this._onFocus);
   },
 

@@ -7,7 +7,6 @@ var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
 var Imageable = require('jog/behavior/imageable').Imageable;
-var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
@@ -37,6 +36,7 @@ var Photo = Class.create(BaseUI, {
         className: cssx('app-ui-story-photo')
       });
 
+      this.uri = image.uri;
       new Imageable(node, image.uri);
       return node;
     }
@@ -47,6 +47,21 @@ var Photo = Class.create(BaseUI, {
 
     return dom.createElement('div');
   },
+
+  onDocumentReady: function() {
+    var tappable = this.getNodeTappable();
+    tappable.addTarget(this.getNode());
+    this.getEvents().listen(tappable, 'tap', this._onTap);
+  },
+
+  _onTap: function() {
+    this.dispatchEvent(EventType.STORY_PHOTO_TAP, this.uri, true);
+  },
+
+  /**
+   * @type {string}
+   */
+  uri: null,
 
   /**
    * @type {Object}

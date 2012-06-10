@@ -7,7 +7,6 @@ var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
 var Imageable = require('jog/behavior/imageable').Imageable;
-var Tappable = require('jog/behavior/tappable').Tappable;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 
@@ -21,10 +20,6 @@ var JewelBar = Class.create(BaseUI, {
    */
   main: function(opt_showBackButton) {
     this._showBackButton = opt_showBackButton;
-  },
-
-  dispose: function() {
-    Class.dispose(this._tappable);
   },
 
   /** @override */
@@ -61,16 +56,16 @@ var JewelBar = Class.create(BaseUI, {
 
   /** @override */
   onDocumentReady:function() {
-    this._tappable = new Tappable(this.getNode());
+    var tappable = this.getNodeTappable();
 
-    this._tappable.addTarget(this._backIcon || this._sideMenuIcon).
+    tappable.addTarget(this._backIcon || this._sideMenuIcon).
       addTarget(this._friendRequestsIcon).
       addTarget(this._notificationIcon).
       addTarget(this._messagesIcon).
       addTarget(this.getNode());
 
     var events = this.getEvents();
-    events.listen(this._tappable, 'tap', this._onTap);
+    events.listen(tappable, 'tap', this._onTap);
 
     if (this._sideMenuIcon) {
       new Imageable(this._sideMenuIcon, '/images/menu-2x.png');
@@ -98,7 +93,6 @@ var JewelBar = Class.create(BaseUI, {
     }
   },
 
-  _tappable: null,
   _showBackButton: false,
   _sideMenuIcon: null,
   _friendRequestsIcon:null,
