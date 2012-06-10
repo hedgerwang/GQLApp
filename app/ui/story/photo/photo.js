@@ -21,7 +21,6 @@ var Photo = Class.create(BaseUI, {
   /** @override */
   createNode: function() {
     var image = this._image;
-    delete this._image;
 
     if (image && image.uri && /\.jpg$/.test(image.uri)) {
       if (__DEV__) {
@@ -37,7 +36,14 @@ var Photo = Class.create(BaseUI, {
       });
 
       this.uri = image.uri;
-      new Imageable(node, image.uri);
+
+      var imageable = new Imageable(node, image.uri);
+      imageable.addEventListener('load', this.bind(function(event) {
+        this.naturalWidth = event.target.naturalWidth;
+        this.naturalHeight = event.target.naturalHeight;
+
+      }));
+
       return node;
     }
 
@@ -48,20 +54,24 @@ var Photo = Class.create(BaseUI, {
     return dom.createElement('div');
   },
 
-  onDocumentReady: function() {
-    var tappable = this.getNodeTappable();
-    tappable.addTarget(this.getNode());
-    this.getEvents().listen(tappable, 'tap', this._onTap);
-  },
-
-  _onTap: function() {
-    this.dispatchEvent(EventType.STORY_PHOTO_TAP, this.uri, true);
+  /**
+   * @return {Photo}
+   */
+  clone: function() {
+    var photo = new Photo(this._image);
+    photo.naturalHeight = this.naturalHeight;
+    photo.naturalWidth = this.naturalWidth;
+    photo.uri = this.uri;
+    return photo;
   },
 
   /**
    * @type {string}
    */
   uri: null,
+
+  naturalWidth: 0,
+  naturalHeight: 0,
 
   /**
    * @type {Object}

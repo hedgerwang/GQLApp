@@ -101,10 +101,10 @@ var Story = Class.create(BaseUI, {
    * @return {BaseUI}
    */
   _createImages: function(subAttachments, data) {
-    var imagesAlbum;
+    var album = new Album();
 
     if (lang.isArray(subAttachments) && subAttachments.length > 1) {
-      var album = new Album();
+
       for (var i = 0, j = subAttachments.length; i < j; i++) {
         var subImage = objects.getValueByName('media.image', subAttachments[i]);
         album.addPhoto(new Photo(subImage));
@@ -112,10 +112,10 @@ var Story = Class.create(BaseUI, {
       return album;
     }
 
-
     var image = objects.getValueByName('attachments.0.media.image', data);
     if (image) {
-      return new Photo(image);
+      album.addPhoto(new Photo(image));
+      return album;
     }
 
     return null;

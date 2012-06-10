@@ -6,6 +6,7 @@
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
+var Photo = require('app/ui/story/photo').Photo;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
 var cssx = require('jog/cssx').cssx;
@@ -18,45 +19,124 @@ var Album = Class.create(BaseUI, {
 
   /** @override */
   createNode: function() {
-    this._body = body = dom.createElement(
+    this._albumBody = dom.createElement(
       'div', cssx('app-ui-story-album-body'));
 
-    return dom.createElement('div', cssx('app-ui-story-album'), this._body);
+    return dom.createElement(
+      'div', cssx('app-ui-story-album'), this._albumBody);
   },
 
-
+  /** @override */
   onDocumentReady:function() {
-    this.getEvents().listen(
-      this, EventType.STORY_PHOTO_TAP, this._onStoryPhotoTap);
+    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onPhotoTap);
+  },
+
+  /** @override */
+  removeChild:function(child) {
+    BaseUI.prototype.removeChild.call(this, child);
+    if (child instanceof Photo) {
+      if (this._photos) {
+        this._photos.slice(this._photos.indexOf(child), 1);
+      }
+
+      if (child === this._firstPhoto) {
+        delete this._firstPhoto;
+      }
+
+      if (!this._photos.length) {
+        delete this._photos;
+      }
+    }
+  },
+
+  /**
+   * @return {Element}
+   */
+  getPhotosParentNode: function() {
+    return this._albumBody;
   },
 
   /**
    * @param {Photo} photo
    */
   addPhoto: function(photo) {
-    if (!this._scrollable) {
+    if (this._firstPhoto && !this._photos) {
+      this._photos = [this._firstPhoto];
+
       this._scrollable = new Scrollable(
         this.getNode(),
         Scroller.OPTIONS_PAGING_HORIZONTAL
       );
     }
+
     this.appendChild(photo);
-    photo.render(this._body);
+    this.getNodeTappable().addTarget(photo.getNode());
+    photo.render(this.getPhotosParentNode());
+
+    if (!this._firstPhoto) {
+      this._firstPhoto = photo;
+    } else {
+      this._photos.push(photo);
+    }
+  },
+
+  /**
+   * @return {Array.<Photo>}
+   */
+  getPhotos: function() {
+    if (!this._photos) {
+      this._photos = this._firstPhoto ? [this._firstPhoto] : [];
+    }
+    return this._photos;
+  },
+
+  getPhotoInView: function() {
+    if (!this._firstPhoto) {
+      return null;
+    }
+
+    var idx = this._scrollable ?
+      this._scrollable.getScrollPageIndex() : 0;
+
+    return idx === 0 ?
+      this._firstPhoto :
+      this._photos[idx];
+  },
+
+  scrollPhotoIntoView: function(photo) {
+    return this._scrollable ?
+      this._scrollable.getScrollPageIndex() : 0;
   },
 
   /**
    * @param {Event} event
    */
-  _onStoryPhotoTap: function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.dispatchEvent(EventType.STORY_ALBUM_TAP, null, true);
+  _onPhotoTap: function(event) {
+    var photo = this.getPhotoInView();
+    if (photo && photo.naturalWidth > 1) {
+      this.dispatchEvent(EventType.STORY_ALBUM_TAP, photo, true);
+      return;
+    }
+
+    if (__DEV__) {
+      console.warn('Unable to open album photo', photo.uri, photo);
+    }
   },
+
+  /**
+   * @type {Array.<Photo>}
+   */
+  _photos: null,
+
+  /**
+   * @type {Photo}
+   */
+  _firstPhoto: null,
 
   /**
    * @type {Element}
    */
-  _body: null,
+  _albumBody: null,
 
   /**
    * @type {Scrollable}

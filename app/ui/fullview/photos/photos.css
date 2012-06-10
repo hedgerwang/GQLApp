@@ -1,0 +1,33 @@
+.app-ui-fullview-photos {  
+  background: #000;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100000;
+}
+
+.app-ui-fullview-photos_body {  
+  height: 100%;
+  white-space: nowrap;
+  width: 100%;
+  z-index: 2;
+}
+
+.app-ui-fullview-photos-photo {  
+  background: #000 none no-repeat center center;
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.app-ui-fullview-photos_placeholder {  
+  background: #000 none no-repeat center center;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+}

@@ -11,6 +11,7 @@ var Developer = require('app/ui/scene/developer').Developer;
 var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
+var Photos = require('app/ui/fullview/photos').Photos;
 var Profile = require('app/ui/scene/profile').Profile;
 var SideMenu = require('app/ui/scene/sidemenu').SideMenu;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
@@ -35,7 +36,7 @@ var App = Class.create(null, {
       this.callAfter(this._start, 600)
     );
 
-    // show the whole chro me.
+    // show the whole chrome.
     this._chrome.render(dom.getDocument().body);
   },
 
@@ -52,6 +53,7 @@ var App = Class.create(null, {
     Class.dispose(this._events);
     Class.dispose(this._sideMenu);
     Class.dispose(this._chrome);
+    Class.dispose(this._photosView);
   },
 
   _start: function() {
@@ -113,11 +115,6 @@ var App = Class.create(null, {
       this._chrome,
       EventType.STORY_ALBUM_TAP,
       this._onViewPhoto);
-
-    events.listen(
-      this._chrome,
-      EventType.STORY_PHOTO_TAP,
-      this._onViewPhoto);
   },
 
   /**
@@ -171,7 +168,14 @@ var App = Class.create(null, {
    * @param {Event} event
    */
   _onViewPhoto: function(event) {
-    // console.log(event.type, event.defaultPrevented, event.bubbles);
+    var album = event.target;
+    this._hideSideMenu().addCallback(this.bind(function() {
+      Class.dispose(this._photosView);
+      this._photosView = new Photos();
+      this._photosView.render(this._chrome.getNode());
+      this._photosView.importAlbum(album);
+      album = null;
+    }));
   },
 
   _onDeveloper: function() {
@@ -223,9 +227,11 @@ var App = Class.create(null, {
       return newScene.translateXTo(this._chrome.getWidth(), 350);
     })).then(this.bind(function(nextScene) {
       nextScene.render(this._chrome.getNode());
+      nextScene.setDisabled(true);
       return nextScene.translateXTo(0, 350);
     })).addCallback(this.bind(function(nextScene) {
       nextScene._prevScene.setHidden(true);
+      nextScene.setDisabled(false);
       this._enableSceneScroller();
     }));
   },
@@ -398,6 +404,11 @@ var App = Class.create(null, {
    * @type {Scene}
    */
   _activeScene: null,
+
+  /**
+   * @type {Photos}
+   */
+  _photosView: null,
 
   /**
    * 0 - close
