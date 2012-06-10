@@ -58,10 +58,6 @@ var ActiveSceneScroller = Class.create(EventTarget, {
 
   onScroll: function(left) {
     var x = Math.min(-left / this._scale, this._width);
-<<<<<<< HEAD
-=======
-    console.log(this._width, this._scale, left);
->>>>>>> e42c0d24442ce71d60cfdcaff4901f4976eba292
     this._scene.translateXTo(Math.max(x, 0));
   },
 

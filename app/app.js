@@ -371,7 +371,7 @@ var App = Class.create(null, {
     this._sceneScroller.setScale(this._chrome.getScale());
     this._sceneScroller.addEventListener(
       EventType.ACTIVE_SCENE_SCROLLER_SCROLLOUT,
-      this.bind(this._hideSideMenu));
+      this.bind(this._showSideMenu));
   },
 
   _disableSceneScroller: function() {
