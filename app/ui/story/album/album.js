@@ -118,9 +118,7 @@ var Album = Class.create(BaseUI, {
       return;
     }
 
-    if (__DEV__) {
-      console.warn('Unable to open album photo', photo.uri, photo);
-    }
+    console.warn('Unable to open album photo', photo.uri, photo);
   },
 
   /**

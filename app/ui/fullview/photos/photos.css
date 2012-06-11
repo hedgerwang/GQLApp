@@ -15,19 +15,20 @@
   z-index: 2;
 }
 
-.app-ui-fullview-photos-photo {  
-  background: #000 none no-repeat center center;
+.app-ui-fullview-photos-page {  
   display: inline-block;
   height: 100%;
+  position: relative;
   vertical-align: middle;
   width: 100%;
 }
 
-.app-ui-fullview-photos_placeholder {  
-  background: #000 none no-repeat center center;
-  bottom: 0;
-  left: 0;
+.app-ui-fullview-photos-image {  
+  
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 100%;
   position: absolute;
-  top: 0;
-  z-index: 100;
+  width: 100%;
 }

@@ -41,7 +41,6 @@ var Photo = Class.create(BaseUI, {
       imageable.addEventListener('load', this.bind(function(event) {
         this.naturalWidth = event.target.naturalWidth;
         this.naturalHeight = event.target.naturalHeight;
-
       }));
 
       return node;

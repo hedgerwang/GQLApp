@@ -8,16 +8,19 @@ var Animator = require('jog/animator').Animator;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
+var Functions = require('jog/functions').Functions;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
-var Tappable = require('jog/behavior/tappable').Tappable;
+var TouchHelper = require('jog/touchhelper').TouchHelper;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
+var lang = require('jog/lang').lang;
 
 var Photos = Class.create(BaseUI, {
   /** @override */
   main: function() {
+    this._showMoreImages = lang.throttle(this._showMoreImages, 300, this);
   },
 
   /** @override */
@@ -37,9 +40,8 @@ var Photos = Class.create(BaseUI, {
 
   /** @override */
   onDocumentReady: function() {
-    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
-
     var album = this._albumToImport;
+
     if (album) {
       delete this._albumToImport;
       this.importAlbum(album);
@@ -64,140 +66,168 @@ var Photos = Class.create(BaseUI, {
     }
 
     this._albumImported = true;
-    this._translateAlbumPhotoIntoView(album);
+    this._importAlbum(album);
   },
 
-  _translateAlbumPhotoIntoView: function(album) {
-    var photo = album.getPhotoInView();
-
-    if (!photo) {
-      return;
-    }
-
-    if (!photo.naturalHeight) {
-      // Photo can't be translated.
-      // Simply import photos.
-      this._onAlbumPhotoTranslatedIntoView(album, null);
-      return;
-    }
-
-    var nodeRect = this.getNode().getBoundingClientRect();
-    var photoRect = photo.getNode().getBoundingClientRect();
-    var placeHolder = dom.createElement(
-      'div', cssx('app-ui-fullview-photos_placeholder'));
-
-    var x1 = photoRect.left - nodeRect.left;
-    var y1 = photoRect.top - nodeRect.top;
-    var h1 = photoRect.height;
-    var w1 = photoRect.width;
-    var placeHolderStyle = placeHolder.style;
-
-    placeHolderStyle.left = x1 + 'px';
-    placeHolderStyle.top = y1 + 'px';
-    placeHolderStyle.width = h1 + 'px';
-    placeHolderStyle.height = w1 + 'px';
-    this.getNode().appendChild(placeHolder);
-
-    var h2;
-    var w2;
-
-    var photoRatio = photo.naturalWidth / photo.naturalHeight;
-    if (photoRatio >= 1) {
-      w2 = nodeRect.width;
-      h2 = w2 / photoRatio;
-      if (h2 > nodeRect.height) {
-        h2 = nodeRect.height;
-        w2 = photoRatio * h2;
-      }
-    } else if (photoRatio < 1) {
-      h2 = nodeRect.height;
-      w2 = photoRatio * h2;
-      if (w2 > nodeRect.width) {
-        w2 = nodeRect.width;
-        h2 = w2 / photoRatio;
-      }
-    } else {
-      h2 = Math.min(nodeRect.width);
-      w2 = h2;
-    }
-
-    var x2 = (nodeRect.width - w2) / 2;
-    var y2 = (nodeRect.height - h2) / 2;
-    var dx = x2 - x1;
-    var dy = y2 - y1;
-    var dw = w2 - w1;
-    var dh = h2 - h1;
-
-    new Imageable(placeHolder, photo.uri);
-
-    this._animator = new Animator();
-
-    this._animator.start(
-      this.bind(function(value) {
-        placeHolderStyle.left = x1 + ~~(dx * value) + 'px';
-        placeHolderStyle.top = y1 + ~~(dy * value) + 'px';
-        placeHolderStyle.width = w1 + ~~(dw * value) + 'px';
-        placeHolderStyle.height = h1 + ~~(dh * value) + 'px';
-      }),
-      this.bind(function() {
-        return true;
-      }),
-      this.bind(function() {
-        x1 = null;
-        y1 = null;
-        w1 = null;
-        w2 = null;
-        dw = null;
-        dh = null;
-        placeHolderStyle = null;
-        this._onAlbumPhotoTranslatedIntoView(album, photo);
-        this.callLater(function() {
-          dom.remove(placeHolder);
-          placeHolder = null;
-        }, 500);
-        album = null;
-        photo = null;
-      }),
-      350);
-  },
-
-  /**
-   * @param {Album} album
-   * @param {Photo} translatedPhoto
-   */
-  _onAlbumPhotoTranslatedIntoView:function(album, translatedPhoto) {
-    if (album.disposed) {
-      return;
-    }
-
+  _importAlbum: function(album) {
     var photos = album.getPhotos();
-
-    if (!photos) {
-      return;
-    }
+    var photoInView = album.getPhotoInView();
 
     if (photos.length > 1) {
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scroller.OPTIONS_PAGING_HORIZONTAL);
+        Scroller.OPTIONS_PAGING_HORIZONTAL
+      );
+    } else {
+      // Prevent page from scrolling.
+      this.getEvents().listen(
+        this.getNode(),
+        TouchHelper.EVT_TOUCHMOVE,
+        Functions.PREVENT_DEFAULT);
     }
 
-    var photoClassName = cssx('app-ui-fullview-photos-photo');
-    var photoNodeBase = dom.createElement('div', photoClassName);
-    var body = this._body;
-    var tappable = this.getNodeTappable();
+    var willTranslate;
+    var scrollLeft = 0;
+    var selectedPageNode;
 
     for (var i = 0, j = photos.length; i < j; i++) {
       var photo = photos[i];
-      var photoNode = photoNodeBase.cloneNode();
-      new Imageable(photoNode, photo.uri, Imageable.RESIZE_MODE_USE_NATURAL);
-      body.appendChild(photoNode);
-      tappable.addTarget(photoNode);
-      if (translatedPhoto === photo) {
-        this._scrollable.scrollTo(i * photoNode.offsetWidth, 0);
-        translatedPhoto = null;
+
+      var pageNode = dom.createElement(
+        'div', cssx('app-ui-fullview-photos-page'));
+
+      if (photo === photoInView) {
+        willTranslate = true;
+        scrollLeft = i * this.getWidth();
+        selectedPageNode = pageNode;
       }
+
+      // Hack: Expando.
+      pageNode._uri = photo.uri;
+
+      this._body.appendChild(pageNode);
+      this.getNodeTappable().addTarget(pageNode);
     }
+
+    if (this._scrollable) {
+      this._scrollable.scrollTo(scrollLeft, 0);
+    }
+
+    if (!selectedPageNode) {
+      if (__DEV__) {
+        throw new Error('selectedPageNode not found');
+      }
+      this._onTranslateComplete();
+      return;
+    }
+
+    if (photoInView.naturalWidth) {
+      this._translateAlbumPhotoIntoView(
+        selectedPageNode,
+        photoInView.getNode(),
+        photoInView.naturalWidth,
+        photoInView.naturalHeight
+      );
+    } else {
+      var img = new Image();
+      this.getEvents().listen(img, 'load', function(event) {
+        this._translateAlbumPhotoIntoView(
+          selectedPageNode,
+          photoInView.getNode(),
+          img.naturalWidth,
+          img.naturalHeight
+        );
+        img = null;
+      });
+      img.src = photoInView.uri;
+    }
+  },
+
+  _translateAlbumPhotoIntoView: function(pageNode, photoNode, naturalWidth,
+                                         naturalHeight) {
+    var photoRect = photoNode.getBoundingClientRect();
+    var imageNode =
+      dom.createElement('div', cssx('app-ui-fullview-photos-image'));
+    var pageRect = pageNode.getBoundingClientRect();
+    var scale = photoNode.offsetWidth / photoRect.width;
+
+    var imageNodeStyle = imageNode.style;
+    var photoStyle = photoNode.style;
+    imageNodeStyle.backgroundImage = photoStyle.backgroundImage;
+    imageNodeStyle.backgroundSize = photoStyle.backgroundSize;
+    imageNodeStyle.width = ~~(scale * photoRect.width) + 'px';
+    imageNodeStyle.height = ~~ (scale * photoRect.height) + 'px';
+    imageNodeStyle.left = ~~(scale * (photoRect.left - pageRect.left)) + 'px';
+    imageNodeStyle.top = ~~(scale * (photoRect.top - pageRect.top)) + 'px';
+    pageNode.appendChild(imageNode);
+
+    var ratio = naturalWidth / naturalHeight;
+
+    var w0 = parseInt(imageNodeStyle.width, 10);
+    var w1 = pageNode.offsetWidth;
+    var dw = w1 - w0;
+
+    var h0 = parseInt(imageNodeStyle.height, 10);
+    var h1 = w1 / ratio;
+    var dh = h1 - h0;
+
+    var x0 = parseInt(imageNodeStyle.left, 10);
+    var x1 = 0;
+    var dx = x1 - x0;
+
+    var y0 = parseInt(imageNodeStyle.top, 10);
+    var y1 = (pageNode.offsetHeight - h1) / 2;
+    var dy = y1 - y0;
+
+    this._animator = new Animator();
+
+    var step = function(value) {
+      imageNodeStyle.width = ~~(value * dw + w0) + 'px';
+      imageNodeStyle.height = ~~(value * dh + h0) + 'px';
+      imageNodeStyle.left = ~~(value * dx + x0) + 'px';
+      imageNodeStyle.top = ~~(value * dy + y0) + 'px';
+    };
+
+    var complete = this.bind(function() {
+      imageNodeStyle.witdh = '100%';
+      this._onTranslateComplete();
+    });
+
+    this._animator.start(
+      step, Functions.VALUE_TRUE, complete, 350);
+  },
+
+  _onTranslateComplete: function() {
+    Class.dispose(this._animator);
+
+    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
+
+    if (this._scrollable) {
+      this.getEvents().listen(
+        this._scrollable, 'scrollstart', this._showMoreImages);
+      this.getEvents().listen(
+        this._scrollable, 'scrollend', this._showMoreImages);
+    }
+  },
+
+  _showMoreImages: function() {
+    var idx = this._scrollable.getScrollPageIndex();
+    var pageNodes = this._body.childNodes;
+    this._showImage(pageNodes[idx - 1]);
+    this._showImage(pageNodes[idx]);
+    this._showImage(pageNodes[idx + 1]);
+  },
+
+  _showImage: function(pageNode) {
+    if (!pageNode || pageNode.firstChild) {
+      return;
+    }
+
+    var imageNode = dom.createElement(
+      'div', cssx('app-ui-fullview-photos-image'));
+
+    pageNode.appendChild(imageNode);
+    new Imageable(imageNode, pageNode._uri, Imageable.RESIZE_MODE_USE_WIDTH);
   },
 
   _onTap: function() {
