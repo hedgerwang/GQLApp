@@ -171,19 +171,27 @@ var App = Class.create(null, {
     var album = event.target;
     this._hideSideMenu().addCallback(this.bind(function() {
       Class.dispose(this._photosView);
-      this._photosView = new Photos();
-      this._photosView.render(this._chrome.getNode());
-      this._photosView.importAlbum(album);
-      this._photosView.addEventListener(
-        EventType.PHOTOS_VIEW_CLOSE,
-        this.bind(this._onPhotosViewClose));
+
+      var photsView = new Photos();
+      photsView = new Photos();
+      photsView.render(this._chrome.getNode());
+      photsView.importAlbum(album);
+
+      var handler = this.bind(this._onPhotosViewChange);
+      photsView.addEventListener(EventType.PHOTOS_VIEW_CLOSE, handler);
+      photsView.addEventListener(EventType.PHOTOS_VIEW_READY, handler);
       album = null;
       this._activeScene.setDisabled(true);
     }));
   },
 
-  _onPhotosViewClose: function() {
-    this._activeScene.setDisabled(false);
+  /**
+   * @param {Event} event
+   */
+  _onPhotosViewChange: function(event) {
+    var disabled = event.type === EventType.PHOTOS_VIEW_READY;
+    this._activeScene.setDisabled(disabled);
+    this._activeScene.setHidden(disabled);
   },
 
   _onDeveloper: function() {
