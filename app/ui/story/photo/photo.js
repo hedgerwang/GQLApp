@@ -21,8 +21,7 @@ var Photo = Class.create(BaseUI, {
   /** @override */
   createNode: function() {
     var image = this._image;
-
-    if (image && image.uri && /\.(jpg|png|gif)$/.test(image.uri)) {
+    if (image && image.uri) {
       if (__DEV__) {
         if (!image.width || !image.height) {
           console.warn('Image width or height appears 0. ' +
