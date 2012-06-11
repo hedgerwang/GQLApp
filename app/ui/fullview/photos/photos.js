@@ -186,14 +186,12 @@ var Photos = Class.create(BaseUI, {
     var y1 = (pageNode.offsetHeight - h1) / 2;
     var dy = y1 - y0;
 
-
     this._animator = new Animator();
     var pageNodeStyle = pageNode.style;
     var uiNodeStyle = this.getNode().style;
 
     var step = function(value) {
       var opacity = ~~(10 * value) / 10;
-      uiNodeStyle.backgroundColor = 'rgba(0,0,0,' + opacity + ')';
       imageNodeStyle.width = ~~(value * dw + w0) + 'px';
       imageNodeStyle.height = ~~(value * dh + h0) + 'px';
       imageNodeStyle.left = ~~(value * dx + x0) + 'px';
@@ -201,6 +199,8 @@ var Photos = Class.create(BaseUI, {
     };
 
     var complete = this.bind(function() {
+      uiNodeStyle.backgroundColor = '#000';
+      pageNodeStyle.backgroundColor = '';
       imageNodeStyle.witdh = ''; // 100%.
       pageNodeStyle.backgroundColor = ''; // #000.
       imageNodeStyle = null;
@@ -212,6 +212,7 @@ var Photos = Class.create(BaseUI, {
       pageNode = null;
     });
 
+    step(0);
     this._animator.start(
       step, Functions.VALUE_TRUE, complete, 350);
   },

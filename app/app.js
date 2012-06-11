@@ -190,6 +190,8 @@ var App = Class.create(null, {
    */
   _onPhotosViewChange: function(event) {
     var disabled = event.type === EventType.PHOTOS_VIEW_READY;
+    this._sideMenu.setDisabled(disabled);
+    this._sideMenu.setHidden(disabled);
     this._activeScene.setDisabled(disabled);
     this._activeScene.setHidden(disabled);
   },

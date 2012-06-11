@@ -1,4 +1,5 @@
 .app-ui-fullview-photos {
+  background-color: #000;
   bottom: 0;
   left: 0;
   position: absolute;
@@ -6,7 +7,6 @@
   top: 0;
   z-index: 100000;
 }
-
 
 .app-ui-fullview-photos_body {
   height: 100%;
@@ -25,7 +25,6 @@
 }
 
 .app-ui-fullview-photos-image {
-  background-color: #000;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: 100%;
