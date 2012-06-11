@@ -23,6 +23,8 @@ var asserts = require('jog/asserts').asserts;
     chrome.appendChild(album, true);
     chrome.render(body);
 
+    var photo = new Photo({uri: '/images/test/portrait.png'});
+    album.addPhoto(photo);
     var i = 0;
     while (i++ < 5) {
       var image = {

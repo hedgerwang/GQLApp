@@ -143,6 +143,13 @@ var Photos = Class.create(BaseUI, {
     }
   },
 
+  /**
+   *
+   * @param {Element} pageNode
+   * @param {Element} photoNode
+   * @param {number} naturalWidth
+   * @param {numbe} naturalHeight
+   */
   _translateAlbumPhotoIntoView: function(pageNode, photoNode, naturalWidth,
                                          naturalHeight) {
     var photoRect = photoNode.getBoundingClientRect();
@@ -179,9 +186,13 @@ var Photos = Class.create(BaseUI, {
     var y1 = (pageNode.offsetHeight - h1) / 2;
     var dy = y1 - y0;
 
+
     this._animator = new Animator();
+    var pageNodeStyle = pageNode.style;
 
     var step = function(value) {
+      var opacity = ~~(10 * value) / 10;
+      pageNodeStyle.backgroundColor = 'rgba(0,0,0,' + opacity + ')';
       imageNodeStyle.width = ~~(value * dw + w0) + 'px';
       imageNodeStyle.height = ~~(value * dh + h0) + 'px';
       imageNodeStyle.left = ~~(value * dx + x0) + 'px';
@@ -189,17 +200,22 @@ var Photos = Class.create(BaseUI, {
     };
 
     var complete = this.bind(function() {
-      imageNodeStyle.witdh = '100%';
+      imageNodeStyle.witdh = ''; // 100%.
+      pageNodeStyle.backgroundColor = ''; // #000.
+      imageNodeStyle = null;
+      pageNodeStyle = null;
+      Class.dispose(this._animator);
+      this._showUFI(pageNode);
       this._onTranslateComplete();
+      pageNode = null;
     });
 
+    step(0);
     this._animator.start(
       step, Functions.VALUE_TRUE, complete, 350);
   },
 
   _onTranslateComplete: function() {
-    Class.dispose(this._animator);
-
     this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
 
     if (this._scrollable) {
@@ -218,6 +234,14 @@ var Photos = Class.create(BaseUI, {
     this._showImage(pageNodes[idx + 1]);
   },
 
+  _showUFI: function(pageNode) {
+    pageNode.appendChild(dom.createElement(
+      'div',
+      cssx('app-ui-fullview-photos-ufi'),
+      'Like . Comment')
+    );
+  },
+
   _showImage: function(pageNode) {
     if (!pageNode || pageNode.firstChild) {
       return;
@@ -227,10 +251,12 @@ var Photos = Class.create(BaseUI, {
       'div', cssx('app-ui-fullview-photos-image'));
 
     pageNode.appendChild(imageNode);
+    this._showUFI(pageNode);
     new Imageable(imageNode, pageNode._uri, Imageable.RESIZE_MODE_USE_WIDTH);
   },
 
   _onTap: function() {
+    this.dispatchEvent(EventType.PHOTOS_VIEW_CLOSE);
     this.dispose();
   },
 

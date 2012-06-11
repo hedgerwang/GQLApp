@@ -105,7 +105,7 @@ var ActiveSceneScroller = Class.create(EventTarget, {
       TouchHelper.EVT_TOUCHSTART,
       this._onTouchStart);
 
-    if (this._scene.getTranslateX() > this._width / 3) {
+    if (this._scene.getTranslateX() > this._width / 5) {
       this.dispatchEvent(EventType.ACTIVE_SCENE_SCROLLER_SCROLLOUT);
     }
   },

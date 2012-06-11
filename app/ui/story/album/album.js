@@ -37,14 +37,14 @@ var Album = Class.create(BaseUI, {
     if (child instanceof Photo) {
       if (this._photos) {
         this._photos.slice(this._photos.indexOf(child), 1);
+
+        if (!this._photos.length) {
+          delete this._photos;
+        }
       }
 
       if (child === this._firstPhoto) {
         delete this._firstPhoto;
-      }
-
-      if (!this._photos.length) {
-        delete this._photos;
       }
     }
   },
@@ -101,11 +101,6 @@ var Album = Class.create(BaseUI, {
     return idx === 0 ?
       this._firstPhoto :
       this._photos[idx];
-  },
-
-  scrollPhotoIntoView: function(photo) {
-    return this._scrollable ?
-      this._scrollable.getScrollPageIndex() : 0;
   },
 
   /**

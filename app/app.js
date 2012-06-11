@@ -174,8 +174,16 @@ var App = Class.create(null, {
       this._photosView = new Photos();
       this._photosView.render(this._chrome.getNode());
       this._photosView.importAlbum(album);
+      this._photosView.addEventListener(
+        EventType.PHOTOS_VIEW_CLOSE,
+        this.bind(this._onPhotosViewClose));
       album = null;
+      this._activeScene.setDisabled(true);
     }));
+  },
+
+  _onPhotosViewClose: function() {
+    this._activeScene.setDisabled(false);
   },
 
   _onDeveloper: function() {
