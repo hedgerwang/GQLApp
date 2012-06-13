@@ -31,6 +31,7 @@ var Developer = Class.create(Scene, {
         'Inertial scrolling time (100 ~ 2000)',
         'scroll_dur',
         Scroller.prototype._SCROLLING_DURATION,
+        50,
         100,
         3000)
     );
@@ -40,6 +41,7 @@ var Developer = Class.create(Scene, {
         'Inertial scrolling speed factor (0.1 ~ 2)',
         'scroll_fac',
         Scroller.prototype._SPEED_FACTOR,
+        0.01,
         0.1,
         1)
     );
@@ -96,12 +98,18 @@ var Developer = Class.create(Scene, {
    * @param {string} label
    * @param {string} name
    * @param {string|number} value
+   * @param {number} step
+   * @param {number} min
+   * @param {number} max
    */
-  _createRangeInput: function(label, name, value, min, max) {
+  _createRangeInput: function(label, name, value, step, min, max) {
     return dom.createElement('div', cssx('app-ui-scene-developer_item'),
       ['div', cssx('app-ui-scene-developer_item-label'), label],
       ['input', {
-        type: 'text',
+        type: 'number',
+        step: step,
+        min: min,
+        max: max,
         className: cssx('app-ui-scene-developer_item-input'),
         name: name,
         value: value

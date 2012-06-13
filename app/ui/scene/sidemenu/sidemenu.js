@@ -61,6 +61,7 @@ var SideMenu = Class.create(Scene, {
   },
 
   /**
+   /**
    * @param {Event} event
    */
   _onTap: function(event) {

@@ -239,11 +239,13 @@ var Photos = Class.create(BaseUI, {
   },
 
   _showUFI: function(pageNode) {
-    pageNode.appendChild(dom.createElement(
-      'div',
-      cssx('app-ui-fullview-photos-ufi'),
-      'Like . Comment')
-    );
+    Animator.requestAnimationFrame(function() {
+      pageNode.appendChild(dom.createElement(
+        'div',
+        cssx('app-ui-fullview-photos-ufi'),
+        'Like . Comment')
+      );
+    });
   },
 
   _showImage: function(pageNode) {
@@ -255,8 +257,23 @@ var Photos = Class.create(BaseUI, {
       'div', cssx('app-ui-fullview-photos-image'));
 
     pageNode.appendChild(imageNode);
+
     this._showUFI(pageNode);
-    new Imageable(imageNode, pageNode._uri, Imageable.RESIZE_MODE_USE_WIDTH);
+
+    var ima = new Imageable(
+      imageNode,
+      pageNode._uri,
+      Imageable.RESIZE_MODE_USE_WIDTH);
+
+    ima.addEventListener('load', function(evt) {
+      // Need to manually center the image :-P.
+      var r = ima.naturalWidth / ima.naturalHeight;
+      var h = pageNode.offsetWidth / r;
+      var y = (pageNode.offsetHeight - h) / 2;
+      imageNode.style.backgroundPosition = '0 ' + (~~y) + 'px';
+      imageNode = null;
+      ima = null;
+    });
   },
 
   _onTap: function() {

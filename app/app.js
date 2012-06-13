@@ -199,6 +199,7 @@ var App = Class.create(null, {
   _onDeveloper: function() {
     this._hideSideMenu().addCallback(this.bind(function() {
       this._clearScenes();
+      this._sideMenu.dismissSelectedItem();
       this._addScene(new Developer());
     }));
   },

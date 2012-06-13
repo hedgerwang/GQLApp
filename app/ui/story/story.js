@@ -63,13 +63,12 @@ var Story = Class.create(BaseUI, {
    * @reutrn {Element}
    */
   _createHeader: function(actor, data) {
-    var actorPix = objects.getValueByName('profile_picture.uri', actor);
+    var uri = objects.getValueByName('profile_picture.uri', actor);
+    var pix = dom.createElement('div', cssx('app-ui-story-profile-pix'));
+    new Imageable(pix, uri);
 
     return dom.createElement('div', cssx('app-ui-story-header'),
-      ['div', {
-        className: cssx('app-ui-story-profile-pix'),
-        style: 'background-image:url(' + actorPix + ')'
-      }],
+      pix,
       ['div', cssx('app-ui-story-title'),
         ['span', {profile_id: actor.id}, actor.name],
         this._createTime(data.creation_time)
