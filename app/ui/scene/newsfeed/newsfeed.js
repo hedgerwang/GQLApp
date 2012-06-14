@@ -82,6 +82,10 @@ var NewsFeed = Class.create(Scene, {
    * @param {Object} response
    */
   _onQueryResult: function(response) {
+    if (this.disabled) {
+      return;
+    }
+
     if (this._loading) {
       this._loading.dispose();
       delete this._loading;
@@ -118,13 +122,13 @@ var NewsFeed = Class.create(Scene, {
         );
       }
 
-      if (this._storiesLength && this._storiesLength < 200) {
+      if (this._storiesLength && this._storiesLength < 150) {
         var startCursor = objects.getValueByName(
           response.userid + '.home_stories.page_info.end_cursor',
           response);
 
         if (startCursor) {
-          this._query(40, startCursor);
+          this._query(20, startCursor);
         }
       }
       response = null;

@@ -53,8 +53,14 @@ var Story = Class.create(BaseUI, {
 
     var footer = this._createFooter();
 
+
     return dom.createElement('div', cssx('app-ui-story'),
-      header, body, footer);
+      dom.createElement('div', cssx('app-ui-story-border'),
+        header,
+        body,
+        footer
+      )
+    );
   },
 
   /**

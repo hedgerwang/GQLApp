@@ -152,6 +152,81 @@ var Photos = Class.create(BaseUI, {
    */
   _translateAlbumPhotoIntoView: function(pageNode, photoNode, naturalWidth,
                                          naturalHeight) {
+    if (photoNode.style.backgroundImage) {
+      this._translateAlbumPhotoIntoViewWithBgImage(
+        pageNode, photoNode, naturalWidth, naturalHeight)
+    } else if (photoNode.firstChild.tagName === 'CANVAS') {
+      this._translateAlbumPhotoIntoViewWithCanvas(
+        pageNode, photoNode, naturalWidth, naturalHeight);
+    } else {
+      if (__DEV__) {
+        throw new Error('Unknow PhotoNode to translate Photo from');
+      }
+    }
+  },
+
+
+  /**
+   * @param {Element} pageNode
+   * @param {Element} photoNode
+   * @param {number} naturalWidth
+   * @param {number} naturalHeight
+   */
+  _translateAlbumPhotoIntoViewWithCanvas: function(pageNode, photoNode,
+                                                   naturalWidth,
+                                                   naturalHeight) {
+
+    var photoRect = photoNode.getBoundingClientRect();
+    var photoCanvasNode = photoNode.firstChild;
+
+    var imageNode = photoCanvasNode.cloneNode(false);
+    imageNode.className = cssx('app-ui-fullview-photos-image');
+
+    var pageRect = pageNode.getBoundingClientRect();
+    var scale = photoNode.offsetWidth / photoRect.width;
+
+    var imageNodeStyle = imageNode.style;
+    imageNodeStyle.width = ~~(scale * photoRect.width) + 'px';
+    imageNodeStyle.height = ~~ (scale * photoRect.height) + 'px';
+    imageNodeStyle.left = ~~(scale * (photoRect.left - pageRect.left)) + 'px';
+    imageNodeStyle.top = ~~(scale * (photoRect.top - pageRect.top)) + 'px';
+    pageNode.appendChild(imageNode);
+
+    var img = new Image();
+    img.onerror = img.onload = this.bind(function(evt) {
+      if (!this.disposed && evt.type === 'load') {
+        imageNode.getContext('2d').drawImage(
+          img,
+          photoCanvasNode.imageX,
+          photoCanvasNode.imageY,
+          photoCanvasNode.imageW,
+          photoCanvasNode.imageH);
+      }
+
+      this._translateAlbumPhotoIntoViewContinue(
+        pageNode, imageNode, photoCanvasNode.imageW, photoCanvasNode.imageW);
+
+      imageNode = null;
+      photoCanvasNode = null;
+      img.onload = null;
+      img.onerror = null;
+      imageNode = null;
+      img = null;
+    });
+    img.src = photoCanvasNode.imageSrc;
+  },
+
+
+  /**
+   *
+   * @param {Element} pageNode
+   * @param {Element} photoNode
+   * @param {number} naturalWidth
+   * @param {numbe} naturalHeight
+   */
+  _translateAlbumPhotoIntoViewWithBgImage: function(pageNode, photoNode,
+                                                    naturalWidth,
+                                                    naturalHeight) {
     var photoRect = photoNode.getBoundingClientRect();
     var imageNode =
       dom.createElement('div', cssx('app-ui-fullview-photos-image'));
@@ -168,10 +243,17 @@ var Photos = Class.create(BaseUI, {
     imageNodeStyle.top = ~~(scale * (photoRect.top - pageRect.top)) + 'px';
     pageNode.appendChild(imageNode);
 
+    this._translateAlbumPhotoIntoViewContinue(
+      pageNode, imageNode, naturalWidth, naturalHeight);
+  },
+
+  _translateAlbumPhotoIntoViewContinue: function(pageNode, imageNode,
+                                                 naturalWidth, naturalHeight) {
+    var imageNodeStyle = imageNode.style;
     var ratio = naturalWidth / naturalHeight;
 
     var w0 = parseInt(imageNodeStyle.width, 10);
-    var w1 = pageNode.offsetWidth;
+    var w1 = dom.getViewportWidth();
     var dw = w1 - w0;
 
     var h0 = parseInt(imageNodeStyle.height, 10);
@@ -183,7 +265,7 @@ var Photos = Class.create(BaseUI, {
     var dx = x1 - x0;
 
     var y0 = parseInt(imageNodeStyle.top, 10);
-    var y1 = (pageNode.offsetHeight - h1) / 2;
+    var y1 = (dom.getViewportHeight() - h1) / 2;
     var dy = y1 - y0;
 
     this._animator = new Animator();
@@ -191,7 +273,6 @@ var Photos = Class.create(BaseUI, {
     var uiNodeStyle = this.getNode().style;
 
     var step = function(value) {
-      var opacity = ~~(10 * value) / 10;
       imageNodeStyle.width = ~~(value * dw + w0) + 'px';
       imageNodeStyle.height = ~~(value * dh + h0) + 'px';
       imageNodeStyle.left = ~~(value * dx + x0) + 'px';
@@ -201,7 +282,7 @@ var Photos = Class.create(BaseUI, {
     var complete = this.bind(function() {
       uiNodeStyle.backgroundColor = '#000';
       pageNodeStyle.backgroundColor = '';
-      imageNodeStyle.witdh = ''; // 100%.
+      imageNodeStyle.width = ''; // 100%.
       pageNodeStyle.backgroundColor = ''; // #000.
       imageNodeStyle = null;
       pageNodeStyle = null;
@@ -258,22 +339,23 @@ var Photos = Class.create(BaseUI, {
 
     pageNode.appendChild(imageNode);
 
-    this._showUFI(pageNode);
-
     var ima = new Imageable(
       imageNode,
       pageNode._uri,
       Imageable.RESIZE_MODE_USE_WIDTH);
 
-    ima.addEventListener('load', function(evt) {
+    ima.addEventListener('load', this.bind(function(evt) {
       // Need to manually center the image :-P.
       var r = ima.naturalWidth / ima.naturalHeight;
-      var h = pageNode.offsetWidth / r;
-      var y = (pageNode.offsetHeight - h) / 2;
+      var h = dom.getViewportWidth() / r;
+      var y = (dom.getViewportHeight() - h) / 2;
       imageNode.style.backgroundPosition = '0 ' + (~~y) + 'px';
       imageNode = null;
       ima = null;
-    });
+
+      this._showUFI(pageNode);
+      pageNode = null;
+    }));
   },
 
   _onTap: function() {

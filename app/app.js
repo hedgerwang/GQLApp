@@ -193,7 +193,7 @@ var App = Class.create(null, {
     this._sideMenu.setDisabled(disabled);
     this._sideMenu.setHidden(disabled);
     this._activeScene.setDisabled(disabled);
-    this._activeScene.setHidden(disabled);
+    // this._activeScene.setHidden(disabled);
   },
 
   _onDeveloper: function() {

@@ -24,8 +24,10 @@ var Photo = Class.create(BaseUI, {
     if (image && image.uri) {
       if (__DEV__) {
         if (!image.width || !image.height) {
-          console.warn('Image width or height appears 0. ' +
-            'Maybe this image is too big?',
+          console.warn(
+            'Image width or height appears 0. ' +
+              'Maybe this image is too big? ' +
+              'This could be resolved by Imageable.',
             image.uri,
             image);
         }
@@ -67,3 +69,16 @@ var Photo = Class.create(BaseUI, {
 });
 
 exports.Photo = Photo;
+
+try {
+
+  var context = document.getCSSCanvasContext("2d", "bordershadow", 10, 10);
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.shadowBlur = 2;
+  context.shadowColor = '#000';
+  context.fillStyle = '#000';
+  context.fillRect(3, 3, 3, 3);
+} catch(ex) {
+  alert(ex.message);
+}
