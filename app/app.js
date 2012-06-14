@@ -57,10 +57,13 @@ var App = Class.create(null, {
   },
 
   _start: function() {
-    this._chrome.appendChild(this._sideMenu, true);
-    this._coverScene.fadeOut(450, true);
+
+    this._coverScene.fadeOut(450, true).addCallback(this.bind(function() {
+      this._chrome.appendChild(this._sideMenu, true);
+      this._bindEvents();
+    }));
+
     this._addScene(new NewsFeed(0, false));
-    this._bindEvents();
   },
 
   _bindEvents: function() {

@@ -249,6 +249,7 @@ var Photos = Class.create(BaseUI, {
 
   _translateAlbumPhotoIntoViewContinue: function(pageNode, imageNode,
                                                  naturalWidth, naturalHeight) {
+
     var imageNodeStyle = imageNode.style;
     var ratio = naturalWidth / naturalHeight;
 

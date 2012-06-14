@@ -20,10 +20,27 @@
   border-right: solid 1px #dfdfdf;
   box-sizing: border-box;
   color: #666;
+  overflow: hidden;
   padding: 10px 0;
+  position: relative;
   text-align: center;
   white-space: nowrap;
   width: 33.33%;
+}
+
+.app-ui-composerbar_tab-active {  
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.app-ui-composerbar_camera-input {  
+  -webkit-appreance: none;
+  left: 0;
+  opacity: 0;
+  padding: 3em;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 .app-ui-composerbar_tab:first-child {  
@@ -38,7 +55,9 @@
   display: inline-block;
   height: 1.1em;
   margin: -2px 4px 0 0;
+  position: relative;
   vertical-align: middle;
   width: 1.1em;
+  z-index: 2;
 }
 

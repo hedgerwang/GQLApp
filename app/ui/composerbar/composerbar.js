@@ -24,11 +24,23 @@ var ComposerBar = Class.create(BaseUI, {
 
   /** @override */
   createNode: function() {
+    var photoTab = this._createTab('Photo', '/images/photo.png');
+    var photoInput = dom.createElement('input', {
+      type: 'file',
+      accept: 'image/*',
+      capture: 'camera',
+      className: cssx('app-ui-composerbar_camera-input')
+    });
+    photoTab.appendChild(photoInput);
+
     var node = dom.createElement('div', cssx('app-ui-composerbar'),
       this._createTab('Status', '/images/compose.png'),
-      this._createTab('Photo', '/images/photo.png'),
+      photoTab,
       this._createTab('Check In', '/images/place.png')
     );
+
+    this._photoTab = photoTab;
+
     return node;
   },
 
@@ -58,6 +70,20 @@ var ComposerBar = Class.create(BaseUI, {
 
   onDocumentReady: function() {
     this._visible = true;
+    var tappable = this.getNodeTappable();
+    tappable.addTarget(this._photoTab);
+    this.getEvents().listen(this.getNodeTappable(), 'tapstart', this._onTap);
+    this.getEvents().listen(this.getNodeTappable(), 'tapend', this._onTap);
+  },
+
+  _onTap: function(event) {
+    switch (event.data) {
+      case this._photoTab:
+        dom.alterClassName(this._photoTab,
+          cssx('app-ui-composerbar_tab-active'),
+          event.type === 'tapstart');
+        break;
+    }
   },
 
   _onAnimStep: function(value) {
@@ -104,7 +130,8 @@ var ComposerBar = Class.create(BaseUI, {
   _translateY: 0,
   _deltaTranslateY: 0,
   _startTranslateY: 0,
-  _endTranslateY: 0
+  _endTranslateY: 0,
+  _photoTab: null
 });
 
 exports.ComposerBar = ComposerBar;
