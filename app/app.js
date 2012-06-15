@@ -57,12 +57,11 @@ var App = Class.create(null, {
   },
 
   _start: function() {
-
     this._coverScene.fadeOut(450, true).addCallback(this.bind(function() {
       this._chrome.appendChild(this._sideMenu, true);
       this._bindEvents();
+      this._enableSceneScroller();
     }));
-
     this._addScene(new NewsFeed(0, false));
   },
 
@@ -224,7 +223,6 @@ var App = Class.create(null, {
     if (!this._activeScene) {
       this._activeScene = scene;
       this._chrome.appendChild(this._activeScene, true);
-      this._disableSceneScroller();
       this._enableSceneScroller();
       return;
     }

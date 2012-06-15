@@ -37,10 +37,10 @@ var Story = Class.create(BaseUI, {
     var subattachments =
       objects.getValueByName('attachments.0.subattachments', data);
 
-    if (__DEV__ && !lang.isArray(subattachments) || subattachments.length < 2) {
-      // Do not show stories that has no attachments.
-      // return dom.createElement('div', null, '');
-    }
+    // if (__DEV__ && !lang.isArray(subattachments) || subattachments.length < 2) {
+    // Do not show stories that has no attachments.
+    // return dom.createElement('div', null, '');
+    // }
 
     var header = this._createHeader(actor, data);
     var body = this._createBody(message);

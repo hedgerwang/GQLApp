@@ -24,12 +24,14 @@ var Photo = Class.create(BaseUI, {
     if (image && image.uri) {
       if (__DEV__) {
         if (!image.width || !image.height) {
-          console.warn(
+          var debugInfo = [
             'Image width or height appears 0. ' +
               'Maybe this image is too big? ' +
               'This could be resolved by Imageable.',
             image.uri,
-            image);
+            image
+          ];
+          console.warn(debugInfo);
         }
       }
       var node = dom.createElement('div', {

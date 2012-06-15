@@ -21,6 +21,22 @@ var Developer = Class.create(Scene, {
     var node = Scene.prototype.createNode.call(this);
     dom.addClassName(node, cssx('app-ui-scene-developer'));
 
+    this._submit = dom.createElement(
+      'input',
+      {
+        className: cssx('app-ui-scene-developer_item-submit'),
+        type: 'button',
+        value: 'Save'
+      },
+      'Save');
+
+
+    return node;
+  },
+
+  onDocumentReady: function() {
+    this._scroll.render(this.getNode());
+
     this._scroll.addContent(
       dom.createElement('div',
         cssx('app-ui-scene-developer_item'),
@@ -46,21 +62,9 @@ var Developer = Class.create(Scene, {
         1)
     );
 
-    this._submit = dom.createElement(
-      'input',
-      {
-        className: cssx('app-ui-scene-developer_item-submit'),
-        type: 'button',
-        value: 'Save'
-      },
-      'Save');
-
     this._scroll.addContent(this._submit);
-    return node;
-  },
 
-  onDocumentReady: function() {
-    this._scroll.render(this.getNode());
+
     this.getEvents().listen(this._submit, 'click', this._save);
   },
 
