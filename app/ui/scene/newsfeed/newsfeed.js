@@ -118,7 +118,9 @@ var NewsFeed = Class.create(Scene, {
 
     if (lang.isArray(stories) && stories.length) {
       if (this._storiesLength === 0) {
-        this._firstStoryID = stories[0].id;
+        var firstStory = stories[0];
+        // id could be null, use creation_time instead.
+        this._firstStoryID = firstStory.id || firstStory.creation_time;
       }
 
       for (var i = 0, j = stories.length; i < j; i++) {
@@ -150,7 +152,7 @@ var NewsFeed = Class.create(Scene, {
       // It appears that we had the very latest cached data, but it seems old
       // so we should try to see if we some newer stories.
       this._refreshTime = now;
-      this._refreshQuery(startCursor);
+      this._queryFreshness(startCursor);
     }
 
     if (this._storiesLength &&
@@ -168,14 +170,22 @@ var NewsFeed = Class.create(Scene, {
 
   /**
    *
-   * @param {string} startCursor
+   * @param {string?} startCursor
    */
-  _refreshQuery: function(startCursor) {
+  _queryFreshness: function(startCursor) {
+    if (startCursor) {
+      this._queryFreshnessStartCursor = startCursor;
+    } else {
+      startCursor = this._queryFreshnessStartCursor;
+    }
+
+    console.log('NewsFeed query freshness from ', startCursor);
+
     FBData.getHomeStoriesPageInfo(this._uid, 20, startCursor).
-      addCallback(this.bind(this._onRefreshQuery));
+      addCallback(this.bind(this._onFreshnessQuery));
   },
 
-  _onRefreshQuery: function(response) {
+  _onFreshnessQuery: function(response) {
     var pageInfo = objects.getValueByName(
       response.userid + '.home_stories.page_info',
       response);
@@ -186,15 +196,22 @@ var NewsFeed = Class.create(Scene, {
 
     console.log(
       'Refresh query result pageInfo ',
+      this._firstStoryID,
+      stories[0] && stories[0].id,
       pageInfo,
-      stories,
+      stories.length,
       response
     );
 
     if (lang.isArray(stories) && stories.length > 1 &&
       this._firstStoryID &&
-      this._firstStoryID !== stories[0].id) {
+      this._firstStoryID !== stories[0].id &&
+      this._firstStoryID !== stories[0].creation_time) {
+      this._firstStoryID = null;
       this._composerBar.updateNewStoriesCount(stories.length - 1);
+    } else {
+      // Check freshness periodically.
+      this.callLater(this._queryFreshness, NewsFeed.REFRESH_INTERVAL);
     }
   },
 
@@ -214,6 +231,8 @@ var NewsFeed = Class.create(Scene, {
   _firstStoryID: '',
 
   _refreshTime: 0,
+
+  _queryFreshnessStartCursor: '',
 
   _storiesLength: 0,
 
@@ -238,10 +257,7 @@ var NewsFeed = Class.create(Scene, {
 });
 
 NewsFeed.STORIES_TO_FETCH_COUNT = 150;
-NewsFeed.REFRESH_INTERVAL = 1 * 60 * 1000;
 
-if (__DEV__) {
-  NewsFeed.REFRESH_INTERVAL = 30;
-}
+NewsFeed.REFRESH_INTERVAL = 1 * 60 * 1000;
 
 exports.NewsFeed = NewsFeed;
