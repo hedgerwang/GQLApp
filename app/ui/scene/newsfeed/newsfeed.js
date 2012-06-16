@@ -22,10 +22,12 @@ var NewsFeed = Class.create(Scene, {
   /**
    * @param {number=} opt_uid
    * @param {boolean=} opt_showBackButton
+   * @param {boolean=} opt_useCache
    * @override
    */
-  main: function(opt_uid, opt_showBackButton) {
+  main: function(opt_uid, opt_showBackButton, opt_useCache) {
     this._uid = opt_uid;
+    this._useCache = (typeof opt_useCache === 'boolean') ? opt_useCache : true;
     this._jewel = this.appendChild(new JewelBar(opt_showBackButton));
     this._scrollList = this.appendChild(new ScrollList());
     this._loading = this.appendChild(new LoadingIndicator());
@@ -46,7 +48,8 @@ var NewsFeed = Class.create(Scene, {
     this._loading.render(node);
     this._composerBar.render(node);
     this._loading.center();
-    this._query(14, null);
+
+    this._query(14, null, this._useCache);
 
     var events = this.getEvents();
     events.listen(this.getNodeTappable(), 'tap', this._onTap);
@@ -67,14 +70,16 @@ var NewsFeed = Class.create(Scene, {
 
   /**
    * @param {number} count
-   * @param {string?} startCursor
+   * @param {string?} cursor
+   * @param {boolean} useCache
+   * @return {Deferred}
    */
-  _query: function(count, startCursor) {
+  _query: function(count, cursor, useCache) {
     var callback = this._loading ?
       this.callAfter(this._onQueryResult, 1200) :
       this.bind(this._onQueryResult);
 
-    FBData.getHomeStories(this._uid, count, startCursor, true).
+    return FBData.getHomeStories(this._uid, count, cursor, useCache).
       addCallback(callback);
   },
 
@@ -82,57 +87,115 @@ var NewsFeed = Class.create(Scene, {
    * @param {Object} response
    */
   _onQueryResult: function(response) {
-    if (this.disabled) {
+    if (this.disposed) {
       return;
     }
 
-    if (this._loading) {
-      this._loading.dispose();
-      delete this._loading;
+    Class.dispose(this._loading);
+    delete this._loading;
+
+    this._queryResponse = response;
+    this.callLater(this._renderResponse, 16);
+  },
+
+  _renderResponse: function() {
+    var response = this._queryResponse;
+
+    var stories = objects.getValueByName(
+      response.userid + '.' + 'home_stories.nodes',
+      response);
+
+    var scrollList = this._scrollList;
+    var tappable = this.getNodeTappable();
+
+    if (!scrollList.isInDocument()) {
+      scrollList.render(this.getNode());
+      scrollList.addContent(
+        dom.createElement('div',
+          cssx('app-ui-scene-newsfeed-top-spacer')));
+      tappable.addTarget(scrollList.getNode());
     }
 
-    this.callLater(function() {
-      var stories = objects.getValueByName(
-        response.userid + '.' + 'home_stories.nodes',
+    if (lang.isArray(stories) && stories.length) {
+      if (this._storiesLength === 0) {
+        this._firstStoryID = stories[0].id;
+      }
+
+      for (var i = 0, j = stories.length; i < j; i++) {
+        scrollList.addContent(new Story(stories[i]));
+      }
+      this._storiesLength += stories.length;
+    } else if (this._storiesLength === 0) {
+      this._scrollList.addContent(
+        dom.createElement(
+          'textarea',
+          cssx('app-ui-scene-newsfeed-denug-no-stories'),
+          'No Stories Found\n\r.' + JSON.stringify(response)
+        )
+      );
+    }
+
+    var pageInfo = objects.getValueByName(
+      response.userid + '.home_stories.page_info',
+      response);
+
+    var startCursor = pageInfo.start_cursor;
+    var now = Date.now();
+
+    if (!this._refreshTime &&
+      response._cacheTime &&
+      now - response._cacheTime > NewsFeed.REFRESH_INTERVAL &&
+      startCursor &&
+      !pageInfo.has_previous_page) {
+      // It appears that we had the very latest cached data, but it seems old
+      // so we should try to see if we some newer stories.
+      this._refreshTime = now;
+      this._refreshQuery(startCursor);
+    }
+
+    if (this._storiesLength &&
+      this._storiesLength < NewsFeed.STORIES_TO_FETCH_COUNT) {
+      var endCursor = objects.getValueByName(
+        response.userid + '.home_stories.page_info.end_cursor',
         response);
 
-      var scrollList = this._scrollList;
-      var tappable = this.getNodeTappable();
-
-      if (!scrollList.isInDocument()) {
-        scrollList.render(this.getNode());
-        scrollList.addContent(
-          dom.createElement('div',
-            cssx('app-ui-scene-newsfeed-top-spacer')));
-        tappable.addTarget(scrollList.getNode());
+      if (endCursor && pageInfo.has_next_page) {
+        this._query(20, endCursor, true);
       }
+    }
+    delete this._queryResponse;
+  },
 
-      if (lang.isArray(stories) && stories.length) {
-        for (var i = 0, j = stories.length; i < j; i++) {
-          scrollList.addContent(new Story(stories[i]));
-        }
-        this._storiesLength += stories.length;
-      } else if (this._storiesLength === 0) {
-        this._scrollList.addContent(
-          dom.createElement(
-            'textarea',
-            cssx('app-ui-scene-newsfeed-denug-no-stories'),
-            'No Stories Found\n\r.' + JSON.stringify(response)
-          )
-        );
-      }
+  /**
+   *
+   * @param {string} startCursor
+   */
+  _refreshQuery: function(startCursor) {
+    FBData.getHomeStoriesPageInfo(this._uid, 20, startCursor).
+      addCallback(this.bind(this._onRefreshQuery));
+  },
 
-      if (this._storiesLength && this._storiesLength < 150) {
-        var startCursor = objects.getValueByName(
-          response.userid + '.home_stories.page_info.end_cursor',
-          response);
+  _onRefreshQuery: function(response) {
+    var pageInfo = objects.getValueByName(
+      response.userid + '.home_stories.page_info',
+      response);
 
-        if (startCursor) {
-          this._query(20, startCursor);
-        }
-      }
-      response = null;
-    }, 16);
+    var stories = objects.getValueByName(
+      response.userid + '.' + 'home_stories.nodes',
+      response);
+
+    console.log(
+      'Refresh query result pageInfo ',
+      pageInfo,
+      stories,
+      response
+    );
+
+    if (lang.isArray(stories) && stories.length > 1 &&
+      this._firstStoryID &&
+      this._firstStoryID !== stories[0].id) {
+      this._composerBar.updateNewStoriesCount(stories.length - 1);
+    }
   },
 
   /**
@@ -144,14 +207,22 @@ var NewsFeed = Class.create(Scene, {
       var profile = targetNode.getAttribute('profile_id');
       if (profile) {
         this.dispatchEvent(EventType.VIEW_PROFILE, profile, true);
-        return;
       }
     }
   },
 
+  _firstStoryID: '',
+
+  _refreshTime: 0,
+
   _storiesLength: 0,
 
   _feedSrollTop: 0,
+
+  /**
+   * @type {Object}
+   */
+  _queryResponse: null,
 
   _uid: 0,
 
@@ -165,5 +236,12 @@ var NewsFeed = Class.create(Scene, {
    */
   _jewel: null
 });
+
+NewsFeed.STORIES_TO_FETCH_COUNT = 150;
+NewsFeed.REFRESH_INTERVAL = 1 * 60 * 1000;
+
+if (__DEV__) {
+  NewsFeed.REFRESH_INTERVAL = 30;
+}
 
 exports.NewsFeed = NewsFeed;

@@ -24,22 +24,30 @@ var ComposerBar = Class.create(BaseUI, {
 
   /** @override */
   createNode: function() {
-    var photoTab = this._createTab('Photo', '/images/photo.png');
+    this._photoTab = this._createTab('Photo', '/images/photo.png');
+
     var photoInput = dom.createElement('input', {
       type: 'file',
       accept: 'image/*',
       capture: 'camera',
       className: cssx('app-ui-composerbar_camera-input')
     });
-    photoTab.appendChild(photoInput);
+
+    this._photoTab.appendChild(photoInput);
+
+    this._newStoriesCountPanel = dom.createElement(
+      'div', cssx('app-ui-composerbar_new-stories-count'));
 
     var node = dom.createElement('div', cssx('app-ui-composerbar'),
-      this._createTab('Status', '/images/compose.png'),
-      photoTab,
-      this._createTab('Check In', '/images/place.png')
+      [
+        'div',
+        cssx('app-ui-composerbar_tabs'),
+        this._createTab('Status', '/images/compose.png'),
+        this._photoTab,
+        this._createTab('Check In', '/images/place.png')
+      ],
+      this._newStoriesCountPanel
     );
-
-    this._photoTab = photoTab;
 
     return node;
   },
@@ -72,16 +80,50 @@ var ComposerBar = Class.create(BaseUI, {
     this._visible = true;
     var tappable = this.getNodeTappable();
     tappable.addTarget(this._photoTab);
+    tappable.addTarget(this._newStoriesCountPanel);
     this.getEvents().listen(this.getNodeTappable(), 'tapstart', this._onTap);
     this.getEvents().listen(this.getNodeTappable(), 'tapend', this._onTap);
   },
 
+  /**
+   * @param {number} count
+   */
+  updateNewStoriesCount: function(count) {
+    if (count > 0) {
+      var msg = 'You have ';
+      if (count === 1) {
+        msg += 'one new story';
+      } else {
+        if (count > 10) {
+          count = 'more than 10';
+        }
+        msg += count + ' new stories';
+      }
+      this._newStoriesCountPanel.textContent = msg;
+      dom.addClassName(
+        this._newStoriesCountPanel,
+        cssx('app-ui-composerbar_new-stories-count-shown')
+      );
+    } else {
+      dom.removeClassName(
+        this._newStoriesCountPanel,
+        cssx('app-ui-composerbar_new-stories-count-shown')
+      );
+    }
+  },
+
   _onTap: function(event) {
+    var tapStart = event.type === 'tapstart';
+    dom.alterClassName(event.data, cssx('pressed'), tapStart);
+
     switch (event.data) {
       case this._photoTab:
-        dom.alterClassName(this._photoTab,
-          cssx('app-ui-composerbar_tab-active'),
-          event.type === 'tapstart');
+        break;
+      case this._newStoriesCountPanel:
+        if (!tapStart) {
+          // TODO(hedger): Should have listened to TAPCLICK event instead.
+          this.dispatchEvent(EventType.NEWSFEED_REFRESH, null, true);
+        }
         break;
     }
   },

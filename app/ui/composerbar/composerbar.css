@@ -1,11 +1,5 @@
 .app-ui-composerbar {  
   backface-visibility: hidden;
-  background-color: rgba(229, 229, 229, 1);
-  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(229, 229, 229, 1) 100%); /* Chrome10+,Safari5.1+ */
-  border-bottom: solid 1px #efefef;
-  box-shadow: 0 0 3px #444;
-  display: -webkit-box;
-  font-size: 90%;
   left: 0;
   overflow: hidden;
   position: absolute;
@@ -13,6 +7,15 @@
   top: 0;
   white-space: nowrap;
   z-index: 10;
+}
+
+.app-ui-composerbar_tabs {  
+  background-color: rgba(229, 229, 229, 1);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(229, 229, 229, 1) 100%); /* Chrome10+,Safari5.1+ */
+  border-bottom: solid 1px #efefef;
+  box-shadow: 0 0 3px #444;
+  display: -webkit-box;
+  font-size: 90%;
 }
 
 .app-ui-composerbar_tab {  
@@ -28,7 +31,7 @@
   width: 33.33%;
 }
 
-.app-ui-composerbar_tab-active {  
+.app-ui-composerbar_tab.pressed {  
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -61,3 +64,29 @@
   z-index: 2;
 }
 
+.app-ui-composerbar_new-stories-count {  
+  backface-visibility: hidden;
+  background-color: rgba(229, 229, 229, 0.9);
+  border-bottom: solid 1px #aaa;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 0.95em;
+  font-weight: bold;
+  opacity: 0;
+  padding: 10px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  transform: translate3d(0, -100px, 0);
+  transition-duration: 300ms;
+  transition-property: opacity;
+  white-space: nowrap;
+}
+
+.app-ui-composerbar_new-stories-count-shown {  
+  display: block;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.app-ui-composerbar_new-stories-count.pressed {  
+  background-color: rgba(200, 200, 200, 0.9);
+}

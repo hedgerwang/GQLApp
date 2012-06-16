@@ -20,4 +20,7 @@ var asserts = require('jog/asserts').asserts;
     setTimeout(function() {
       bar.setVisible(true);
     }, 500);
+    setTimeout(function() {
+      bar.updateNewStoriesCount(100);
+    }, 1000);
   });

@@ -72,15 +72,24 @@ var Photo = Class.create(BaseUI, {
 
 exports.Photo = Photo;
 
-try {
-
-  var context = document.getCSSCanvasContext("2d", "bordershadow", 10, 10);
-  context.shadowOffsetX = 0;
-  context.shadowOffsetY = 0;
-  context.shadowBlur = 2;
-  context.shadowColor = '#000';
-  context.fillStyle = '#000';
-  context.fillRect(3, 3, 3, 3);
-} catch(ex) {
-  alert(ex.message);
-}
+//(function() {
+//  try {
+//    var el = document.createElement('canvas');
+//    el.width = 18;
+//    el.height = 18;
+//    var context = document.getCSSCanvasContext(
+//      '2d',
+//      'app-ui-story-photo-border',
+//      18,
+//      18
+//    );
+//    context.shadowOffsetX = 0;
+//    context.shadowOffsetY = 0;
+//    context.shadowBlur = 3;
+//    context.shadowColor = "#000";
+//    context.fillStyle = "#fff";
+//    context.fillRect(~~((el.width - 10) / 2), ~~((el.height - 10) / 2 ), 10, 10);
+//  } catch(ex) {
+//    alert(ex.message);
+//  }
+//})();

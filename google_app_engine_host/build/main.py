@@ -5,13 +5,12 @@ class MainPage(webapp.RequestHandler) :
   def get(self) :
     ua = str(self.request.headers['User-Agent'])
 
-    if 'Android' in ua:      
-      # self.redirect('/android')
+    if 'Android' in ua:
       self.redirect('/1x')
       return
-      
+
     self.redirect('/2x')
-      
+
 
 #    self.response.headers['Content-Type'] = 'text/plain'
 #    self.response.out.write('Hello, webapp World!')

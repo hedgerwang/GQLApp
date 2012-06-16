@@ -99,6 +99,11 @@ var App = Class.create(null, {
       this._onViewHome);
 
     events.listen(
+      this._chrome,
+      EventType.NEWSFEED_REFRESH,
+      this._onViewHome);
+
+    events.listen(
       this._sideMenu,
       EventType.SIDE_MENU_DEVELOPER,
       this._onDeveloper);
@@ -159,10 +164,14 @@ var App = Class.create(null, {
     }
   },
 
-  _onViewHome: function() {
+  /**
+   * @param {Event} event
+   */
+  _onViewHome: function(event) {
+    var useCache = event.type !== EventType.NEWSFEED_REFRESH;
     this._hideSideMenu().addCallback(this.bind(function() {
       this._clearScenes();
-      this._addScene(new NewsFeed(0));
+      this._addScene(new NewsFeed(0, false, useCache));
     }));
   },
 
@@ -458,6 +467,10 @@ window.addEventListener('DOMContentLoaded', function() {
       }
     }, true);
   }
+
+  window.addEventListener('error', function(evt) {
+    alert('error:' + evt.message);
+  });
 
   var app = new App();
 });
