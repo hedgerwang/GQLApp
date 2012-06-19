@@ -10,6 +10,7 @@ var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var JewelBar = require('app/ui/jewelbar').JewelBar;
 var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
+var PullToRefreshPanel = require('app/ui/pulltorefreshpanel').PullToRefreshPanel;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var Story = require('app/ui/story').Story;
@@ -49,6 +50,9 @@ var NewsFeed = Class.create(Scene, {
     this._composerBar.render(node);
     this._loading.center();
 
+    var refreshPanel = new PullToRefreshPanel();
+    refreshPanel.attachToScrollTarget(this._scrollList);
+
     this._query(14, null, this._useCache);
 
     var events = this.getEvents();
@@ -57,8 +61,8 @@ var NewsFeed = Class.create(Scene, {
   },
 
   _onFeedScroll: function() {
-    var newTop = this._scrollList.scrollTop;
-    newTop = newTop < 0 ? 0 : newTop;
+    var scrollTop = this._scrollList.scrollTop;
+    var newTop = scrollTop < 0 ? 0 : scrollTop;
 
     if (this._feedSrollTop > newTop) {
       this._composerBar.setVisible(true);
@@ -95,7 +99,7 @@ var NewsFeed = Class.create(Scene, {
     delete this._loading;
 
     this._queryResponse = response;
-    this.callLater(this._renderResponse, 16);
+    this.setTimeout(this._renderResponse, 16);
   },
 
   _renderResponse: function() {
@@ -141,7 +145,7 @@ var NewsFeed = Class.create(Scene, {
       response.userid + '.home_stories.page_info',
       response);
 
-    var startCursor = pageInfo.start_cursor;
+    var startCursor = pageInfo ? pageInfo.start_cursor : null;
     var now = Date.now();
 
     if (!this._refreshTime &&
@@ -211,7 +215,7 @@ var NewsFeed = Class.create(Scene, {
       this._composerBar.updateNewStoriesCount(stories.length - 1);
     } else {
       // Check freshness periodically.
-      this.callLater(this._queryFreshness, NewsFeed.REFRESH_INTERVAL);
+      this.setTimeout(this._queryFreshness, NewsFeed.REFRESH_INTERVAL);
     }
   },
 

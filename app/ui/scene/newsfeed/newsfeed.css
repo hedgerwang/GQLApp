@@ -8,9 +8,13 @@
 }
 
 .app-ui-scene-newsfeed > .jog-ui-scrolllist {  
-  background: #d8dce6;
+  background: #e2e9f1;
   top: 44px;
   z-index: 1;
+}
+
+.app-ui-scene-newsfeed .app-ui-story {  
+  background: #d8dce6;
 }
 
 .app-ui-scene-newsfeed .app-ui-composerbar {  
@@ -26,3 +30,5 @@
   width: 90%;
   word-wrap: break-word;
 }
+
+

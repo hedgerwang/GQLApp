@@ -84,7 +84,7 @@ var Developer = Class.create(Scene, {
     input.value = factor;
     Scroller.prototype._SPEED_FACTOR = factor;
 
-    this.callLater(function() {
+    this.setTimeout(function() {
       this._submit.value = 'Saved';
       this.getEvents().listen(this._submit, 'click', this._save);
     }, 500);

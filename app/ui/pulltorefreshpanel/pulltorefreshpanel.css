@@ -1,0 +1,26 @@
+.app-ui-pulltorefreshpanel {
+  backface-visibility: hidden;
+  color: rgba(0, 0, 0, 0.65);
+  font-family: verdana;
+  font-size: 12px;
+  left: 0;
+  padding: 120px 0 10px 0;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  top: 0;
+  transform: translate3d(0, 0, 0);
+  white-space: nowrap;
+  width: 100%;
+  z-index: 10;
+}
+
+.app-ui-pulltorefreshpanel-refreshing {
+  background: rgba(226, 233, 241, 0.9);
+  border-bottom: 1px solid #aaa;
+}
+
+.app-ui-pulltorefreshpanel-refreshing .jog-ui-loading-indicator-centered {
+  margin-top: 5em;
+}
