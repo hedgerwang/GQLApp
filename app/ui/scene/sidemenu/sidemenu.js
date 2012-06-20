@@ -232,7 +232,8 @@ var SideMenu = Class.create(Scene, {
     return (new Deferred()).addCallback(this.bind(function() {
       var body = dom.createElement(
         'ul',
-        cssx('app-ui-scene-sidemenu_body'),
+        cssx('app-ui-scene-sidemenu_body') + ' ' +
+          cssx('app-ui-scene-sidemenu_body-last'),
         this._createHeading('Other')
       );
 
