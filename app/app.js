@@ -37,7 +37,9 @@ var App = Class.create(null, {
     );
 
     // show the whole chrome.
-    this._chrome.render(dom.getDocument().body);
+    var body = dom.createElement('div', cssx('app_body'));
+    dom.getDocument().body.appendChild(body);
+    this._chrome.render(body);
   },
 
   dispose: function() {

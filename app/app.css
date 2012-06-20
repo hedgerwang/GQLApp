@@ -2,3 +2,12 @@
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.8);
 }
 
+.app_body {  
+  -webkit-overflow-scrolling: touch;
+  bottom: -100px;
+  left: 0;
+  overflow: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
