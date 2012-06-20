@@ -1,15 +1,15 @@
 .app-ui-story-album {  
-  height: 288px;
-  margin: 8px 0 3px 0;
+  height: 310px;
+  margin: 8px 0 3px -14px;
   overflow: visible;
   white-space: nowrap;
-  width: 288px;
+  width: 318px;
 }
 
 .app-ui-story-album .app-ui-story-photo {  
   background: #fefefe;
   display: inline-block;
-  height: 280px;
+  height: 310px;
   margin: 0 6px 0 0;
-  width: 280px;
+  width: 310px;
 }

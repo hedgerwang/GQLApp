@@ -1,23 +1,23 @@
-.app-ui-scene-sidemenu {
+.app-ui-scene-sidemenu {  
   background: #31394a;
   width: 260px;
   z-index: 1;
 }
 
-.app-ui-scene-sidemenu_onsearch {
+.app-ui-scene-sidemenu_onsearch {  
   width: 100%;
 }
 
-.app-ui-scene-sidemenu > .jog-ui-scrolllist {
+.app-ui-scene-sidemenu > .jog-ui-scrolllist {  
   background: transparent;
   top: 44px;
 }
 
-.app-ui-scene-sidemenu_onsearch > .jog-ui-scrolllist {
+.app-ui-scene-sidemenu_onsearch > .jog-ui-scrolllist {  
   pointer-events: none;
 }
 
-.app-ui-scene-sidemenu_heading {
+.app-ui-scene-sidemenu_heading {  
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#434B5C), to(#394152));
   border-bottom-color: #242A37;
   border-bottom-style: solid;
@@ -35,7 +35,7 @@
   text-transform: uppercase;
 }
 
-.app-ui-scene-sidemenu_item {
+.app-ui-scene-sidemenu_item {  
   border-bottom-color: #242A37;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -46,17 +46,17 @@
   display: -webkit-box;
 }
 
-.app-ui-scene-sidemenu_item-selected {
+.app-ui-scene-sidemenu_item-selected {  
   background: #262C3A;
 }
 
-.app-ui-scene-sidemenu_item-icon {
+.app-ui-scene-sidemenu_item-icon {  
   height: 34px;
   margin: 6px 8px;
   width: 34px;
 }
 
-.app-ui-scene-sidemenu_item-text {
+.app-ui-scene-sidemenu_item-text {  
   color: #C4CCDA;
   font-size: 14px;
   font-weight: bold;
@@ -67,6 +67,6 @@
   width: 200px;
 }
 
-.app-ui-scene-sidemenu_body-last {
+.app-ui-scene-sidemenu_body-last {  
   padding-bottom: 40px;
 }

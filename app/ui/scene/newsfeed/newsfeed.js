@@ -219,15 +219,24 @@ var NewsFeed = Class.create(Scene, {
     );
 
     if (lang.isArray(stories) && stories.length > 1 &&
-      this._firstStoryID &&
-      this._firstStoryID !== stories[0].id &&
-      this._firstStoryID !== stories[0].creation_time) {
-      this._firstStoryID = null;
-      this._composerBar.updateNewStoriesCount(stories.length - 1);
-    } else {
-      // Check freshness periodically.
-      this.setTimeout(this._queryFreshness, NewsFeed.REFRESH_INTERVAL);
+      this._firstStoryID) {
+
+      var firstStoryID = this._firstStoryID;
+      var i;
+      for (i = 0; i < stories.length; i++) {
+        var story = stories[0];
+        if (firstStoryID === story.id || firstStoryID === story.creation_time) {
+          break;
+        }
+      }
+      if (i > 0) {
+        this._firstStoryID = null;
+        this._composerBar.updateNewStoriesCount(i);
+      }
     }
+    // Check freshness periodically.
+    this.setTimeout(this._queryFreshness, NewsFeed.REFRESH_INTERVAL);
+
   },
 
   /**

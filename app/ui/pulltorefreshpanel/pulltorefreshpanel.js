@@ -3,15 +3,15 @@
  * @author Hedger Wang
  */
 
-var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
 var Imageable = require('jog/behavior/imageable').Imageable;
+var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Tappable = require('jog/behavior/tappable').Tappable;
+var TouchHelper = require('jog/touchhelper').TouchHelper;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
-var TouchHelper = require('jog/touchhelper').TouchHelper;
 var translate = require('jog/style/translate').translate;
 
 var PullToRefreshPanel = Class.create(BaseUI, {

@@ -37,8 +37,15 @@ var App = Class.create(null, {
     );
 
     // show the whole chrome.
-    var body = dom.createElement('div', cssx('app_body'));
-    dom.getDocument().body.appendChild(body);
+    var body;
+    if (UserAgent.IS_IOS) {
+      // Trick to disable the addressbar then enforce the fullscreen view.
+      var body = dom.createElement('div', cssx('app_body'));
+      dom.getDocument().body.appendChild(body);
+    } else {
+      body = dom.getDocument().body;
+    }
+
     this._chrome.render(body);
   },
 
