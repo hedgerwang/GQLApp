@@ -1,4 +1,4 @@
-.app-ui-pulltorefreshpanel {
+.app-ui-pulltorefreshpanel {  
   backface-visibility: hidden;
   color: rgba(0, 0, 0, 0.65);
   font-family: verdana;
@@ -16,11 +16,11 @@
   z-index: 10;
 }
 
-.app-ui-pulltorefreshpanel-refreshing {
+.app-ui-pulltorefreshpanel-refreshing {  
   background: rgba(226, 233, 241, 0.9);
   border-bottom: 1px solid #aaa;
 }
 
-.app-ui-pulltorefreshpanel-refreshing .jog-ui-loading-indicator-centered {
+.app-ui-pulltorefreshpanel-refreshing .jog-ui-loading-indicator-centered {  
   margin-top: 5em;
 }

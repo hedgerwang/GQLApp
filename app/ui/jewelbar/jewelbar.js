@@ -42,8 +42,12 @@ var JewelBar = Class.create(BaseUI, {
     this._notificationIcon = dom.createElement(
       'div', cssx('app-ui-jewelbar_notification') + iconClassName);
 
+    this._topBar = dom.createElement(
+      'div', cssx('app-ui-jewelbar_topbar'));
+
     var node = dom.createElement(
       'div', cssx('app-ui-jewelbar'),
+      this._topBar,
       this._backIcon || this._sideMenuIcon,
       ['div', cssx('app-ui-jewelbar_center'),
         this._friendRequestsIcon,
@@ -62,7 +66,7 @@ var JewelBar = Class.create(BaseUI, {
       addTarget(this._friendRequestsIcon).
       addTarget(this._notificationIcon).
       addTarget(this._messagesIcon).
-      addTarget(this.getNode());
+      addTarget(this._topBar);
 
     var events = this.getEvents();
     events.listen(tappable, 'tap', this._onTap);
@@ -89,10 +93,15 @@ var JewelBar = Class.create(BaseUI, {
         case this._backIcon:
           this.dispatchEvent(EventType.JEWELBAR_BACK, null, true);
           break;
+
+        case this._topBar:
+          this.dispatchEvent(EventType.JEWELBAR_SCROLL_TO_TOP, null, true);
+          break;
       }
     }
   },
 
+  _topBar: null,
   _showBackButton: false,
   _sideMenuIcon: null,
   _friendRequestsIcon:null,

@@ -137,9 +137,7 @@ var Profile = Class.create(Scene, {
 
   _friendsTappable: null,
   _scrollList:null,
-  _jewel:null,
-  _loading:null,
-  _tabs: null
+  _loading:null
 });
 
 exports.Profile = Profile;

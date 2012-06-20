@@ -29,7 +29,7 @@ var NewsFeed = Class.create(Scene, {
   main: function(opt_uid, opt_showBackButton, opt_useCache) {
     this._uid = opt_uid;
     this._useCache = (typeof opt_useCache === 'boolean') ? opt_useCache : true;
-    this._jewel = this.appendChild(new JewelBar(opt_showBackButton));
+    this._jewelBar = this.appendChild(new JewelBar(opt_showBackButton));
     this._scrollList = this.appendChild(new ScrollList());
     this._loading = this.appendChild(new LoadingIndicator());
     this._composerBar = this.appendChild(new ComposerBar());
@@ -45,7 +45,7 @@ var NewsFeed = Class.create(Scene, {
   /** @override} */
   onDocumentReady:function() {
     var node = this.getNode();
-    this._jewel.render(node);
+    this._jewelBar.render(node);
     this._loading.render(node);
     this._composerBar.render(node);
     this._loading.center();
@@ -58,6 +58,17 @@ var NewsFeed = Class.create(Scene, {
     var events = this.getEvents();
     events.listen(this.getNodeTappable(), 'tap', this._onTap);
     events.listen(this._scrollList, 'scroll', this._onFeedScroll);
+    events.listen(this._jewelBar,
+      EventType.JEWELBAR_SCROLL_TO_TOP,
+      this._onScrollTopTop);
+  },
+
+  _onScrollTopTop: function() {
+    if (this._scrollList.scrollTop <= 0) {
+      return;
+    }
+
+    this._scrollList.getScroller().scrollTo(0, 0, true);
   },
 
   _onFeedScroll: function() {
@@ -257,7 +268,7 @@ var NewsFeed = Class.create(Scene, {
   /**
    * @type {JewelBar}
    */
-  _jewel: null
+  _jewelBar: null
 });
 
 NewsFeed.STORIES_TO_FETCH_COUNT = 150;
