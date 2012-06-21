@@ -15,13 +15,13 @@ handlers:
 #  static_files: 1x.html
 #  upload: 1x.html
 
+- url: /0x
+  static_files: 0x.html
+  upload: 0x.html 
+
 - url: /1x
   static_files: 1x.html
   upload: 1x.html
-  
-- url: /15x
-  static_files: 15x.html
-  upload: 15x.html  
 
 - url: /2x
   static_files: 2x.html
