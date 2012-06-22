@@ -90,12 +90,8 @@ var NewsFeed = Class.create(Scene, {
    * @return {Deferred}
    */
   _query: function(count, cursor, useCache) {
-    var callback = this._loading ?
-      this.callAfter(this._onQueryResult, 1200) :
-      this.bind(this._onQueryResult);
-
     return FBData.getHomeStories(this._uid, count, cursor, useCache).
-      addCallback(callback);
+      addCallback(this.bind(this._onQueryResult));
   },
 
   /**
@@ -106,11 +102,13 @@ var NewsFeed = Class.create(Scene, {
       return;
     }
 
-    Class.dispose(this._loading);
-    delete this._loading;
-
     this._queryResponse = response;
-    this.setTimeout(this._renderResponse, 16);
+    if (this._loading) {
+      this._loading.dismiss().addCallback(this.bind(this._renderResponse));
+      delete this._loading;
+    } else {
+      this.setTimeout(this._renderResponse, 16);
+    }
   },
 
   _renderResponse: function() {

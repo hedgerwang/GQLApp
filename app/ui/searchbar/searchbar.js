@@ -112,25 +112,29 @@ var SearchBar = Class.create(BaseUI, {
    * @param {Event} event
    */
   _onInput: function(event) {
-    if (this._loadingIcon || !this._on) {
+    if (this._loadingIcon || !this._active) {
       return;
     }
 
-    if (!this._friendsData) {
+    if (!this._friendsData && !this._loadingIcon) {
+      // No data yet. Show loading icon instead.
       this._loadingIcon = new LoadingIndicator();
       this.appendChild(this._loadingIcon, true);
 
       FBData.getFriends(100, null, true).addCallback(
-        this.callAfter(function(data) {
-          this._friendsData = objects.getValueByName(
-            data.userid + '.friends.nodes', data) || [];
+        this.bind(function() {
+          this._loadingIcon.dismiss().addCallback(
+            this.bind(function() {
+              delete this._loadingIcon;
+              this._friendsData = objects.getValueByName(
+                'friends.nodes', data[data.userid]) || [];
+              // Trigger the search again.
+              this._onInput(null);
+            })
+          );
 
-          Class.dispose(this._loadingIcon);
-          delete this._loadingIcon;
-
-          this._onInput(null);
-        }, 1200));
-
+        })
+      );
       return;
     }
 
@@ -138,7 +142,7 @@ var SearchBar = Class.create(BaseUI, {
   },
 
   _search: function() {
-    if (!this._on || this.disposed) {
+    if (!this._active || this.disposed) {
       return;
     }
 
@@ -187,8 +191,8 @@ var SearchBar = Class.create(BaseUI, {
   },
 
   _start: function() {
-    if (!this._on) {
-      this._on = true;
+    if (!this._active) {
+      this._active = true;
 
       dom.addClassName(this.getNode(), cssx('app-ui-searchbar_onsearch'));
       this.getEvents().listen(this._input, 'input', this._onInput);
@@ -199,14 +203,14 @@ var SearchBar = Class.create(BaseUI, {
   },
 
   _close: function() {
-    if (this._on) {
+    if (this._active) {
       Class.dispose(this._scrollList);
       delete this._scrollList;
 
       Class.dispose(this._loadingIcon);
       delete this._loadingIcon;
 
-      delete this._on;
+      delete this._active;
       this._input.value = '';
       this._input.blur();
       this.getEvents().unlisten(this._input, 'input', this._onInput);
@@ -223,7 +227,7 @@ var SearchBar = Class.create(BaseUI, {
   _mask: null,
   _searchPopup:null,
   _cancel: null,
-  _on: false,
+  _active: false,
   _queryValue: ''
 });
 

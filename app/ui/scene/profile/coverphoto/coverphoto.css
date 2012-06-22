@@ -1,6 +1,8 @@
 .app-ui-scene-profile-cover-photo {
+  backface-visibility: hidden;
   background: #fff;
   min-height: 100px;
+  transform: translate3d(0, 0, 0);
 }
 
 .app-ui-scene-profile-cover-photo_body {
@@ -17,10 +19,10 @@
 .app-ui-scene-profile-cover-photo_profile-pix {
   background: #fff;
   border: solid 0.3em #fff;
-  box-shadow: 0 0 5px #aaa;
   display: block;
   height: 90px;
   margin: 8px 0 0 8px;
+  outline: solid 3px rgba(0, 0, 0, 0.1);
   position: relative;
   width: 90px;
 }

@@ -33,7 +33,7 @@ var App = Class.create(null, {
 
     this._coverScene.addEventListener(
       EventType.FB_SESSION_READY,
-      this.callAfter(this._start, 600)
+      lang.callAfter(this.bind(this._start), 600)
     );
 
     // show the whole chrome.
