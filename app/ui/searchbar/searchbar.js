@@ -55,7 +55,7 @@ var SearchBar = Class.create(BaseUI, {
       this._searchPopup
     );
 
-    new Imageable(this._icon, '/images/spyglass-2x.png');
+    this.renderImage(this._icon, '/images/spyglass-2x.png');
     return node;
   },
 
@@ -186,7 +186,7 @@ var SearchBar = Class.create(BaseUI, {
 
     node._profileID = data.id;
 
-    new Imageable(icon, objects.getValueByName('profile_picture.uri', data));
+    this.renderImage(icon, objects.getValueByName('profile_picture.uri', data));
     return node;
   },
 

@@ -72,7 +72,7 @@ var TimelineUnit = Class.create(BaseUI, {
     var uri = objects.getValueByName('profile_picture.uri', actor);
     var pix = dom.createElement(
       'div', cssx('app-ui-timeline-unit_profile-pix'));
-    new Imageable(pix, uri);
+    this.renderImage(pix, uri);
 
     return dom.createElement('div', cssx('app-ui-timeline-unit_header'),
       pix,

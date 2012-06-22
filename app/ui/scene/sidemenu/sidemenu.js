@@ -257,7 +257,7 @@ var SideMenu = Class.create(Scene, {
       cssx('app-ui-scene-sidemenu_item-icon'));
 
     if (iconSrc) {
-      new Imageable(icon, iconSrc);
+      this.renderImage(icon, iconSrc);
     }
 
     var node = dom.createElement('li', cssx('app-ui-scene-sidemenu_item'),

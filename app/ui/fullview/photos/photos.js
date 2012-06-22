@@ -340,10 +340,11 @@ var Photos = Class.create(BaseUI, {
 
     pageNode.appendChild(imageNode);
 
-    var ima = new Imageable(
+    var ima = this.renderImage(
       imageNode,
       pageNode._uri,
-      Imageable.RESIZE_MODE_USE_WIDTH);
+      Imageable.RESIZE_MODE_USE_WIDTH
+    );
 
     ima.addEventListener('load', this.bind(function(evt) {
       // Need to manually center the image :-P.

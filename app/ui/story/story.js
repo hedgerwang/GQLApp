@@ -70,7 +70,7 @@ var Story = Class.create(BaseUI, {
   _createHeader: function(actor, data) {
     var uri = objects.getValueByName('profile_picture.uri', actor);
     var pix = dom.createElement('div', cssx('app-ui-story-profile-pix'));
-    new Imageable(pix, uri);
+    this.renderImage(pix, uri);
 
     return dom.createElement('div', cssx('app-ui-story-header'),
       pix,

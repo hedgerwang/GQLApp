@@ -158,7 +158,7 @@ var ComposerBar = Class.create(BaseUI, {
     var img = dom.createElement(
       'div', cssx('app-ui-composerbar_tab-icon'));
 
-    new Imageable(img, iconSrc);
+    this.renderImage(img, iconSrc);
 
     return dom.createElement('div', cssx('app-ui-composerbar_tab'),
       img, text);

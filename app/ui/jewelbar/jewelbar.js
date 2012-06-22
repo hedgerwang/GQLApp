@@ -72,12 +72,12 @@ var JewelBar = Class.create(BaseUI, {
     events.listen(tappable, 'tap', this._onTap);
 
     if (this._sideMenuIcon) {
-      new Imageable(this._sideMenuIcon, '/images/menu-2x.png');
+      this.renderImage(this._sideMenuIcon, '/images/menu-2x.png');
     }
 
-    new Imageable(this._friendRequestsIcon, '/images/requests-2x.png');
-    new Imageable(this._messagesIcon, '/images/messages-2x.png');
-    new Imageable(this._notificationIcon, '/images/notifications-2x.png');
+    this.renderImage(this._friendRequestsIcon, '/images/requests-2x.png');
+    this.renderImage(this._messagesIcon, '/images/messages-2x.png');
+    this.renderImage(this._notificationIcon, '/images/notifications-2x.png');
   },
 
   /**

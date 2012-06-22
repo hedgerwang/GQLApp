@@ -53,7 +53,8 @@ var CoverPhoto = Class.create(BaseUI, {
     if (coverUri) {
       var cover = dom.createElement(
         'div', cssx('app-ui-scene-profile-cover-photo_image'));
-      new Imageable(cover, coverUri);
+
+      this.renderImage(cover, coverUri);
       node.appendChild(cover);
     }
 
@@ -62,8 +63,8 @@ var CoverPhoto = Class.create(BaseUI, {
     if (profileUri) {
       var img = dom.createElement(
         'div', cssx('app-ui-scene-profile-cover-photo_profile-pix'));
-      new Imageable(img, profileUri);
 
+      this.renderImage(img, profileUri);
       node.appendChild(img);
     }
 

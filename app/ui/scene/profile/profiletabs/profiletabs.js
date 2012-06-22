@@ -66,7 +66,7 @@ var ProfileTabs = Class.create(BaseUI, {
 
               fragment.appendChild(facePile);
 
-              new Imageable(
+              this.renderImage(
                 facePile,
                 objects.getValueByName('profile_picture.uri', friend));
             }
@@ -93,7 +93,7 @@ var ProfileTabs = Class.create(BaseUI, {
 
             fragment.appendChild(facePile);
 
-            new Imageable(
+            this.renderImage(
               facePile,
               objects.getValueByName('cover_photo.image.uri', album));
           }

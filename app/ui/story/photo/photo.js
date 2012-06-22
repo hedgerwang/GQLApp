@@ -40,7 +40,7 @@ var Photo = Class.create(BaseUI, {
 
       this.uri = image.uri;
 
-      var imageable = new Imageable(node, image.uri);
+      var imageable = this.renderImage(node, image.uri);
       imageable.addEventListener('load', this.bind(function(event) {
         this.naturalWidth = event.target.naturalWidth;
         this.naturalHeight = event.target.naturalHeight;

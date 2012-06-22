@@ -7,7 +7,6 @@ var Class = require('jog/class').Class;
 var ComposerBar = require('app/ui/composerbar').ComposerBar;
 var EventType = require('app/eventtype').EventType;
 var FBData = require('jog/fbdata').FBData;
-var Imageable = require('jog/behavior/imageable').Imageable;
 var JewelBar = require('app/ui/jewelbar').JewelBar;
 var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var PullToRefreshPanel = require('app/ui/pulltorefreshpanel').PullToRefreshPanel;
