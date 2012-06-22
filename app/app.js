@@ -348,31 +348,35 @@ var App = Class.create(null, {
 
     switch (this._sideMenuMode) {
       case 1:
+        // Open
         df.addCallback(this.bind(
           function() {
             if (this._sideMenuMode == 1) {
+              this._activeScene.setDisabled(false);
+
+              this._events.listen(
+                this._activeScene.getNode(),
+                TouchHelper.EVT_TOUCHSTART,
+                this._hideSideMenu,
+                null,
+                true);
+
               dom.addClassName(
                 this._activeScene.getNode(),
                 cssx('app-scene-with-shadow'));
             }
           }));
-
-        this._events.listen(
-          this._activeScene.getNode(),
-          TouchHelper.EVT_TOUCHSTART,
-          this._hideSideMenu,
-          null,
-          true);
-
         break;
 
       case 2:
+        // Fullscreen
         dom.removeClassName(
           this._activeScene.getNode(),
           cssx('app-scene-with-shadow'));
         break;
 
       case 3:
+        //         
         this._sideMenuMode = 1;
         dom.addClassName(
           this._activeScene.getNode(),

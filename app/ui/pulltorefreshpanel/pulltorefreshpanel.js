@@ -121,13 +121,17 @@ var PullToRefreshPanel = Class.create(BaseUI, {
 
   _onTouchStart: function() {
     delete this._mayRefresh;
+    this._touchedStartTime = Date.now();
     this._bindEvents(true);
   },
 
   _onTouchEnd: function() {
     if (this._mayRefresh) {
-      this._wantRefresh = true;
+      if ((Date.now() - this._touchedStartTime) > 800) {
+        this._wantRefresh = true;
+      }
     }
+    delete this._touchedStartTime;
     delete this._mayRefresh;
     dom.alterClassName(
       this.getNode(),
@@ -183,6 +187,11 @@ var PullToRefreshPanel = Class.create(BaseUI, {
    * @type {number}
    */
   _panelHeight: 0,
+
+  /**
+   * @type {number}
+   */
+  _touchedStartTime: 0,
 
   /**
    * @type {BaseUI}
