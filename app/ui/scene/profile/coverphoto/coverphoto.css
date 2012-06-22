@@ -1,0 +1,39 @@
+.app-ui-scene-profile-cover-photo_body {  
+  padding: 44px 0;
+  position: relative;
+}
+
+.app-ui-scene-profile-cover-photo_image {  
+  background: #000;
+  height: 250px;
+  margin-bottom: -60px;
+  width: 100%;
+}
+
+.app-ui-scene-profile-cover-photo_profile-pix {  
+  background: #fff;
+  border: solid 0.3em #fff;
+  box-shadow: 0 0 5px #aaa;
+  display: block;
+  height: 90px;
+  margin: 8px 0 0 8px;
+  position: relative;
+  width: 90px;
+}
+
+.app-ui-scene-profile-cover-photo_profile-name {  
+  bottom: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  left: 106px;
+  line-height: 140%;
+  margin-bottom: -30px;
+  margin-top: -50px;
+  overflow: hidden;
+  padding: 10px 10px;
+  position: relative;
+  text-align: left;
+  white-space: normal;
+  width: 182px;
+  word-wrap: break-word;
+}

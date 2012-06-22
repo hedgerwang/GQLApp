@@ -1,0 +1,38 @@
+.app-ui-scene-profile-profile-tabs {  
+  margin: 8px;
+}
+
+.app-ui-scene-profile-profile-tabs_body {  
+  display: -webkit-box;
+}
+
+.app-ui-scene-profile-profile-tabs_tab {  
+  background: #fff;
+  margin: 0 8px 0 0;
+  width: 84px;
+}
+
+.app-ui-scene-profile-profile-tabs_tab-body {  
+  border: solid 1px #aaa;
+  height: 56px;
+  line-height: 0;
+  width: 84px;
+}
+
+.app-ui-scene-profile-profile-tabs_tab-label {  
+  color: #7F848B;
+  font-size: 12px;
+  font-weight: bold;
+  overflow: hidden;
+  padding: 5px 0;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 84px;
+}
+
+.app-ui-scene-profile-profile-tabs_facepile {  
+  background: #eee;
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
