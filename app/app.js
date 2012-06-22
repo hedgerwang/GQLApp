@@ -72,8 +72,8 @@ var App = Class.create(null, {
       this._enableSceneScroller();
     }));
 
-    this._addScene(new Profile(0));
-    // this._addScene(new NewsFeed(0, false));
+    // this._addScene(new Profile(0));
+    this._addScene(new NewsFeed(0, false));
   },
 
   _bindEvents: function() {

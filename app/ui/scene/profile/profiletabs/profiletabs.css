@@ -1,9 +1,11 @@
 .app-ui-scene-profile-profile-tabs {  
-  margin: 8px;
+  background: #fff;
+  min-height: 96px;
 }
 
 .app-ui-scene-profile-profile-tabs_body {  
   display: -webkit-box;
+  padding: 8px;
 }
 
 .app-ui-scene-profile-profile-tabs_tab {  
@@ -31,7 +33,7 @@
 }
 
 .app-ui-scene-profile-profile-tabs_facepile {  
-  background: #eee;
+  background: #fefefe;
   display: inline-block;
   height: 28px;
   width: 28px;

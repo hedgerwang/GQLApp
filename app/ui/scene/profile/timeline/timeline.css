@@ -1,0 +1,18 @@
+.app-ui-scene-profile-timeline {  
+  background: #d8dfea;
+}
+
+.app-ui-scene-profile-timeline_header {  
+  border-bottom: solid 1px #676F80;
+  border-top: solid 1px #676F80;
+  color: #676F80;
+  font-family: Helvetica, sans-serif;
+  font-size: 27px;
+  font-weight: bold;
+  line-height: 37px;
+  margin: 10px 0 0 0;
+  outline: solid 1px #f0f0f0;
+  padding: 10px 0;
+  text-align: center;
+  text-shadow: 0 1px 0 #E9ECF2;
+}

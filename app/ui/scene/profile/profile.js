@@ -13,6 +13,7 @@ var ProfileTabs = require('app/ui/scene/profile/profiletabs').ProfileTabs;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var Tappable = require('jog/behavior/tappable').Tappable;
+var Timeline = require('app/ui/scene/profile/timeline').Timeline;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -46,12 +47,7 @@ var Profile = Class.create(Scene, {
     this._onLoad();
   },
 
-  _onLoad: function() {
-    if (this._loading && this._onLoadCount > 0) {
-      this._loading.dismiss();
-      delete this._loading;
-    }
-
+  _onLoad: function(evt) {
     this._scrollList.reflow();
     this._onLoadCount++;
 
@@ -60,7 +56,14 @@ var Profile = Class.create(Scene, {
     switch (this._onLoadCount) {
       case 1:
         var coverPhoto = new CoverPhoto(this._uid);
-        this.getEvents().listen(coverPhoto, 'load', this._onLoad);
+        coverPhoto.getNode().style.display = 'none';
+        this.getEvents().listen(coverPhoto, 'load', this.bind(function(evt) {
+          this._loading.dismiss().addCallback(this.bind(function() {
+            coverPhoto.getNode().style.display = '';
+            coverPhoto = null;
+            this._onLoad();
+          }));
+        }));
         this._scrollList.addContent(coverPhoto);
         break;
 
@@ -68,6 +71,12 @@ var Profile = Class.create(Scene, {
         var profileTabs = new ProfileTabs(this._uid);
         this.getEvents().listen(profileTabs, 'load', this._onLoad);
         this._scrollList.addContent(profileTabs);
+        break;
+
+      case 3:
+        var timeline = new Timeline(this._uid);
+        this.getEvents().listen(timeline, 'load', this._onLoad);
+        this._scrollList.addContent(timeline);
         break;
     }
   },

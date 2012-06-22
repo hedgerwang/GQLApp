@@ -31,13 +31,17 @@ var ProfileTabs = Class.create(BaseUI, {
   },
 
   /** @override */
-  onDocumentReady: function() {
-    this._scrollable = new Scrollable(
-      this.getNode(),
-      Scroller.OPTIONS_HORIZONTAL);
+  dispose: function() {
+    Class.dispose(this._scrollable);
+  },
 
+  /** @override */
+  onDocumentReady: function() {
     this._renderFriendsTab().
-      then(this.bind(this._renderAlbums));
+      then(this.bind(this._renderAlbums)).
+      addCallback(this.bind(function() {
+      this.dispatchEvent('load', null, true);
+    }));
   },
 
   /**
@@ -95,6 +99,7 @@ var ProfileTabs = Class.create(BaseUI, {
           }
           this._renderTab('Albums', fragment);
         }
+        df.succeed();
       })
     );
     return df;
@@ -111,9 +116,18 @@ var ProfileTabs = Class.create(BaseUI, {
       ['div', cssx('app-ui-scene-profile-profile-tabs_tab-body'), tabContent],
       ['div', cssx('app-ui-scene-profile-profile-tabs_tab-label'), label]
     );
+
     this._body.appendChild(tab);
+
+    if (!this._scrollable) {
+      this._scrollable = new Scrollable(
+        this.getNode(),
+        Scroller.OPTIONS_PAGING_HORIZONTAL
+      );
+    }
   },
 
+  _scrollable: null,
   _uid: 0,
   _body: null
 });

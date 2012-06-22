@@ -1,0 +1,49 @@
+.app-ui-timeline-unit {  
+  padding: 10px 10px 0 10px;
+}
+
+.app-ui-timeline-unit_border {  
+  background: #fff;
+  border-radius: 4px;
+  border: solid 1px #aaa;
+}
+
+.app-ui-timeline-unit_header {  
+  display: -webkit-box;
+  margin: 8px;
+}
+
+.app-ui-timeline-unit_title {  
+  box-flex: 1;
+  color: #576B95;
+  display: block;
+  font-weight: bold;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+.app-ui-timeline-unit_profile-pix {  
+  background-size: 100% 100%;
+  background: #D8DCE6;
+  display: inline-block;
+  height: 34px;
+  margin: 0 8px 0 0;
+  vertical-align: top;
+  width: 34px;
+}
+
+.app-ui-timeline-unit_body {  
+  hyphens: auto;
+  margin: 8px;
+  word-wrap: break-word;
+}
+
+.app-ui-timeline-unit_footer {  
+  background: #e2e9f1;
+  border-radius: 0 0 4px 4px;
+  border-top: 1px solid #E4E6EA;
+  color: #576B95;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px;
+}
