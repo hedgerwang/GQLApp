@@ -9,8 +9,8 @@ CACHE MANIFEST
 # UA = %(ua)s
 
 CACHE:
-%(cachedFiles)s
 http://connect.facebook.net/en_US/all.js
+%(cachedFiles)s
 
 NETWORK:
 *
@@ -39,7 +39,7 @@ class Manifest(webapp.RequestHandler) :
     ua = str(self.request.headers['User-Agent'])
     if 'Android' in ua:
       cachedFiles = [
-        '/1x',
+        # '/1x',
         # '/images/menu-2x.png',
         # '/images/messages.png',
         # '/images/notifications.png  ',
@@ -48,7 +48,7 @@ class Manifest(webapp.RequestHandler) :
       ]
     else:
       cachedFiles = [
-        '/2x',
+        # '/2x',
         # '/images/menu-2x.png',
         # '/images/messages-2x.png',
         # '/images/notifications-2x.png ',

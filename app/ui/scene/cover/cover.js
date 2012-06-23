@@ -17,7 +17,7 @@ var Cover = Class.create(Scene, {
   /** @override} */
   createNode: function() {
     var node = Scene.prototype.createNode.call(this);
-    dom.append(node, dom.createElement('div', null, 'phāsëbük'));
+    dom.append(node, dom.createElement('div', null, 'FAST+'));
     dom.addClassName(node, cssx('app-ui-scene-cover'));
 
     return node;

@@ -73,6 +73,10 @@ var PullToRefreshPanel = Class.create(BaseUI, {
    * @param {Event=} opt_event
    */
   _onScroll: function(opt_event) {
+    if (! this._scrollStartTime) {
+      this._scrollStartTime = Date.now();
+    }
+
     var height = this._panelHeight;
     var scrollY = -this._scrollTarget.scrollTop - height;
     var deltaY = scrollY - this._scrollY;
@@ -121,17 +125,17 @@ var PullToRefreshPanel = Class.create(BaseUI, {
 
   _onTouchStart: function() {
     delete this._mayRefresh;
-    this._touchedStartTime = Date.now();
     this._bindEvents(true);
   },
 
   _onTouchEnd: function() {
     if (this._mayRefresh) {
-      if ((Date.now() - this._touchedStartTime) > 800) {
+      var duation = Date.now() - this._scrollStartTime;
+      if (duation > 800) {
         this._wantRefresh = true;
       }
     }
-    delete this._touchedStartTime;
+    delete this._scrollStartTime;
     delete this._mayRefresh;
     dom.alterClassName(
       this.getNode(),
@@ -191,7 +195,7 @@ var PullToRefreshPanel = Class.create(BaseUI, {
   /**
    * @type {number}
    */
-  _touchedStartTime: 0,
+  _scrollStartTime: 0,
 
   /**
    * @type {BaseUI}

@@ -122,7 +122,7 @@ var SearchBar = Class.create(BaseUI, {
       this.appendChild(this._loadingIcon, true);
 
       FBData.getFriends(100, null, true).addCallback(
-        this.bind(function() {
+        this.bind(function(data) {
           this._loadingIcon.dismiss().addCallback(
             this.bind(function() {
               delete this._loadingIcon;
