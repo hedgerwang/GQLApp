@@ -43,7 +43,9 @@ var Timeline = Class.create(BaseUI, {
    * @param {Object} data
    */
   _onQueryBack: function(data) {
-    this._uid = data.uid;
+    this._uid = data.userid;
+
+
     var sections = objects.getValueByName(
       'timeline_sections.nodes', data[this._uid]);
 

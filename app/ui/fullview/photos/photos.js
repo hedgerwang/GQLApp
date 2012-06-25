@@ -318,6 +318,7 @@ var Photos = Class.create(BaseUI, {
     });
 
     step(0);
+
     this._animator.start(step, Functions.VALUE_TRUE, complete, 280);
   },
 

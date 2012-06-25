@@ -27,7 +27,7 @@
 
 .app-ui-fullview-photos-image {
   backface-visibility: hidden;
-  background-position: left center;
+  background-position: center center;
   background-repeat: no-repeat;
   background-size: 100% auto;
   height: 100%;

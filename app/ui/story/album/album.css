@@ -1,4 +1,4 @@
-.app-ui-story-album {  
+.app-ui-story-album {
   height: 310px;
   margin: 8px 0 3px -14px;
   overflow: visible;
@@ -6,8 +6,8 @@
   width: 318px;
 }
 
-.app-ui-story-album .app-ui-story-photo {  
-  background: #fefefe;
+.app-ui-story-album .app-ui-story-photo {
+  background-color: #fefefe;
   display: inline-block;
   height: 310px;
   margin: 0 6px 0 0;

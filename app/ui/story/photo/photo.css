@@ -1,5 +1,6 @@
 .app-ui-story-photo {  
   background-color: #fff;
+  background-position: center center;
   border-color: #f0f0f0 #f0f0f0 #efefef #f0f0f0;
   border-style: solid;
   border-width: 1px;
