@@ -72,6 +72,8 @@ var App = Class.create(null, {
       this._enableSceneScroller();
     }));
 
+
+    // TEST!
     this._addScene(new Profile(0));
     // this._addScene(new NewsFeed(0, false));
   },
@@ -215,7 +217,6 @@ var App = Class.create(null, {
     this._sideMenu.setDisabled(disabled);
     this._sideMenu.setHidden(disabled);
     this._activeScene.setDisabled(disabled);
-    // this._activeScene.setHidden(disabled);
   },
 
   _onDeveloper: function() {
@@ -341,10 +342,12 @@ var App = Class.create(null, {
    */
   _showSideMenu: function() {
     this._disableSceneScroller();
-
+    this._activeScene.setDisabled(true);
+    this._sideMenu.setDisabled(true);
     this._sideMenuMode++;
 
-    var df = this._activeScene.translateXTo(this._sideMenu.getWidth(), 350);
+    var df = this._activeScene.translateXTo(this._sideMenu.getWidth(), 350).
+      addCallback(this.bind(this._onSideMenuShown));
 
     switch (this._sideMenuMode) {
       case 1:
@@ -352,8 +355,7 @@ var App = Class.create(null, {
         df.addCallback(this.bind(
           function() {
             if (this._sideMenuMode == 1) {
-              this._activeScene.setDisabled(false);
-
+              // To receive the TOUCH event to close the side menu.
               this._events.listen(
                 this._activeScene.getNode(),
                 TouchHelper.EVT_TOUCHSTART,
@@ -376,7 +378,7 @@ var App = Class.create(null, {
         break;
 
       case 3:
-        //         
+        //  Resume from fullscreen to open.
         this._sideMenuMode = 1;
         dom.addClassName(
           this._activeScene.getNode(),
@@ -384,6 +386,12 @@ var App = Class.create(null, {
     }
 
     return df;
+  },
+
+  _onSideMenuShown: function() {
+    // To receive the TOUCH event to close the side menu.
+    this._activeScene.setDisabled(false);
+    this._sideMenu.setDisabled(false);
   },
 
   /**
@@ -394,6 +402,8 @@ var App = Class.create(null, {
     this._disableSceneScroller();
 
     this._sideMenuMode = 0;
+    this._sideMenu.setDisabled(true);
+    this._activeScene.setDisabled(true);
 
     if (opt_event) {
       opt_event.preventDefault();
@@ -410,8 +420,14 @@ var App = Class.create(null, {
       null,
       true);
 
-    return this._activeScene.translateXTo(0, 350).addCallback(
-      this.bind(this._enableSceneScroller));
+    return this._activeScene.translateXTo(0, 350).
+      addCallback(this.bind(this._onSideMenuHidden)).
+      addCallback(this.bind(this._enableSceneScroller));
+  },
+
+  _onSideMenuHidden: function() {
+    this._activeScene.setDisabled(false);
+    this._sideMenu.setDisabled(true);
   },
 
   _enableSceneScroller: function() {

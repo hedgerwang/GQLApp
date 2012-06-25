@@ -87,8 +87,8 @@ var Timeline = Class.create(BaseUI, {
    */
   _renderUnit: function(sectionNode, unitData) {
     var unit = new TimelineUnit(unitData);
-    unit.render(sectionNode);
     this.appendChild(unit);
+    unit.render(sectionNode);
   },
 
   _uid : 0

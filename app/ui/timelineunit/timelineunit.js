@@ -25,6 +25,10 @@ var TimelineUnit = Class.create(BaseUI, {
     this._data = data;
   },
 
+  dispose: function() {
+    Class.dispose(this._album);
+  },
+
   /** @override */
   createNode: function() {
     var data = this._data;
@@ -51,7 +55,7 @@ var TimelineUnit = Class.create(BaseUI, {
       var album = new Album();
       album.addPhoto(new Photo(image));
       album.render(body);
-      this.appendChild(album);
+      this._album = album;
     }
 
     return dom.createElement('div', cssx('app-ui-timeline-unit'),
@@ -61,6 +65,12 @@ var TimelineUnit = Class.create(BaseUI, {
         this._createFooter()
       )
     );
+  },
+
+  onDocumentReady: function() {
+    if (this._album) {
+      this.appendChild(this._album);
+    }
   },
 
   /**
@@ -91,6 +101,7 @@ var TimelineUnit = Class.create(BaseUI, {
     );
   },
 
+  _album: null,
   _data: null
 });
 

@@ -3,7 +3,7 @@
   margin: 8px 0 3px -14px;
   overflow: visible;
   white-space: nowrap;
-  width: 318px;
+  width: 318px; /* margin-right: 6px + border-width * 2 */
 }
 
 .app-ui-story-album .app-ui-story-photo {
@@ -12,4 +12,15 @@
   height: 310px;
   margin: 0 6px 0 0;
   width: 310px;
+}
+
+.app-ui-story-album.jog-bebavior-scrollable {
+  height: 280px;
+  margin-left: 0;
+  width: 288px; /* margin-right: 6px + border-width * 2 */
+}
+
+.app-ui-story-album.jog-bebavior-scrollable .app-ui-story-photo {
+  height: 280px;
+  width: 280px;
 }
