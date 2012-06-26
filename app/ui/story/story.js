@@ -47,7 +47,7 @@ var Story = Class.create(BaseUI, {
     var images = this._createImages(subattachments, data);
 
     if (images) {
-      this.appendChild(images);
+      this._images = images;
       images.render(body);
     }
 
@@ -60,6 +60,12 @@ var Story = Class.create(BaseUI, {
         footer
       )
     );
+  },
+
+  onNodeReady: function() {
+    if (this._images) {
+      this.appendChild(this._images);
+    }
   },
 
   /**
@@ -154,6 +160,10 @@ var Story = Class.create(BaseUI, {
     return null;
   },
 
+  /**
+   * @type {BaseUI}
+   */
+  _images: null,
   _data: null
 });
 

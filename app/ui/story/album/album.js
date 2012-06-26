@@ -60,6 +60,7 @@ var Album = Class.create(BaseUI, {
    * @param {Photo} photo
    */
   addPhoto: function(photo) {
+
     if (this._firstPhoto && !this._photos) {
       this._photos = [this._firstPhoto];
 

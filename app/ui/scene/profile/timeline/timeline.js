@@ -10,7 +10,7 @@ var FBData = require('jog/fbdata').FBData;
 var Imageable = require('jog/behavior/imageable').Imageable;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
-var TimelineUnit = require('app/ui/timelineunit').TimelineUnit;
+var Section = require('app/ui/scene/profile/timeline/section').Section;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -60,35 +60,7 @@ var Timeline = Class.create(BaseUI, {
    * @param {number} index
    */
   _renderSection: function(sectionData, index) {
-    var units = objects.getValueByName('timeline_units.nodes', sectionData);
-    if (!lang.isArray(units) || !units.length) {
-      return;
-    }
-
-    var section = dom.createElement(
-      'div', cssx('app-ui-scene-profile-timeline_section')
-    );
-
-    if (index > 0) {
-      section.appendChild(dom.createElement(
-        'h3', cssx('app-ui-scene-profile-timeline_header'), sectionData.label)
-      );
-    }
-
-    for (var i = 0, unit; unit = units[i]; i++) {
-      this._renderUnit(section, unit);
-    }
-
-    this.getNode().appendChild(section);
-  },
-
-  /**
-   * @param {Object} unitData
-   */
-  _renderUnit: function(sectionNode, unitData) {
-    var unit = new TimelineUnit(unitData);
-    this.appendChild(unit);
-    unit.render(sectionNode);
+    this.appendChild(new Section(sectionData), true);
   },
 
   _uid : 0
