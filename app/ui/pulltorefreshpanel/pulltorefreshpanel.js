@@ -85,6 +85,7 @@ var PullToRefreshPanel = Class.create(BaseUI, {
     if (scrollY < this._minY) {
       // Scroll to far. We won't be able to see the label anyway.
       delete this._mayRefresh;
+      translate.toY(this.getNode(), -5000);
       return;
     }
 

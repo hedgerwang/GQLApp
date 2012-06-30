@@ -1,22 +1,22 @@
-.app-ui-scene-profile-cover-photo {
+.app-ui-scene-profile-cover-photo {  
   backface-visibility: hidden;
   background: #fff;
   min-height: 100px;
   transform: translate3d(0, 0, 0);
 }
 
-.app-ui-scene-profile-cover-photo_body {
+.app-ui-scene-profile-cover-photo_body {  
   padding: 44px 0;
   position: relative;
 }
 
-.app-ui-scene-profile-cover-photo_image {
+.app-ui-scene-profile-cover-photo_image {  
   height: 250px;
   margin-bottom: -60px;
   width: 100%;
 }
 
-.app-ui-scene-profile-cover-photo_profile-pix {
+.app-ui-scene-profile-cover-photo_profile-pix {  
   background: #fff;
   border: solid 0.3em #fff;
   display: block;
@@ -27,7 +27,7 @@
   width: 90px;
 }
 
-.app-ui-scene-profile-cover-photo_profile-name {
+.app-ui-scene-profile-cover-photo_profile-name {  
   bottom: 0;
   font-size: 1.2em;
   font-weight: bold;

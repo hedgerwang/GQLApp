@@ -1,4 +1,4 @@
-.app-ui-story-album {
+.app-ui-story-album {  
   height: 310px;
   margin: 8px 0 3px -14px;
   overflow: visible;
@@ -6,7 +6,7 @@
   width: 318px; /* margin-right: 6px + border-width * 2 */
 }
 
-.app-ui-story-album .app-ui-story-photo {
+.app-ui-story-album .app-ui-story-photo {  
   background-color: #fefefe;
   display: inline-block;
   height: 310px;
@@ -14,13 +14,13 @@
   width: 310px;
 }
 
-.app-ui-story-album.jog-bebavior-scrollable {
+.app-ui-story-album.jog-bebavior-scrollable {  
   height: 280px;
   margin-left: 0;
   width: 288px; /* margin-right: 6px + border-width * 2 */
 }
 
-.app-ui-story-album.jog-bebavior-scrollable .app-ui-story-photo {
+.app-ui-story-album.jog-bebavior-scrollable .app-ui-story-photo {  
   height: 280px;
   width: 280px;
 }

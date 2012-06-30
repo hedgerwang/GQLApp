@@ -1,27 +1,27 @@
-.app-ui-scene-profile-profile-tabs {
+.app-ui-scene-profile-profile-tabs {  
   background: #fff;
   min-height: 96px;
 }
 
-.app-ui-scene-profile-profile-tabs_body {
+.app-ui-scene-profile-profile-tabs_body {  
   display: -webkit-box;
   padding: 8px;
 }
 
-.app-ui-scene-profile-profile-tabs_tab {
+.app-ui-scene-profile-profile-tabs_tab {  
   background: #fff;
   margin: 0 8px 0 0;
   width: 84px;
 }
 
-.app-ui-scene-profile-profile-tabs_tab-body {
+.app-ui-scene-profile-profile-tabs_tab-body {  
   border: solid 1px #f0f0f0;
   height: 56px;
   line-height: 0;
   width: 84px;
 }
 
-.app-ui-scene-profile-profile-tabs_tab-label {
+.app-ui-scene-profile-profile-tabs_tab-label {  
   color: #7F848B;
   font-size: 12px;
   font-weight: bold;
@@ -32,7 +32,7 @@
   width: 84px;
 }
 
-.app-ui-scene-profile-profile-tabs_facepile {
+.app-ui-scene-profile-profile-tabs_facepile {  
   background: #fefefe;
   display: inline-block;
   height: 28px;
