@@ -6,6 +6,7 @@
 var ActiveSceneScroller = require('app/behavior/activescenescroller').ActiveSceneScroller;
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
+var Composer = require('app/ui/scene/composer').Composer;
 var Cover = require('app/ui/scene/cover').Cover;
 var Developer = require('app/ui/scene/developer').Developer;
 var EventType = require('app/eventtype').EventType;
@@ -72,8 +73,11 @@ var App = Class.create(null, {
       this._enableSceneScroller();
     }));
 
+    // this._showComposer();
+
 
     // TEST!
+    // this._addScene(new Composer(0));
     // this._addScene(new Profile(0));
     this._addScene(new NewsFeed(0, false));
   },
@@ -234,7 +238,7 @@ var App = Class.create(null, {
       scene.dispose();
       scene = nextScene;
     }
-    delete this._activeScene;
+    this._activeScene = undefined;
   },
 
   /**
@@ -303,7 +307,7 @@ var App = Class.create(null, {
     this._disableSceneScroller();
     prevScene.setHidden(false).setDisabled(true);
     this._activeScene = prevScene;
-    delete this._activeScene._nextScene;
+    this._activeScene._nextScene = undefined;
 
     targetScene.setDisabled(true).
       translateXTo(this._chrome.getWidth() - 50, 600).addCallback(
@@ -322,6 +326,13 @@ var App = Class.create(null, {
       cssx('app-ui-scene-sidemenu_onsearch'));
 
     this._showSideMenu();
+  },
+
+  _showComposer: function() {
+    if (!this._composer) {
+      this._composer = new Composer();
+      this._chrome.appendChild(this._composer, true);
+    }
   },
 
   _toggleSideMenu: function() {
@@ -442,13 +453,18 @@ var App = Class.create(null, {
 
   _disableSceneScroller: function() {
     Class.dispose(this._sceneScroller);
-    delete this._sceneScroller;
+    this._sceneScroller = undefined;
   },
 
   /**
    * @type {BaseUI}
    */
   _chrome: null,
+
+  /**
+   * @type {Composer}
+   */
+  _composer: null,
 
   /**
    * @type {ActiveSceneScroller}
