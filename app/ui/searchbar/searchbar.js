@@ -42,6 +42,8 @@ var SearchBar = Class.create(BaseUI, {
         placeholder: 'Search'
       });
 
+    // this._input.tabIndex = 0;
+
     this._searchPopup = dom.createElement('div');
 
     var node = dom.createElement(

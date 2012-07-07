@@ -126,9 +126,6 @@ var NewsFeed = Class.create(Scene, {
         dom.createElement('div',
           cssx('app-ui-scene-newsfeed-top-spacer')));
       tappable.addTarget(scrollList.getNode());
-
-    } else {
-      console.log('>>>', scrollList.getNode().parentNode);
     }
 
     if (lang.isArray(stories) && stories.length) {

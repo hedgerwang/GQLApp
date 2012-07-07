@@ -73,8 +73,6 @@ var App = Class.create(null, {
       this._enableSceneScroller();
     }));
 
-    // this._showComposer();
-
 
     // TEST!
     // this._addScene(new Composer(0));
@@ -89,6 +87,16 @@ var App = Class.create(null, {
       this._chrome,
       EventType.JEWELBAR_SIDE_MENU_TOGGLE,
       this._toggleSideMenu);
+
+    events.listen(
+      this._chrome,
+      EventType.COMPOSER_OPEN,
+      this._showComposer);
+
+    events.listen(
+      this._chrome,
+      EventType.COMPOSER_CLOSE,
+      this._hideComposer);
 
     events.listen(
       this._chrome,
@@ -332,6 +340,19 @@ var App = Class.create(null, {
     if (!this._composer) {
       this._composer = new Composer();
       this._chrome.appendChild(this._composer, true);
+    }
+    this._activeScene.setDisabled(true);
+    this._sideMenu.setDisabled(true);
+    this._sideMenu.setHidden(true);
+  },
+
+  _hideComposer: function() {
+    if (this._composer) {
+      Class.dispose(this._composer);
+      delete this._composer;
+      this._activeScene.setDisabled(false);
+      this._sideMenu.setDisabled(false);
+      this._sideMenu.setHidden(false);
     }
   },
 

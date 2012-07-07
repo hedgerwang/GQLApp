@@ -25,6 +25,7 @@ var ComposerBar = Class.create(BaseUI, {
   /** @override */
   createNode: function() {
     this._photoTab = this._createTab('Photo', '/images/photo.png');
+    this._composeTab = this._createTab('Status', '/images/compose.png');
 
     var photoInput = dom.createElement('input', {
       type: 'file',
@@ -42,7 +43,7 @@ var ComposerBar = Class.create(BaseUI, {
       [
         'div',
         cssx('app-ui-composerbar_tabs'),
-        this._createTab('Status', '/images/compose.png'),
+        this._composeTab,
         this._photoTab,
         this._createTab('Check In', '/images/place.png')
       ],
@@ -79,6 +80,7 @@ var ComposerBar = Class.create(BaseUI, {
   onDocumentReady: function() {
     this._visible = true;
     var tappable = this.getNodeTappable();
+    tappable.addTarget(this._composeTab);
     tappable.addTarget(this._photoTab);
     tappable.addTarget(this._newStoriesCountPanel);
     this.getEvents().listen(this.getNodeTappable(), 'tapstart', this._onTap);
@@ -115,15 +117,17 @@ var ComposerBar = Class.create(BaseUI, {
   _onTap: function(event) {
     var tapStart = event.type === 'tapstart';
     dom.alterClassName(event.data, cssx('pressed'), tapStart);
+    if (tapStart) {
+      return;
+    }
 
     switch (event.data) {
-      case this._photoTab:
+      case this._composeTab:
+        this.dispatchEvent(EventType.COMPOSER_OPEN, null, true);
         break;
+
       case this._newStoriesCountPanel:
-        if (!tapStart) {
-          // TODO(hedger): Should have listened to TAPCLICK event instead.
-          this.dispatchEvent(EventType.NEWSFEED_REFRESH, null, true);
-        }
+        this.dispatchEvent(EventType.NEWSFEED_REFRESH, null, true);
         break;
     }
   },
@@ -173,7 +177,8 @@ var ComposerBar = Class.create(BaseUI, {
   _deltaTranslateY: 0,
   _startTranslateY: 0,
   _endTranslateY: 0,
-  _photoTab: null
+  _photoTab: null,
+  _composeTab:null
 });
 
 exports.ComposerBar = ComposerBar;
