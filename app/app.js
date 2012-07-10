@@ -339,20 +339,34 @@ var App = Class.create(null, {
   _showComposer: function() {
     if (!this._composer) {
       this._composer = new Composer();
-      this._chrome.appendChild(this._composer, true);
+      this._composer.setDisabled(true);
+      this._composer.translateYTo(dom.getViewportHeight()).
+        addCallback(this.bind(
+        function() {
+          this._composer.setDisabled(false);
+          this._chrome.appendChild(this._composer, true);
+          this._composer.translateYTo(0, 350);
+        }
+      ));
+
+      this._activeScene.setDisabled(true);
+      this._sideMenu.setDisabled(true);
+      this._sideMenu.setHidden(true);
     }
-    this._activeScene.setDisabled(true);
-    this._sideMenu.setDisabled(true);
-    this._sideMenu.setHidden(true);
   },
 
   _hideComposer: function() {
     if (this._composer) {
-      Class.dispose(this._composer);
-      delete this._composer;
-      this._activeScene.setDisabled(false);
-      this._sideMenu.setDisabled(false);
-      this._sideMenu.setHidden(false);
+      this._composer.setDisabled(true);
+      this._composer.translateYTo(dom.getViewportHeight(), 300).addCallback(
+        this.bind(function() {
+          this._activeScene.setDisabled(false);
+          this._sideMenu.setDisabled(false);
+          this._sideMenu.setHidden(false);
+          Class.dispose(this._composer);
+          delete this._composer;
+        })
+      );
     }
   },
 

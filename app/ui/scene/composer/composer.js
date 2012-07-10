@@ -29,14 +29,36 @@ var Composer = Class.create(Scene, {
   /** @override} */
   onDocumentReady:function() {
     this.getNodeTappable().addTarget(this._cancel);
+    this.getEvents().listen(this._input, 'focus', this._onFocus);
+    this.getEvents().listen(this._input, 'blur', this._onBlur);
     this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
-    this._onFocus();
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onFocus: function(event) {
+    window.scrollTo(0, 1);
+    this._focusTimer = this.setTimeout(function() {
+      window.scrollTo(0, 1);
+      dom.addClassName(this._input, cssx('app-ui-scene-composer_input-focus'));
+    }, 100);
+  },
+
+  /**
+   * @param {Event} event
+   */
+  _onBlur: function(event) {
+    clearTimeout(this._focusTimer);
+    dom.removeClassName(this._input, cssx('app-ui-scene-composer_input-focus'));
   },
 
   /**
    * @param {Event} event
    */
   _onTap: function(event) {
+    this._input.blur();
+
     switch (event.data) {
       case this._cancel:
         this.dispatchEvent(EventType.COMPOSER_CLOSE, null, true);
@@ -81,8 +103,9 @@ var Composer = Class.create(Scene, {
     this._pix = node.firstChild;
 
     FBData.getProfile(0, true).addCallback(this.bind(function(data) {
-      var src = objects.getValueByName('profile_picture.uri', data[data.userid]);
-      this.renderImage(this._pix, src);
+      var src = objects.getValueByName(
+        'profile_picture.uri', data[data.userid]);
+      this.renderImage(this._pix, src).show(50, 50);
     }));
 
     return node;
@@ -97,6 +120,7 @@ var Composer = Class.create(Scene, {
     return node;
   },
 
+  _focusTimer: 0,
   _input: null,
   _body: null,
   _pix: null,
