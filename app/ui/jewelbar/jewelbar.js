@@ -69,7 +69,7 @@ var JewelBar = Class.create(BaseUI, {
       addTarget(this._topBar);
 
     var events = this.getEvents();
-    events.listen(tappable, 'tap', this._onTap);
+    events.listen(tappable, 'tapclick', this._onTap);
 
     if (this._sideMenuIcon) {
       this.renderImage(this._sideMenuIcon, '/images/menu-2x.png');

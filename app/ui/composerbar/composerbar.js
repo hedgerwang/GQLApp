@@ -83,8 +83,7 @@ var ComposerBar = Class.create(BaseUI, {
     tappable.addTarget(this._composeTab);
     tappable.addTarget(this._photoTab);
     tappable.addTarget(this._newStoriesCountPanel);
-    this.getEvents().listen(this.getNodeTappable(), 'tapstart', this._onTap);
-    this.getEvents().listen(this.getNodeTappable(), 'tapend', this._onTap);
+    this.getEvents().listen(tappable, 'tapclick', this._onTapClick);
   },
 
   /**
@@ -114,13 +113,10 @@ var ComposerBar = Class.create(BaseUI, {
     }
   },
 
-  _onTap: function(event) {
-    var tapStart = event.type === 'tapstart';
-    dom.alterClassName(event.data, cssx('pressed'), tapStart);
-    if (tapStart) {
-      return;
-    }
-
+  /**
+   * @param {Event} event
+   */
+  _onTapClick: function(event) {
     switch (event.data) {
       case this._composeTab:
         this.dispatchEvent(EventType.COMPOSER_OPEN, null, true);
@@ -132,6 +128,9 @@ var ComposerBar = Class.create(BaseUI, {
     }
   },
 
+  /**
+   * @param {number} value
+   */
   _onAnimStep: function(value) {
     this._setTranslateY(
       this._startTranslateY + ~~(value * this._deltaTranslateY));

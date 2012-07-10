@@ -66,7 +66,7 @@ var SearchBar = Class.create(BaseUI, {
     tappable.addTarget(this.getNode());
     tappable.addTarget(this._cancel);
     tappable.addTarget(this._searchPopup);
-    this.getEvents().listen(tappable, 'tap', this._onTap);
+    this.getEvents().listen(tappable, 'tapclick', this._onTap);
     this.getEvents().listen(this._input, 'focus', this._onFocus);
   },
 

@@ -31,7 +31,7 @@ var Composer = Class.create(Scene, {
     this.getNodeTappable().addTarget(this._cancel);
     this.getEvents().listen(this._input, 'focus', this._onFocus);
     this.getEvents().listen(this._input, 'blur', this._onBlur);
-    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
+    this.getEvents().listen(this.getNodeTappable(), 'tapclick', this._onTap);
   },
 
   /**

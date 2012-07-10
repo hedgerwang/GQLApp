@@ -6,9 +6,8 @@
 var Album = require('app/ui/story/album').Album;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
-var Imageable = require('jog/behavior/imageable').Imageable;
 var Photo = require('app/ui/story/photo').Photo;
-var Scrollable = require('jog/behavior/scrollable').Scrollable;
+var UFI = require('app/ui/story/ufi').UFI;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -22,10 +21,6 @@ var Story = Class.create(BaseUI, {
     this._data = data;
   },
 
-  dispose: function() {
-    Class.dispose(this._imageable);
-  },
-
   /** @override */
   createNode: function() {
     var data = this._data;
@@ -36,11 +31,6 @@ var Story = Class.create(BaseUI, {
 
     var subattachments =
       objects.getValueByName('attachments.0.subattachments', data);
-
-    // if (__DEV__ && !lang.isArray(subattachments) || subattachments.length < 2) {
-    // Do not show stories that has no attachments.
-    // return dom.createElement('div', null, '');
-    // }
 
     var header = this._createHeader(actor, data);
     var body = this._createBody(message);
@@ -62,10 +52,13 @@ var Story = Class.create(BaseUI, {
     );
   },
 
+  /** @override */
   onNodeReady: function() {
     if (this._images) {
       this.appendChild(this._images);
     }
+    var ufi = this.appendChild(new UFI(this._data.id));
+    ufi.render(this._footer);
   },
 
   /**
@@ -99,9 +92,8 @@ var Story = Class.create(BaseUI, {
    * @return {Node}
    */
   _createFooter: function() {
-    return dom.createElement('div', cssx('app-ui-story-footer'),
-      'Like . Comment'
-    );
+    this._footer = dom.createElement('div', cssx('app-ui-story-footer'));
+    return this._footer;
   },
 
 
@@ -164,7 +156,8 @@ var Story = Class.create(BaseUI, {
    * @type {BaseUI}
    */
   _images: null,
-  _data: null
+  _data: null,
+  _footer: null
 });
 
 

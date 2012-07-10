@@ -38,7 +38,7 @@ var SideMenu = Class.create(Scene, {
     this._scrollList.render(this.getNode());
 
     var tappable = this.getNodeTappable();
-    this.getEvents().listen(tappable, 'tap', this._onTap);
+    this.getEvents().listen(tappable, 'tapclick', this._onTap);
     this.getEvents().listen(tappable, 'tapstart', this._onTapStart);
     this.getEvents().listen(this._searchBar,
       EventType.SEARCH_BAR_ON_SEARCH_SELECT,

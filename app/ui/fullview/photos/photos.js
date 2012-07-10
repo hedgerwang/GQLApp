@@ -389,7 +389,7 @@ var Photos = Class.create(BaseUI, {
   },
 
   _onTranslateComplete: function() {
-    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onTap);
+    this.getEvents().listen(this.getNodeTappable(), 'tapclick', this._onTap);
 
     if (this._scrollable) {
       this.getEvents().listen(

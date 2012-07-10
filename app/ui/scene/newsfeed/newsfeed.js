@@ -55,7 +55,7 @@ var NewsFeed = Class.create(Scene, {
     this._query(14, null, this._useCache);
 
     var events = this.getEvents();
-    events.listen(this.getNodeTappable(), 'tap', this._onTap);
+    events.listen(this.getNodeTappable(), 'tapclick', this._onTap);
     events.listen(this._scrollList, 'scroll', this._onFeedScroll);
     events.listen(this._jewelBar,
       EventType.JEWELBAR_SCROLL_TO_TOP,

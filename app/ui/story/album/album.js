@@ -28,7 +28,7 @@ var Album = Class.create(BaseUI, {
 
   /** @override */
   onDocumentReady:function() {
-    this.getEvents().listen(this.getNodeTappable(), 'tap', this._onPhotoTap);
+    this.getEvents().listen(this.getNodeTappable(), 'tapclick', this._onPhotoTap);
   },
 
   /** @override */
