@@ -20,7 +20,7 @@ var ActiveSceneScroller = Class.create(EventTarget, {
   main: function(scene) {
     this._scene = scene;
 
-    this._scroller = new Scroller(this, Scroller.OPTIONS_HORIZONTAL);
+    this._scroller = new Scroller(this, Scroller.OPTION_HORIZONTAL);
     this._scroller.registerElement(scene.getNode());
 
     this._events = new Events(this);

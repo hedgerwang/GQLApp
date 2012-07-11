@@ -41,6 +41,10 @@
   z-index: 10;
 }
 
+.app-ui-scene-composer_button.tap-pressed {  
+  box-shadow: 0 0 3px 3px rgba(255, 255, 255, 0.5);
+}
+
 .app-ui-scene-composer_publish {  
   left: auto;
   right: 8px;
@@ -50,6 +54,7 @@
   background: #fff;
   bottom: 40px;
   box-shadow: 0 1px 1px 1px #ccc;
+  display: block;
   height: 25%;
   left: 0;
   position: absolute;
@@ -77,7 +82,7 @@
   left: 66px;
   min-height: 3em;
   outline: none;
-  overflow: hidden;
+  overflow: auto;
   padding: 0;
   pointer-events: auto;
   position: absolute;

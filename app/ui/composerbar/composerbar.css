@@ -31,7 +31,7 @@
   width: 33.33%;
 }
 
-.app-ui-composerbar_tab.tap-pressed {
+.app-ui-composerbar_tab.tap-pressed {  
   background-color: rgba(0, 0, 0, 0.3);
 }
 

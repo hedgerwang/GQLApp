@@ -66,7 +66,7 @@ var Album = Class.create(BaseUI, {
 
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scroller.OPTIONS_PAGING_HORIZONTAL
+        Scroller.OPTION_PAGING_HORIZONTAL
       );
     }
 

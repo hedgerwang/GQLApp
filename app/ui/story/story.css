@@ -50,3 +50,26 @@
   border-top: 1px solid #E4E6EA;
 }
 
+.app-ui-story_comment-row {  
+  border-bottom: solid 1px #fff;
+  display: -webkit-box;
+  padding: 8px 8px 8px 66px;
+}
+
+.app-ui-story_comment-row-pix {  
+  display: inline-block;
+  height: 50px;
+  margin: 0 0 0 -58px;
+  width: 50px;
+}
+
+.app-ui-story_comment-row-name {  
+  color: #576B95;
+  font-weight: bold;
+}
+
+.app-ui-story_comment-row-body {  
+  overflow: hidden;
+  width: 100%;
+  word-wrap: break-word;
+}

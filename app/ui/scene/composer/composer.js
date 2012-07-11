@@ -30,8 +30,10 @@ var Composer = Class.create(Scene, {
   onDocumentReady:function() {
     this.getNodeTappable().addTarget(this._cancel);
     this.getEvents().listen(this._input, 'focus', this._onFocus);
-    this.getEvents().listen(this._input, 'blur', this._onBlur);
     this.getEvents().listen(this.getNodeTappable(), 'tapclick', this._onTap);
+    this.setTimeout(function() {
+      this._input && this._input.focus();
+    }, 800);
   },
 
   /**
@@ -43,14 +45,6 @@ var Composer = Class.create(Scene, {
       window.scrollTo(0, 1);
       dom.addClassName(this._input, cssx('app-ui-scene-composer_input-focus'));
     }, 100);
-  },
-
-  /**
-   * @param {Event} event
-   */
-  _onBlur: function(event) {
-    clearTimeout(this._focusTimer);
-    dom.removeClassName(this._input, cssx('app-ui-scene-composer_input-focus'));
   },
 
   /**
@@ -85,11 +79,12 @@ var Composer = Class.create(Scene, {
    * @return {Element}
    */
   _createBody: function() {
-    var node = dom.createElement('div', cssx('app-ui-scene-composer_body'),
+    var node = dom.createElement('label', cssx('app-ui-scene-composer_body'),
       ['div', cssx('app-ui-scene-composer_profile-pix')],
       ['textarea',
         {
           tabIndex: 0,
+          autofocus: 'autofocus',
           placeholder: 'post something...',
           className: cssx('app-ui-scene-composer_input'),
           autocapitalize : 'off',

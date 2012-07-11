@@ -8,10 +8,10 @@ var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
 var FBData = require('jog/fbdata').FBData;
 var JewelBar = require('app/ui/jewelbar').JewelBar;
-var LoadingIndicator = require('jog/ui/loadingindicator').LoadingIndicator;
 var Scene = require('jog/ui/scene').Scene;
 var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var Story = require('app/ui/story').Story;
+var asserts = require('jog/asserts').asserts;
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
@@ -19,22 +19,36 @@ var objects = require('jog/objects').objects;
 
 var FullStory = Class.create(Scene, {
   /**
-   * @param {string} storyID
+   * @param {Object} storyData
    */
-  main: function(storyID) {
-
+  main: function(storyData) {
+    asserts.notNull(storyData, 'FullStory data must not be null');
+    this._jewelBar = this.appendChild(new JewelBar(true));
+    this._scrollList = this.appendChild(new ScrollList());
+    this._data = storyData;
   },
 
   /** @override */
   dispose: function() {
-
   },
 
   createNode: function() {
     var node = Scene.prototype.createNode.call(this);
     dom.addClassName(node, cssx('app-ui-scene-fullstory'));
     return node;
-  }
+  },
+
+  /** @override} */
+  onDocumentReady:function() {
+    this._jewelBar.render(this.getNode());
+    this._scrollList.render(this.getNode());
+    var story = new Story(this._data, Story.OPTION_FULL_STORY);
+    this._scrollList.addContent(story, true);
+  },
+
+  _jewelBar: null,
+  _scrollList: null,
+  _data: null
 });
 
-exports.GeneratedClass = FullStory;
+exports.FullStory = FullStory;

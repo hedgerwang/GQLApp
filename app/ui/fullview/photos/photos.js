@@ -77,7 +77,7 @@ var Photos = Class.create(BaseUI, {
     if (photos.length > 1) {
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scroller.OPTIONS_PAGING_HORIZONTAL
+        Scroller.OPTION_PAGING_HORIZONTAL
       );
     } else {
       // Prevent page from scrolling.

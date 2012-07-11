@@ -11,6 +11,7 @@ var Cover = require('app/ui/scene/cover').Cover;
 var Developer = require('app/ui/scene/developer').Developer;
 var EventType = require('app/eventtype').EventType;
 var Events = require('jog/events').Events;
+var FullStory = require('app/ui/scene/fullstory').FullStory;
 var NewsFeed = require('app/ui/scene/newsfeed').NewsFeed;
 var Photos = require('app/ui/fullview/photos').Photos;
 var Profile = require('app/ui/scene/profile').Profile;
@@ -147,6 +148,11 @@ var App = Class.create(null, {
       this._chrome,
       EventType.STORY_ALBUM_TAP,
       this._onViewPhoto);
+
+    events.listen(
+      this._chrome,
+      EventType.VIEW_STORY,
+      this._onViewStory);
   },
 
   /**
@@ -187,6 +193,18 @@ var App = Class.create(null, {
         this._addScene(new Profile(uid, true));
         break;
     }
+  },
+
+
+  /**
+   * @param {Event} event
+   */
+  _onViewStory: function(event) {
+    var data = event.data;
+    this._hideSideMenu().addCallback(this.bind(function() {
+      this._addScene(new FullStory(data, true));
+      data = undefined;
+    }));
   },
 
   /**
@@ -318,7 +336,7 @@ var App = Class.create(null, {
     this._activeScene._nextScene = undefined;
 
     targetScene.setDisabled(true).
-      translateXTo(this._chrome.getWidth() - 50, 600).addCallback(
+      translateXTo(this._chrome.getWidth() - 50, 350).addCallback(
       this.bind(function(scene) {
         scene.dispose();
         this._activeScene.setDisabled(false);
@@ -343,9 +361,11 @@ var App = Class.create(null, {
       this._composer.translateYTo(dom.getViewportHeight()).
         addCallback(this.bind(
         function() {
-          this._composer.setDisabled(false);
           this._chrome.appendChild(this._composer, true);
-          this._composer.translateYTo(0, 350);
+          this._composer.translateYTo(0, 450).
+            addCallback(this.bind(function() {
+            this._composer.setDisabled(false);
+          }));
         }
       ));
 

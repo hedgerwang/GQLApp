@@ -122,7 +122,7 @@ var ProfileTabs = Class.create(BaseUI, {
     if (!this._scrollable) {
       this._scrollable = new Scrollable(
         this.getNode(),
-        Scroller.OPTIONS_PAGING_HORIZONTAL
+        Scroller.OPTION_PAGING_HORIZONTAL
       );
     }
   },

@@ -18,13 +18,15 @@ var EventType = {
   SIDE_MENU_DEVELOPER: 32,
   STORY_ALBUM_TAP: 40,
   STORY_PHOTO_TAP: 41,
-  VIEW_PROFILE: 50
+  VIEW_PROFILE: 50,
+  VIEW_STORY: 51
 };
 
 if (__DEV__) {
   // Make name more readable.
+  var i = 0;
   for (var name in EventType) {
-    EventType[name] = name;
+    EventType[name] = name + ':' + (i++);
   }
 }
 

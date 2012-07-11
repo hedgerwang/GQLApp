@@ -1,6 +1,36 @@
 .app-ui-story-ufi {
   color: #576B95;
+  display: -webkit-box;
   font-size: 12px;
   font-weight: bold;
   padding: 8px;
+}
+
+.app-ui-story-ufi-start {
+  width: 50%;
+}
+
+.app-ui-story-ufi-end {
+  text-align: right;
+  width: 50%;
+}
+
+.app-ui-story-ufi.tap-pressed {
+  background: #b1b4bd;
+}
+
+.app-ui-story-ufi-icon-likes {
+  display: inline-block;
+  height: 15px;
+  margin: 0 4px;
+  vertical-align: text-bottom;
+  width: 13px;
+}
+
+.app-ui-story-ufi-icon-comments {
+  display: inline-block;
+  height: 16px;
+  margin: 0 6px;
+  vertical-align: text-bottom;
+  width: 12px;
 }

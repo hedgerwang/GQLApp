@@ -6,9 +6,8 @@
  */
 
 var TestCase = require('jog/testing').TestCase;
-var asserts = require('jog/asserts').asserts;
-
 var UFI = require('app/ui/story/ufi').UFI;
+var asserts = require('jog/asserts').asserts;
 
 (new TestCase('UFI Test'))
   .demo('demo',

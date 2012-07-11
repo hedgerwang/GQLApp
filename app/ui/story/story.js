@@ -6,6 +6,7 @@
 var Album = require('app/ui/story/album').Album;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
+var FBData = require('jog/fbdata').FBData;
 var Photo = require('app/ui/story/photo').Photo;
 var UFI = require('app/ui/story/ufi').UFI;
 var cssx = require('jog/cssx').cssx;
@@ -16,9 +17,11 @@ var objects = require('jog/objects').objects;
 var Story = Class.create(BaseUI, {
   /**
    * @param {Object} data
+   * @param {number=} opt_option
    */
-  main: function(data) {
+  main: function(data, opt_option) {
     this._data = data;
+    this._option = opt_option;
   },
 
   /** @override */
@@ -57,8 +60,54 @@ var Story = Class.create(BaseUI, {
     if (this._images) {
       this.appendChild(this._images);
     }
-    var ufi = this.appendChild(new UFI(this._data.id));
-    ufi.render(this._footer);
+
+    switch (this._option) {
+      case Story.OPTION_FULL_STORY:
+        break;
+
+      default:
+        var ufi = this.appendChild(new UFI(this._data));
+        ufi.render(this._footer);
+        break;
+    }
+  },
+
+  onDocumentReady: function() {
+    switch (this._option) {
+      case Story.OPTION_FULL_STORY:
+        this._feedbackID = objects.getValueByName('feedback.id', this._data);
+        if (this._feedbackID) {
+          FBData.getFeedbacks(this._feedbackID, 20, null, true).addCallback(
+            this.bind(this._onFeedbacksReady)
+          );
+        }
+        break;
+    }
+  },
+
+  /**
+   * @param {Object} data
+   */
+  _onFeedbacksReady: function(data) {
+    var comments = objects.getValueByName(
+      'comments.nodes', data[this._feedbackID]);
+
+    if (lang.isArray(comments) && comments.length) {
+      var fragment = dom.createDocumentFragment();
+      for (var i = 0, comment; comment = comments[i]; i++) {
+        fragment.appendChild(this._createCommentRow(comment));
+      }
+      this._footer.appendChild(fragment);
+      this.dispatchEvent('reflow', null, true);
+    } else {
+      if (__DEV__) {
+        console.info('No feedback for UFI.',
+          'feedbackID = ', this._feedbackID,
+          'data = ', data,
+          'this._data = ', this._data
+        );
+      }
+    }
   },
 
   /**
@@ -153,12 +202,32 @@ var Story = Class.create(BaseUI, {
   },
 
   /**
+   * @param {Object} data
+   */
+  _createCommentRow: function(data) {
+    var name = objects.getValueByName('author.name', data);
+    var src = objects.getValueByName('author.profile_picture.uri', data);
+    var text = objects.getValueByName('body.text', data);
+    var node = dom.createElement('div', cssx('app-ui-story_comment-row'),
+      ['div', cssx('app-ui-story_comment-row-pix')],
+      ['div', cssx('app-ui-story_comment-row-body'),
+        ['div', cssx('app-ui-story_comment-row-name'), name],
+        ['div', cssx('app-ui-story_comment-row-text'), text]
+      ]
+    );
+    this.renderImage(node.firstChild, src);
+    return node;
+  },
+
+  /**
    * @type {BaseUI}
    */
   _images: null,
   _data: null,
-  _footer: null
+  _footer: null,
+  _option: false
 });
 
+Story.OPTION_FULL_STORY = 1;
 
 exports.Story = Story;
