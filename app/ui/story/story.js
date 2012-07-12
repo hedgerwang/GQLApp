@@ -7,6 +7,7 @@ var Album = require('app/ui/story/album').Album;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var FBData = require('jog/fbdata').FBData;
+var Input = require('app/ui/story/input').Input;
 var Photo = require('app/ui/story/photo').Photo;
 var UFI = require('app/ui/story/ufi').UFI;
 var cssx = require('jog/cssx').cssx;
@@ -22,6 +23,7 @@ var Story = Class.create(BaseUI, {
   main: function(data, opt_option) {
     this._data = data;
     this._option = opt_option;
+    this._input = this.appendChild(new Input());
   },
 
   /** @override */
@@ -80,6 +82,8 @@ var Story = Class.create(BaseUI, {
           FBData.getFeedbacks(this._feedbackID, 20, null, true).addCallback(
             this.bind(this._onFeedbacksReady)
           );
+        } else {
+          this._input.render(this._footer);
         }
         break;
     }
@@ -98,7 +102,6 @@ var Story = Class.create(BaseUI, {
         fragment.appendChild(this._createCommentRow(comment));
       }
       this._footer.appendChild(fragment);
-      this.dispatchEvent('reflow', null, true);
     } else {
       if (__DEV__) {
         console.info('No feedback for UFI.',
@@ -108,6 +111,8 @@ var Story = Class.create(BaseUI, {
         );
       }
     }
+    this._input.render(this._footer);
+    this.dispatchEvent('reflow', null, true);
   },
 
   /**

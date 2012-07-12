@@ -1,19 +1,19 @@
-.app-ui-story {  
+.app-ui-story {
   padding: 10px 10px 0 10px;
 }
 
-.app-ui-story-border {  
+.app-ui-story-border {
   background: #fff;
   border-radius: 4px;
   border: solid 1px #aaa;
 }
 
-.app-ui-story-header {  
+.app-ui-story-header {
   display: -webkit-box;
   margin: 8px;
 }
 
-.app-ui-story-profile-pix {  
+.app-ui-story-profile-pix {
   background-size: 100% 100%;
   background: #D8DCE6;
   display: inline-block;
@@ -23,7 +23,7 @@
   width: 34px;
 }
 
-.app-ui-story-title {  
+.app-ui-story-title {
   box-flex: 1;
   color: #576B95;
   display: block;
@@ -32,43 +32,44 @@
   word-wrap: break-word;
 }
 
-.app-ui-story-time {  
+.app-ui-story-time {
   color: #bbb;
   font-size: 12px;
   font-weight: normal;
 }
 
-.app-ui-story-body {  
+.app-ui-story-body {
   hyphens: auto;
   margin: 8px;
   word-wrap: break-word;
 }
 
-.app-ui-story-footer {  
+.app-ui-story-footer {
   background: #e2e9f1;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid #E4E6EA;
+  padding: 0 0 1px 0;
 }
 
-.app-ui-story_comment-row {  
+.app-ui-story_comment-row {
   border-bottom: solid 1px #fff;
   display: -webkit-box;
-  padding: 8px 8px 8px 66px;
+  padding: 4px 8px 4px 66px;
 }
 
-.app-ui-story_comment-row-pix {  
+.app-ui-story_comment-row-pix {
   display: inline-block;
   height: 50px;
   margin: 0 0 0 -58px;
   width: 50px;
 }
 
-.app-ui-story_comment-row-name {  
+.app-ui-story_comment-row-name {
   color: #576B95;
   font-weight: bold;
 }
 
-.app-ui-story_comment-row-body {  
+.app-ui-story_comment-row-body {
   overflow: hidden;
   width: 100%;
   word-wrap: break-word;

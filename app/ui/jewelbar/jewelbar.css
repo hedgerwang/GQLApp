@@ -1,4 +1,4 @@
-.app-ui-jewelbar {  
+.app-ui-jewelbar {
   background: -webkit-gradient(linear, left top, left bottom, from(#738ABA), to(#2C4987));
   border-bottom: solid 1px #666;
   border-color: #111A33;
@@ -13,7 +13,7 @@
   z-index: 1000;
 }
 
-.app-ui-jewelbar_center {  
+.app-ui-jewelbar_center {
   display: inline-block;
   height: 100%;
   margin: auto;
@@ -21,7 +21,7 @@
   width: 160px;
 }
 
-.app-ui-jewelbar_icon {  
+.app-ui-jewelbar_icon {
   background-size: 401px 216px;
   display: inline-block;
   height: 26px;
@@ -32,13 +32,13 @@
   z-index: 10;
 }
 
-.app-ui-jewelbar_sidemenu {  
+.app-ui-jewelbar_sidemenu {
   left: 0;
   position: absolute;
   top: 0;
 }
 
-.app-ui-jewelbar_sidemenu.tap-pressed:after {  
+.app-ui-jewelbar_sidemenu.tap-pressed:after {
   box-shadow: 0 0 12px 12px #fff;
   content: '';
   height: 1px;
@@ -48,7 +48,11 @@
   width: 1px;
 }
 
-.app-ui-jewelbar_back {  
+.app-ui-jewelbar_back.tap-pressed {
+  box-shadow: 0 0 3px 3px rgba(255, 255, 255, 0.6);
+}
+
+.app-ui-jewelbar_back {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#647AAB), to(#2C467E));
   border-color: #2A3349 #2A3A64 #253662;
   border-radius: 5px;
@@ -72,7 +76,7 @@
   z-index: 10;
 }
 
-.app-ui-jewelbar_topbar {  
+.app-ui-jewelbar_topbar {
   background: rgba(0, 0, 0, 0);
   height: 70%;
   left: 0;

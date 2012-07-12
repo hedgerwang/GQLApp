@@ -1,0 +1,21 @@
+.app-ui-story-input {
+  padding: 6px;
+}
+
+.app-ui-story-input-textarea {
+  background: #fff;
+  border: solid 1px #999;
+  border-color: #444 #aaa #aaa #999;
+  box-sizing: border-box;
+  color: #444;
+  display: block;
+  height: 4em;
+  outline: none;
+  padding: 6px;
+  width: 100%;
+}
+
+.app-ui-story-input-textarea:focus {
+  height: 8em;
+  margin-bottom: 100px;
+}

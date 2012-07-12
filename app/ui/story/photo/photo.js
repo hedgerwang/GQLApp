@@ -22,30 +22,10 @@ var Photo = Class.create(BaseUI, {
   createNode: function() {
     var image = this._image;
     if (image && image.uri) {
-      if (__DEV__) {
-        if (!image.width || !image.height) {
-          var debugInfo = [
-            'Image width or height appears 0. ' +
-              'Maybe this image is too big? ' +
-              'This could be resolved by Imageable.',
-            image.uri,
-            image
-          ];
-          console.warn(debugInfo);
-        }
-      }
       var node = dom.createElement('div', {
         className: cssx('app-ui-story-photo')
       });
-
       this.uri = image.uri;
-
-      var imageable = this.renderImage(node, image.uri);
-      imageable.addEventListener('load', this.bind(function(event) {
-        this.naturalWidth = event.target.naturalWidth;
-        this.naturalHeight = event.target.naturalHeight;
-      }));
-
       return node;
     }
 
@@ -54,6 +34,17 @@ var Photo = Class.create(BaseUI, {
     }
 
     return dom.createElement('div');
+  },
+
+  /** @override */
+  onDocumentReady: function() {
+    if (this.uri) {
+      var imageable = this.renderImage(this.getNode(), this.uri);
+      imageable.addEventListener('load', this.bind(function(event) {
+        this.naturalWidth = event.target.naturalWidth;
+        this.naturalHeight = event.target.naturalHeight;
+      }));
+    }
   },
 
   /**

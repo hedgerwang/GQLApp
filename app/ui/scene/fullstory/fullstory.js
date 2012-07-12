@@ -26,6 +26,7 @@ var FullStory = Class.create(Scene, {
     this._jewelBar = this.appendChild(new JewelBar(true));
     this._scrollList = this.appendChild(new ScrollList());
     this._data = storyData;
+    this._renderStory = this.bind(this._renderStory);
   },
 
   /** @override */
@@ -39,8 +40,20 @@ var FullStory = Class.create(Scene, {
   },
 
   /** @override} */
-  onDocumentReady:function() {
+  onNodeReady: function() {
     this._jewelBar.render(this.getNode());
+  },
+
+  /** @override} */
+  onDocumentReady:function() {
+    this._renderStory();
+  },
+
+  _renderStory: function() {
+    if (this.translating) {
+      this.setTimeout(this._renderStory, 500);
+      return;
+    }
     this._scrollList.render(this.getNode());
     var story = new Story(this._data, Story.OPTION_FULL_STORY);
     this._scrollList.addContent(story, true);

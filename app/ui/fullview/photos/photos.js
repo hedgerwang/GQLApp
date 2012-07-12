@@ -298,8 +298,7 @@ var Photos = Class.create(BaseUI, {
       if (!fadeIn) {
         fadeIn = true;
         this._animator = new Animator();
-        this._animator.start(step, Functions.VALUE_TRUE, complete, 320);
-        step(0);
+        this._animator.start(step, Functions.VALUE_TRUE, complete, 350);
       } else {
         step = null;
         complete = null;
@@ -319,73 +318,7 @@ var Photos = Class.create(BaseUI, {
 
     step(0);
 
-    this._animator.start(step, Functions.VALUE_TRUE, complete, 280);
-  },
-
-
-  _translateAlbumPhotoIntoViewContinuexxx: function(pageNode, imageNode,
-                                                    naturalWidth,
-                                                    naturalHeight) {
-
-    var imageNodeStyle = imageNode.style;
-    var ratio = naturalWidth / naturalHeight;
-
-    var w0 = parseInt(imageNodeStyle.width, 10);
-    var w1 = dom.getViewportWidth();
-
-    var h0 = parseInt(imageNodeStyle.height, 10);
-    var h1 = w1 / ratio;
-
-    var x0 = parseInt(imageNodeStyle.left, 10);
-    var x1 = 0;
-    var dx = x1 - x0;
-
-    var y0 = parseInt(imageNodeStyle.top, 10);
-    var y1 = (dom.getViewportHeight() - h1) / 2;
-    var dy = y1 - y0;
-
-    this._animator = new Animator();
-    var pageNodeStyle = pageNode.style;
-    var uiNodeStyle = this.getNode().style;
-
-    var scaleX1 = w1 / w0;
-    var scaleY1 = h1 / h0;
-    var scaleXDelta = scaleX1 - 1;
-    var scaleYDelta = scaleY1 - 1;
-    imageNodeStyle.left = 0;
-    imageNodeStyle.top = 0;
-
-    // TODO(hedger): Make it working for other platform.
-    imageNodeStyle.cssText += ';left:0;top:0;' +
-      'width:' + w0 + 'px;height:' + h0 + 'px;' +
-      '-webkit-transform-origin: 0 0;' +
-      '-webkit-backface-visibility: none;';
-
-    var step = function(value) {
-      var scaleX = ~~(100 * (1 + scaleXDelta * value)) / 100;
-      var scaleY = ~~(100 * (1 + scaleYDelta * value)) / 100;
-      var x = ~~((value * dx + x0) / scaleX);
-      var y = ~~((value * dy + y0) / scaleY);
-      imageNodeStyle.webkitTransform =
-        'scale3d(' + scaleX + ',' + scaleY + ',1) ' +
-          'translate3d(' + x + 'px,' + y + 'px,0)';
-    };
-
-    var complete = this.bind(function() {
-      uiNodeStyle.backgroundColor = '#000';
-      pageNodeStyle.backgroundColor = '';
-      pageNodeStyle.backgroundColor = ''; // #000.
-      imageNodeStyle = null;
-      pageNodeStyle = null;
-      uiNodeStyle = null;
-      Class.dispose(this._animator);
-      this._showUFI(pageNode);
-      this._onTranslateComplete();
-      pageNode = null;
-    });
-
-    this._animator.start(
-      step, Functions.VALUE_TRUE, complete, 350);
+    this._animator.start(step, Functions.VALUE_TRUE, complete, 400);
   },
 
   _onTranslateComplete: function() {
