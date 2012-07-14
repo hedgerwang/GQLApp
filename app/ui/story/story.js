@@ -7,7 +7,7 @@ var Album = require('app/ui/story/album').Album;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var FBData = require('jog/fbdata').FBData;
-var Input = require('app/ui/story/input').Input;
+var Feedbacks = require('app/ui/story/feedbacks').Feedbacks;
 var Photo = require('app/ui/story/photo').Photo;
 var UFI = require('app/ui/story/ufi').UFI;
 var cssx = require('jog/cssx').cssx;
@@ -23,7 +23,6 @@ var Story = Class.create(BaseUI, {
   main: function(data, opt_option) {
     this._data = data;
     this._option = opt_option;
-    this._input = this.appendChild(new Input());
   },
 
   /** @override */
@@ -77,42 +76,11 @@ var Story = Class.create(BaseUI, {
   onDocumentReady: function() {
     switch (this._option) {
       case Story.OPTION_FULL_STORY:
-        this._feedbackID = objects.getValueByName('feedback.id', this._data);
-        if (this._feedbackID) {
-          FBData.getFeedbacks(this._feedbackID, 20, null, true).addCallback(
-            this.bind(this._onFeedbacksReady)
-          );
-        } else {
-          this._input.render(this._footer);
-        }
+        var feedbackID = objects.getValueByName('feedback.id', this._data);
+        var feedbacks = this.appendChild(new Feedbacks(feedbackID));
+        feedbacks.render(this._footer);
         break;
     }
-  },
-
-  /**
-   * @param {Object} data
-   */
-  _onFeedbacksReady: function(data) {
-    var comments = objects.getValueByName(
-      'comments.nodes', data[this._feedbackID]);
-
-    if (lang.isArray(comments) && comments.length) {
-      var fragment = dom.createDocumentFragment();
-      for (var i = 0, comment; comment = comments[i]; i++) {
-        fragment.appendChild(this._createCommentRow(comment));
-      }
-      this._footer.appendChild(fragment);
-    } else {
-      if (__DEV__) {
-        console.info('No feedback for UFI.',
-          'feedbackID = ', this._feedbackID,
-          'data = ', data,
-          'this._data = ', this._data
-        );
-      }
-    }
-    this._input.render(this._footer);
-    this.dispatchEvent('reflow', null, true);
   },
 
   /**
@@ -158,19 +126,25 @@ var Story = Class.create(BaseUI, {
    */
   _createImages: function(subAttachments, data) {
     var album = new Album();
+    var storyFeedback = data.feedback;
 
     if (lang.isArray(subAttachments) && subAttachments.length > 1) {
-
       for (var i = 0, j = subAttachments.length; i < j; i++) {
-        var subImage = objects.getValueByName('media.image', subAttachments[i]);
-        album.addPhoto(new Photo(subImage));
+        var subAttachment = subAttachments[i];
+        var subImage = objects.getValueByName(
+          'media.image', subAttachment);
+        var subFeedback = objects.getValueByName(
+          'media.feedback', subAttachment);
+        album.addPhoto(new Photo(subImage, subFeedback || storyFeedback));
       }
       return album;
     }
 
     var image = objects.getValueByName('attachments.0.media.image', data);
     if (image) {
-      album.addPhoto(new Photo(image));
+      var feedback = objects.getValueByName(
+        'attachments.0.media.feedback', data);
+      album.addPhoto(new Photo(image, feedback || storyFeedback));
       return album;
     }
 
@@ -207,30 +181,12 @@ var Story = Class.create(BaseUI, {
   },
 
   /**
-   * @param {Object} data
-   */
-  _createCommentRow: function(data) {
-    var name = objects.getValueByName('author.name', data);
-    var src = objects.getValueByName('author.profile_picture.uri', data);
-    var text = objects.getValueByName('body.text', data);
-    var node = dom.createElement('div', cssx('app-ui-story_comment-row'),
-      ['div', cssx('app-ui-story_comment-row-pix')],
-      ['div', cssx('app-ui-story_comment-row-body'),
-        ['div', cssx('app-ui-story_comment-row-name'), name],
-        ['div', cssx('app-ui-story_comment-row-text'), text]
-      ]
-    );
-    this.renderImage(node.firstChild, src);
-    return node;
-  },
-
-  /**
    * @type {BaseUI}
    */
   _images: null,
   _data: null,
   _footer: null,
-  _option: false
+  _option: 0
 });
 
 Story.OPTION_FULL_STORY = 1;

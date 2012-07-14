@@ -13,24 +13,24 @@ var dom = require('jog/dom').dom;
 var Photo = Class.create(BaseUI, {
   /**
    * @param {Object} image
+   * @param {Object=} feedback
    */
-  main: function(image) {
-    this._image = image;
+  main: function(image, feedback) {
+    this.feedbackID = feedback ? feedback.id : null;
+    this.uri = image ? image.uri : null;
   },
 
   /** @override */
   createNode: function() {
-    var image = this._image;
-    if (image && image.uri) {
+    if (this.uri) {
       var node = dom.createElement('div', {
         className: cssx('app-ui-story-photo')
       });
-      this.uri = image.uri;
       return node;
     }
 
     if (__DEV__) {
-      throw new Error('Invalid photo data:' + JSON.stringify(image));
+      throw new Error('Photo does not have valid uri');
     }
 
     return dom.createElement('div');
@@ -52,35 +52,12 @@ var Photo = Class.create(BaseUI, {
    */
   uri: null,
 
-  naturalWidth: 0,
-  naturalHeight: 0,
-
   /**
-   * @type {Object}
+   * @type {string}
    */
-  _image: null
+  feedbackID: '',
+  naturalWidth: 0,
+  naturalHeight: 0
 });
 
 exports.Photo = Photo;
-
-//(function() {
-//  try {
-//    var el = document.createElement('canvas');
-//    el.width = 18;
-//    el.height = 18;
-//    var context = document.getCSSCanvasContext(
-//      '2d',
-//      'app-ui-story-photo-border',
-//      18,
-//      18
-//    );
-//    context.shadowOffsetX = 0;
-//    context.shadowOffsetY = 0;
-//    context.shadowBlur = 3;
-//    context.shadowColor = "#000";
-//    context.fillStyle = "#fff";
-//    context.fillRect(~~((el.width - 10) / 2), ~~((el.height - 10) / 2 ), 10, 10);
-//  } catch(ex) {
-//    alert(ex.message);
-//  }
-//})();

@@ -1,0 +1,28 @@
+.app-ui-story-feedbacks {
+  background: #e2e9f1;
+}
+
+.app-ui-story-feedbacks-row {
+
+  border-bottom: solid 1px #fff;
+  display: -webkit-box;
+  padding: 4px 8px 4px 66px;
+}
+
+.app-ui-story-feedbacks-row-pix {
+  display: inline-block;
+  height: 50px;
+  margin: 0 0 0 -58px;
+  width: 50px;
+}
+
+.app-ui-story-feedbacks-row-name {
+  color: #576B95;
+  font-weight: bold;
+}
+
+.app-ui-story-feedbacks-row-body {
+  overflow: hidden;
+  width: 100%;
+  word-wrap: break-word;
+}

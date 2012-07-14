@@ -75,9 +75,14 @@ var NewsFeed = Class.create(Scene, {
     var newTop = scrollTop < 0 ? 0 : scrollTop;
 
     if (this._feedSrollTop > newTop) {
+      this._composerBarHiddenScore = 0;
       this._composerBar.setVisible(true);
     } else if (this._feedSrollTop < newTop) {
-      this._composerBar.setVisible(false);
+      if (this._composerBarHiddenScore > 15) {
+        this._composerBar.setVisible(false);
+      } else {
+        this._composerBarHiddenScore++;
+      }
     }
     this._feedSrollTop = newTop;
   },
@@ -274,7 +279,12 @@ var NewsFeed = Class.create(Scene, {
   /**
    * @type {JewelBar}
    */
-  _jewelBar: null
+  _jewelBar: null,
+
+  /**
+   * @type {number}
+   */
+  _composerBarHiddenScore: 0
 });
 
 NewsFeed.STORIES_TO_FETCH_COUNT = 150;

@@ -59,6 +59,7 @@ var ActiveSceneScroller = Class.create(EventTarget, {
   onScroll: function(left) {
     var x = Math.min(-left / this._scale, this._width);
     this._scene.translateXTo(Math.max(x, 0));
+    this._noop = left >= 0;
   },
 
   onScrollEnd: function() {
@@ -97,6 +98,7 @@ var ActiveSceneScroller = Class.create(EventTarget, {
   _onTouchEnd: function(event) {
     this._scroller.doTouchEnd(event);
 
+
     var events = this._events;
     events.unlistenAll();
 
@@ -105,10 +107,18 @@ var ActiveSceneScroller = Class.create(EventTarget, {
       TouchHelper.EVT_TOUCHSTART,
       this._onTouchStart);
 
+    if (this._noop) {
+      // No inertial scrolling.
+      // This will stop the scroller.
+      this._scene.setDisabled(false);
+    }
+
     if (this._scene.getTranslateX() > this._width / 5) {
       this.dispatchEvent(EventType.ACTIVE_SCENE_SCROLLER_SCROLLOUT);
     }
   },
+
+  _noop: false,
 
   _scale: 1,
 

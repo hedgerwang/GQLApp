@@ -1,21 +1,21 @@
-.app-ui-fullview-photos {  
+.app-ui-fullview-photos {
   bottom: 0;
   left: 0;
+  overflow: visible; /* override .jog-bebavior-scrollable */
   position: absolute;
   right: 0;
   top: 0;
-  xbackground-color: #000;
   z-index: 100000;
 }
 
-.app-ui-fullview-photos_body {  
+.app-ui-fullview-photos_body {
   height: 100%;
   white-space: nowrap;
   width: 100%;
   z-index: 2;
 }
 
-.app-ui-fullview-photos-page {  
+.app-ui-fullview-photos-page {
   background: #000;
   display: inline-block;
   height: 100%;
@@ -25,7 +25,7 @@
   width: 100%;
 }
 
-.app-ui-fullview-photos-image {  
+.app-ui-fullview-photos-image {
   backface-visibility: hidden;
   background-position: center center;
   background-repeat: no-repeat;
@@ -35,7 +35,7 @@
   width: 100%;
 }
 
-.app-ui-fullview-photos-ufi {  
+.app-ui-fullview-photos-ufi {
   background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 90%);
   bottom: 0;
   color: white;
@@ -49,4 +49,13 @@
   text-align: right;
   text-shadow: 0 1px 4px #000;
   white-space: nowrap;
+}
+
+.app-ui-fullview-photos-feedbacks {
+  background: #e2e9f1;
+}
+
+.app-ui-fullview-photos-feedbacks .jog-ui-scrolllist {
+  box-shadow: 0 -6px 6px rgba(0, 0, 0, 0.5);
+  height: 66%;
 }

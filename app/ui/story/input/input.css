@@ -9,13 +9,10 @@
   box-sizing: border-box;
   color: #444;
   display: block;
-  height: 4em;
+  height: 6em;
   outline: none;
+  margin-bottom: 100px;
   padding: 6px;
   width: 100%;
 }
 
-.app-ui-story-input-textarea:focus {
-  height: 8em;
-  margin-bottom: 100px;
-}

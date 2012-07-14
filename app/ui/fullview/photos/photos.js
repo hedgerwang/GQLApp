@@ -8,17 +8,22 @@ var Animator = require('jog/animator').Animator;
 var BaseUI = require('jog/ui/baseui').BaseUI;
 var Class = require('jog/class').Class;
 var EventType = require('app/eventtype').EventType;
+var Feedbacks = require('app/ui/story/feedbacks').Feedbacks;
+var FBData = require('jog/fbdata').FBData;
 var Functions = require('jog/functions').Functions;
 var Imageable = require('jog/behavior/imageable').Imageable;
+var Scene = require('jog/ui/scene').Scene;
 var Scrollable = require('jog/behavior/scrollable').Scrollable;
 var Scroller = require('jog/behavior/scrollable/scroller').Scroller;
+var ScrollList = require('jog/ui/scrolllist').ScrollList;
 var TouchHelper = require('jog/touchhelper').TouchHelper;
+
 var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
 var translate = require('jog/style/translate').translate;
 
-var Photos = Class.create(BaseUI, {
+var Photos = Class.create(Scene, {
   /** @override */
   main: function() {
     this._showMoreImages = lang.throttle(this._showMoreImages, 300, this);
@@ -26,17 +31,20 @@ var Photos = Class.create(BaseUI, {
 
   /** @override */
   dispose: function() {
-    Class.dispose(this._animator);
+    Class.dispose(this._transitionAnimator);
     Class.dispose(this._scrollable);
   },
 
   /** @override */
   createNode:function() {
+    var node = Scene.prototype.createNode.call(this);
+
     this._body = dom.createElement(
       'div', cssx('app-ui-fullview-photos_body'));
 
-    return dom.createElement(
-      'div', cssx('app-ui-fullview-photos'), this._body);
+    dom.addClassName(node, cssx('app-ui-fullview-photos'));
+    node.appendChild(this._body);
+    return node;
   },
 
   /** @override */
@@ -79,12 +87,6 @@ var Photos = Class.create(BaseUI, {
         this.getNode(),
         Scroller.OPTION_PAGING_HORIZONTAL
       );
-    } else {
-      // Prevent page from scrolling.
-      this.getEvents().listen(
-        this.getNode(),
-        TouchHelper.EVT_TOUCHMOVE,
-        Functions.PREVENT_DEFAULT);
     }
 
     var willTranslate;
@@ -105,7 +107,7 @@ var Photos = Class.create(BaseUI, {
 
       // Hack: Expando.
       pageNode._uri = photo.uri;
-
+      pageNode._feedbackID = photo.feedbackID;
       this._body.appendChild(pageNode);
       this.getNodeTappable().addTarget(pageNode);
     }
@@ -176,45 +178,49 @@ var Photos = Class.create(BaseUI, {
   _translateAlbumPhotoIntoViewWithCanvas: function(pageNode, photoNode,
                                                    naturalWidth,
                                                    naturalHeight) {
-
-    var photoRect = photoNode.getBoundingClientRect();
-    var photoCanvasNode = photoNode.firstChild;
-
-    var imageNode = photoCanvasNode.cloneNode(false);
-    imageNode.className = cssx('app-ui-fullview-photos-image');
-
-    var pageRect = pageNode.getBoundingClientRect();
-    var scale = photoNode.offsetWidth / photoRect.width;
-
-    var imageNodeStyle = imageNode.style;
-    imageNodeStyle.width = ~~(scale * photoRect.width) + 'px';
-    imageNodeStyle.height = ~~ (scale * photoRect.height) + 'px';
-    imageNodeStyle.left = ~~(scale * (photoRect.left - pageRect.left)) + 'px';
-    imageNodeStyle.top = ~~(scale * (photoRect.top - pageRect.top)) + 'px';
-    pageNode.appendChild(imageNode);
-
-    var img = new Image();
-    img.onerror = img.onload = this.bind(function(evt) {
-      if (!this.disposed && evt.type === 'load') {
-        imageNode.getContext('2d').drawImage(
-          img,
-          photoCanvasNode.imageX,
-          photoCanvasNode.imageY,
-          photoCanvasNode.imageW,
-          photoCanvasNode.imageH);
+    if (__DEV__) {
+      if (1 < 2) {
+        throw new Error('not supported');
       }
+      var photoRect = photoNode.getBoundingClientRect();
+      var photoCanvasNode = photoNode.firstChild;
 
-      this._translateAlbumPhotoIntoViewContinue(
-        pageNode, imageNode, photoCanvasNode.imageW, photoCanvasNode.imageW);
+      var imageNode = photoCanvasNode.cloneNode(false);
+      imageNode.className = cssx('app-ui-fullview-photos-image');
 
-      imageNode = null;
-      photoCanvasNode = null;
-      img.onload = null;
-      img.onerror = null;
-      imageNode = null;
-      img = null;
-    });
-    img.src = photoCanvasNode.imageSrc;
+      var pageRect = pageNode.getBoundingClientRect();
+      var scale = photoNode.offsetWidth / photoRect.width;
+
+      var imageNodeStyle = imageNode.style;
+      imageNodeStyle.width = ~~(scale * photoRect.width) + 'px';
+      imageNodeStyle.height = ~~ (scale * photoRect.height) + 'px';
+      imageNodeStyle.left = ~~(scale * (photoRect.left - pageRect.left)) + 'px';
+      imageNodeStyle.top = ~~(scale * (photoRect.top - pageRect.top)) + 'px';
+      pageNode.appendChild(imageNode);
+
+      var img = new Image();
+      img.onerror = img.onload = this.bind(function(evt) {
+        if (!this.disposed && evt.type === 'load') {
+          imageNode.getContext('2d').drawImage(
+            img,
+            photoCanvasNode.imageX,
+            photoCanvasNode.imageY,
+            photoCanvasNode.imageW,
+            photoCanvasNode.imageH);
+        }
+
+        this._translateAlbumPhotoIntoViewContinue(
+          pageNode, imageNode, photoCanvasNode.imageW, photoCanvasNode.imageW);
+
+        imageNode = null;
+        photoCanvasNode = null;
+        img.onload = null;
+        img.onerror = null;
+        imageNode = null;
+        img = null;
+      });
+      img.src = photoCanvasNode.imageSrc;
+    }
   },
 
 
@@ -270,7 +276,7 @@ var Photos = Class.create(BaseUI, {
     var y1 = (dom.getViewportHeight() - h1) / 2;
     var dy = y1 - y0;
 
-    this._animator = new Animator();
+    this._transitionAnimator = new Animator();
     var pageNodeStyle = pageNode.style;
     var uiNodeStyle = this.getNode().style;
 
@@ -293,12 +299,13 @@ var Photos = Class.create(BaseUI, {
     };
 
     var complete = this.bind(function() {
-      Class.dispose(this._animator);
-      delete this._animator;
+      Class.dispose(this._transitionAnimator);
+      delete this._transitionAnimator;
       if (!fadeIn) {
         fadeIn = true;
-        this._animator = new Animator();
-        this._animator.start(step, Functions.VALUE_TRUE, complete, 350);
+        this._transitionAnimator = new Animator();
+        this._transitionAnimator.start(
+          step, Functions.VALUE_TRUE, complete, 350);
       } else {
         step = null;
         complete = null;
@@ -318,7 +325,7 @@ var Photos = Class.create(BaseUI, {
 
     step(0);
 
-    this._animator.start(step, Functions.VALUE_TRUE, complete, 400);
+    this._transitionAnimator.start(step, Functions.VALUE_TRUE, complete, 400);
   },
 
   _onTranslateComplete: function() {
@@ -343,13 +350,17 @@ var Photos = Class.create(BaseUI, {
   },
 
   _showUFI: function(pageNode) {
-    Animator.requestAnimationFrame(function() {
-      pageNode.appendChild(dom.createElement(
+    Animator.requestAnimationFrame(this.bind(function() {
+      var ufi = dom.createElement(
         'div',
         cssx('app-ui-fullview-photos-ufi'),
-        'Like . Comment')
+        'Like \u00b7 Comment'
       );
-    });
+      this.getNodeTappable().addTarget(ufi);
+      this._ufiOpener = ufi;
+      pageNode.appendChild(ufi);
+      pageNode = null;
+    }));
   },
 
   _showImage: function(pageNode) {
@@ -382,10 +393,91 @@ var Photos = Class.create(BaseUI, {
     }));
   },
 
-  _onTap: function() {
+  /**
+   * @param {Event} event
+   */
+  _onTap: function(event) {
+    if (this.translating) {
+      return;
+    }
+
+    if (this._feedbackScene) {
+      if (this._feedbackScene.translating) {
+        return;
+      }
+
+      this.translateYTo(0, 150).
+        then(this.bind(function() {
+          return this._feedbackScene.translateYTo(dom.getViewportHeight(), 150);
+        }
+      )).addCallback(this.bind(function() {
+        Class.dispose(this._feedbackScene);
+        this._feedbackScene = undefined;
+      }));
+
+      return;
+    }
+
+    switch (event.target) {
+      case this._ufiOpener:
+        this._showFeedbacks();
+        return;
+    }
     this.dispatchEvent(EventType.PHOTOS_VIEW_CLOSE);
     this.dispose();
   },
+
+  _showFeedbacks:function() {
+    if (this._feedbackScene) {
+      return;
+    }
+
+    var children = this._body.childNodes;
+    var idx = this._scrollable ? this._scrollable.getScrollPageIndex() : 0;
+    var pageNode = children[idx];
+    var feedbackID = pageNode ? pageNode._feedbackID : null;
+
+    if (!feedbackID) {
+      if (__DEV__) {
+        throw new Error('Unable to find feedbackID');
+      }
+      return;
+    }
+
+    // TODO(hedger): Build FeedbacksScene?
+    this._feedbackScene = this.appendChild(new Scene());
+
+    dom.addClassName(
+      this._feedbackScene.getNode(),
+      cssx('app-ui-fullview-photos-feedbacks')
+    );
+
+    this._feedbackScene.render(this.getNode());
+
+    var viewH = dom.getViewportHeight();
+
+    this._feedbackScene.
+      translateYTo(viewH).
+      then(
+      this.bind(function() {
+        return this.translateYTo(-viewH / 4, 150);
+      })).
+      then(
+      this.bind(function() {
+        return this._feedbackScene.translateYTo(viewH / 4 + viewH / 3, 150);
+      })).
+      addCallback(
+      this.bind(function() {
+        var scrollList = new ScrollList();
+        this._feedbackScene.appendChild(scrollList, true);
+        scrollList.addContent(new Feedbacks(feedbackID), true);
+      }));
+  },
+
+  /**
+   * @type {Element}
+   */
+  _ufiOpener: null,
 
   /**
    * @type {boolean}
@@ -395,7 +487,7 @@ var Photos = Class.create(BaseUI, {
   /**
    * @type {Animator}
    */
-  _animator: null,
+  _transitionAnimator: null,
 
   /**
    * @type {Element}
@@ -410,7 +502,12 @@ var Photos = Class.create(BaseUI, {
   /**
    * @type {Album}
    */
-  _albumToImport: null
+  _albumToImport: null,
+
+  /**
+   * @type {Scene}
+   */
+  _feedbackScene: null
 });
 
 exports.Photos = Photos;
