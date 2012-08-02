@@ -287,6 +287,7 @@ var Photos = Class.create(Scene, {
     translate.toXY(imageNode, x0, y0);
 
     var fadeIn = false;
+
     var step = function(value) {
       if (!fadeIn) {
         var opacity = ~~(10 * value) / 10;
@@ -322,8 +323,6 @@ var Photos = Class.create(Scene, {
         pageNode = null;
       }
     });
-
-    step(0);
 
     this._transitionAnimator.start(step, Functions.VALUE_TRUE, complete, 400);
   },
@@ -402,19 +401,7 @@ var Photos = Class.create(Scene, {
     }
 
     if (this._feedbackScene) {
-      if (this._feedbackScene.translating) {
-        return;
-      }
-
-      this.translateYTo(0, 150).
-        then(this.bind(function() {
-          return this._feedbackScene.translateYTo(dom.getViewportHeight(), 150);
-        }
-      )).addCallback(this.bind(function() {
-        Class.dispose(this._feedbackScene);
-        this._feedbackScene = undefined;
-      }));
-
+      this._hideFeedbacks();
       return;
     }
 
@@ -460,17 +447,31 @@ var Photos = Class.create(Scene, {
       translateYTo(viewH).
       then(
       this.bind(function() {
-        return this.translateYTo(-viewH / 4, 150);
-      })).
-      then(
-      this.bind(function() {
+        this.translateYTo(-viewH / 4, 150);
         return this._feedbackScene.translateYTo(viewH / 4 + viewH / 3, 150);
       })).
+//      then(
+//      this.bind(function() {
+//        return this._feedbackScene.translateYTo(viewH / 4 + viewH / 3, 150);
+//      })).
       addCallback(
       this.bind(function() {
         var scrollList = new ScrollList();
         this._feedbackScene.appendChild(scrollList, true);
         scrollList.addContent(new Feedbacks(feedbackID), true);
+      }));
+  },
+
+  _hideFeedbacks: function() {
+    if (this._feedbackScene.translating) {
+      return;
+    }
+
+    this.translateYTo(0, 150);
+    this._feedbackScene.translateYTo(dom.getViewportHeight(), 150).addCallback(
+      this.bind(function() {
+        Class.dispose(this._feedbackScene);
+        this._feedbackScene = undefined;
       }));
   },
 
