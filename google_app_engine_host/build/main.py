@@ -14,21 +14,25 @@ http://connect.facebook.net/en_US/all.js
 
 NETWORK:
 *
-'''    
+'''
 
 ManifestTimeStamp = time.time()
 
 
 class MainPage(webapp.RequestHandler) :
-  def get(self) :        
+  def get(self) :
     ua = str(self.request.headers['User-Agent'])
 
     if 'Android' in ua:
       self.redirect('/1x')
       return
 
+    if 'iPad' in ua:
+      self.redirect('/6x')
+      return
+
     self.redirect('/2x')
-    
+
 class FavIcon(webapp.RequestHandler) :
   def get(self) :
     self.response.headers['Content-Type'] = 'image/x-icon'
@@ -53,22 +57,22 @@ class Manifest(webapp.RequestHandler) :
         # '/images/messages-2x.png',
         # '/images/notifications-2x.png ',
         # '/images/requests-2x.png',
-        # '/images/spyglass-2x.png'      
+        # '/images/spyglass-2x.png'
       ]
-   
+
     self.response.headers['Content-Type'] = 'text/cache-manifest'
     self.response.out.write((ManifestText % {
       'timestamp': ManifestTimeStamp,
       'ua': ua,
-      'cachedFiles': '\n'.join(cachedFiles)    
-    }).strip())     
+      'cachedFiles': '\n'.join(cachedFiles)
+    }).strip())
 
 application = webapp.WSGIApplication(
   [
     ('/', MainPage),
     ('/favicon.ico', FavIcon),
     ('/cache.manifest', Manifest),
-  
+
   ], debug=True)
 
 def main() :

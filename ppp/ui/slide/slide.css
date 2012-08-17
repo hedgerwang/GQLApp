@@ -1,0 +1,22 @@
+.ppp-ui-slide {
+  background: #fff;
+  border-radius: 5px;
+  bottom: 10px;
+  left: 30px;
+  position: absolute;
+  right: 30px;
+  top: 10px;
+}
+
+.ppp-ui-slide-pages {
+  background: #ccc;
+  backface-visibility: hidden;
+  top: -10px;
+  bottom: -10px;
+  xright: 10%;
+  left: 50%;
+  position: absolute;
+  width: 50%;
+  margin: 0;
+  transform: translate3d(-10%, 0, 0);
+}

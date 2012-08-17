@@ -26,7 +26,19 @@ handlers:
 - url: /2x
   static_files: 2x.html
   upload: 2x.html
+
+- url: /6x
+  static_files: 6x.html
+  upload: 6x.html
+
+- url: /8x
+  static_files: 8x.html
+  upload: 8x.html
   
+- url: /10x
+  static_files: 10x.html
+  upload: 10x.html
+
 - url: /.*
   script: main.py
 

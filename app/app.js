@@ -2,7 +2,7 @@
  * @fileOverview
  * @author Hedger Wang
  */
-
+var APP = require('jog/app').APP;
 var ActiveSceneScroller = require('app/behavior/activescenescroller').ActiveSceneScroller;
 var Chrome = require('jog/ui/chrome').Chrome;
 var Class = require('jog/class').Class;
@@ -22,7 +22,7 @@ var cssx = require('jog/cssx').cssx;
 var dom = require('jog/dom').dom;
 var lang = require('jog/lang').lang;
 
-var App = Class.create(null, {
+var GQLApp = Class.create(APP, {
 
   main: function() {
     this._chrome = new Chrome();
@@ -550,29 +550,6 @@ var App = Class.create(null, {
   _sideMenuMode: 0
 });
 
-exports.App = App;
+exports.GQLApp = GQLApp;
 
-window.addEventListener('DOMContentLoaded', function() {
-
-  if (window.history.replaceState) {
-    // Clear the hash.
-    window.history.replaceState(
-      null, 'home', window.location.href.split('#')[0]);
-  }
-
-  if (UserAgent.IS_ANDROID) {
-    // Disable pinch-zoom for Android since we're targeting fixed
-    // "target-densitydpi"
-    document.addEventListener('touchstart', function(evt) {
-      if (evt.touches && evt.touches.length > 1) {
-        evt.preventDefault();
-      }
-    }, true);
-  }
-
-  window.addEventListener('error', function(evt) {
-    alert('error:' + evt.message);
-  });
-
-  var app = new App();
-});
+APP.install(GQLApp);
