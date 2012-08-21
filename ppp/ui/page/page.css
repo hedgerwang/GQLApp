@@ -1,3 +1,94 @@
-.ppp-ui-page {
+.ppp-ui-page,
+.ppp-ui-page-side,
+.ppp-ui-page-shadow {
+  bottom: 0;
+  left: 0;
   position: absolute;
+  right: 0;
+  top: 0;
 }
+
+.ppp-ui-page {
+  background: #fff;
+  perspective: 2000px;
+}
+
+.ppp-ui-page-side {
+  background: #fff;
+  backface-visibility: hidden;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  right: auto;
+  width: 100%;
+}
+
+.ppp-ui-page-cover {
+  transform-origin: left center;
+  z-index: 5;
+}
+
+.ppp-ui-page-content-left {
+  left: -100%;
+  transform-origin: right center;
+  visibility: hidden;
+  z-index: 4;
+}
+
+.ppp-ui-page-shadow {
+  background: #000;
+  opacity: 0;
+  right: auto;
+  width: 100%;
+  z-index: 1;
+}
+
+.ppp-ui-page-front-shadow {
+  opacity: 0;
+  background: #000;
+  z-index: 6;
+}
+
+.ppp-ui-page-expanded .ppp-ui-page-back-shadow {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.ppp-ui-page-cover-body {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.ppp-ui-page-content-body {
+  height: 100%;
+  left: 50%;
+  overflow: hidden;
+  position: relative;
+  width: 150%;
+}
+
+.ppp-ui-page-content-right .ppp-ui-page-content-body {
+  left: -50%;
+}
+
+/* demo */
+/*
+.ppp-ui-page-cover {
+  background: #000 url(http://placekitten.com/1000/1400) no-repeat center;
+}
+
+.ppp-ui-page-content-left {
+  background: #222 url(http://placekitten.com/600/800) no-repeat center;
+  background-position: 0 50%;
+  background-size: 200% auto;
+}
+
+.ppp-ui-page-content-right {
+  background: #000 url(http://placekitten.com/600/800) no-repeat center;
+  background-position: -100% 50%;
+  background-size: 200% auto;
+  background-repeat: repeat-x;
+}
+*/

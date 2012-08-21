@@ -1,0 +1,117 @@
+.ppp-ui-page-album-renderer-photos-layout {
+  height: 100%;
+  overflow: hidden;
+}
+
+.ppp-ui-page-album-renderer-cover-image-big,
+.ppp-ui-page-album-renderer-cover-image-small,
+.ppp-ui-page-album-renderer-photos-image,
+.ppp-ui-page-album-renderer-inset-border {
+  xbackground-image: none !important;
+  background-color: #f0f0f0;
+  background-size: cover;
+  background-position: 50%;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.ppp-ui-page-album-renderer-photos-image {
+  float: right;
+  position: relative;
+}
+
+.ppp-ui-page-album-renderer-inset-border {
+  background: none;
+  border: solid 1px #fff;
+  border-width: 1px 1px 0 0;
+}
+
+.ppp-ui-page-album-renderer-cover-image-small {
+  top: auto;
+  right: auto;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-cover-layout-2
+.ppp-ui-page-album-renderer-cover-image-big {
+  bottom: 33%;
+}
+
+.ppp-ui-page-album-renderer-cover-layout-2
+.ppp-ui-page-album-renderer-cover-image-small {
+  height: 33%; /* 50 / 1.33333 */
+  width: 50%;
+}
+
+.ppp-ui-page-album-renderer-cover-layout-2 .n2 {
+  left: 50%;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-cover-layout-3
+.ppp-ui-page-album-renderer-cover-image-big {
+  bottom: 22%;
+}
+
+.ppp-ui-page-album-renderer-cover-layout-3
+.ppp-ui-page-album-renderer-cover-image-small {
+  height: 22%;
+  padding-top: 1px;
+  width: 33.33%;
+}
+
+.ppp-ui-page-album-renderer-cover-layout-3 .n2 {
+  left: 33.33%;
+}
+
+.ppp-ui-page-album-renderer-cover-layout-3 .n3 {
+  left: 66.66%;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-photos-layout-0
+ .ppp-ui-page-album-renderer-photos-image,
+.ppp-ui-page-album-renderer-photos-layout-2
+ .ppp-ui-page-album-renderer-photos-image,
+.ppp-ui-page-album-renderer-photos-layout-4
+ .ppp-ui-page-album-renderer-photos-image {
+  height: 50%;
+  width: 42%;
+}
+
+.ppp-ui-page-album-renderer-photos-layout-0  .n4,
+.ppp-ui-page-album-renderer-photos-layout-0  .n5,
+.ppp-ui-page-album-renderer-photos-layout-0  .n6,
+.ppp-ui-page-album-renderer-photos-layout-0  .n7,
+.ppp-ui-page-album-renderer-photos-layout-0  .n8 {
+  height: 25%;
+  width: 23.5%;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-photos-layout-1
+ .ppp-ui-page-album-renderer-photos-image {
+  height: 100%;
+  width: 100%;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-photos-layout-2  .n1 {
+  margin-right: 42%;
+}
+
+/******************************************************************************/
+
+.ppp-ui-page-album-renderer-photos-layout-9
+.ppp-ui-page-album-renderer-photos-image {
+  height: 33.33%;
+  width: 30%;
+}

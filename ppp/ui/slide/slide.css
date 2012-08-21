@@ -1,22 +1,39 @@
 .ppp-ui-slide {
-  background: #fff;
-  border-radius: 5px;
-  bottom: 10px;
-  left: 30px;
-  position: absolute;
-  right: 30px;
-  top: 10px;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  margin: 0 0 0 0.5%;
+  position: relative;
+  white-space: normal;
+  top: 0;
+  width: 86%;
 }
 
-.ppp-ui-slide-pages {
-  background: #ccc;
-  backface-visibility: hidden;
-  top: -10px;
-  bottom: -10px;
-  xright: 10%;
-  left: 50%;
+.ppp-ui-slide:first-child {
+  margin-left: 7%;
+}
+
+.ppp-ui-slide-background {
+  background: #fff;
+  border-radius: 3px;
+  bottom: 3%;
+  left: 0;
   position: absolute;
-  width: 50%;
+  right: 0;
+  top: 3%;
+  z-index: 1;
+}
+
+.ppp-ui-slide-page {
+  background: #fff;
+  backface-visibility: hidden;
+  box-shadow: 0 0 6px #000;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  overflow: visible;
+  position: absolute;
+  right: -9%;
   margin: 0;
-  transform: translate3d(-10%, 0, 0);
+  z-index: 2;
 }

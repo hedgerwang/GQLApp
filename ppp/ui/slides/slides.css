@@ -1,0 +1,10 @@
+.ppp-ui-slides,
+.ppp-ui-slides-body {
+  background: #000;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: -webkit-box;
+}
